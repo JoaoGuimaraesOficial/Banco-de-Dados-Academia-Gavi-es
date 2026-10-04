@@ -1,0 +1,53 @@
+<section class="card" id="aula_coletiva">
+  <div class="card-head">
+    <h2>AULA_COLETIVA</h2>
+    <span class="qtd">6 atributos</span>
+  </div>
+  <div class="card-info">
+    <p>Sessão de aula em grupo, conduzida por um instrutor em uma unidade, com número limitado de vagas.</p>
+    <p class="rel">Pertence a um FUNCIONARIO (instrutor) e a uma UNIDADE; possui vários CHECKIN_AULA (1:N).</p>
+  </div>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Atributo</th>
+          <th>Descrição</th>
+          <th>Regra de negócio associada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ID_AULA</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg pk">PK</span><span class="tg ai">AI</span><p>Identificador único da aula.</p></td>
+          <td>Cada sessão de aula coletiva é única, mesmo que a modalidade se repita em outros horários.</td>
+        </tr>
+        <tr>
+          <td><code>ID_INSTRUTOR</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg fk">FK &rarr; FUNCIONARIO</span><span class="tg nn">NN</span><p>Instrutor responsável pela aula.</p></td>
+          <td>Toda aula tem um instrutor; somente funcionário com papel INSTRUTOR pode ser alocado.</td>
+        </tr>
+        <tr>
+          <td><code>ID_UNIDADE</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg fk">FK &rarr; UNIDADE</span><span class="tg nn">NN</span><p>Unidade onde a aula acontece.</p></td>
+          <td>A aula ocorre em uma unidade específica, e o aluno faz check-in nela.</td>
+        </tr>
+        <tr>
+          <td><code>NM_MODALIDADE</code></td>
+          <td><span class="tp">VARCHAR(50)</span><span class="tg nn">NN</span><p>Modalidade oferecida (ex.: Spinning, Yoga, Zumba).</p></td>
+          <td>Identifica a atividade para divulgação e para a escolha do aluno.</td>
+        </tr>
+        <tr>
+          <td><code>DT_HORARIO</code></td>
+          <td><span class="tp">DATETIME</span><span class="tg nn">NN</span><p>Data e hora de início da aula.</p></td>
+          <td>Define a agenda e o período em que os check-ins são aceitos.</td>
+        </tr>
+        <tr>
+          <td><code>QT_LIMITE_VAGAS</code></td>
+          <td><span class="tp">SMALLINT UNSIGNED</span><span class="tg nn">NN</span><span class="tg ck">CK</span><p>Capacidade máxima de alunos; deve ser maior que zero.</p></td>
+          <td>O número de check-ins não pode ultrapassar o limite de vagas da aula.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,0 +1,53 @@
+<section class="card" id="treino">
+  <div class="card-head">
+    <h2>TREINO</h2>
+    <span class="qtd">6 atributos</span>
+  </div>
+  <div class="card-info">
+    <p>Ficha de treino prescrita por um professor para um aluno, com prazo de validade.</p>
+    <p class="rel">Pertence a um ALUNO e a um FUNCIONARIO (professor); possui vários ITEM_TREINO (1:N).</p>
+  </div>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Atributo</th>
+          <th>Descrição</th>
+          <th>Regra de negócio associada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ID_TREINO</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg pk">PK</span><span class="tg ai">AI</span><p>Identificador único da ficha de treino.</p></td>
+          <td>Cada ficha de treino é única e pode ser consultada e versionada ao longo do tempo.</td>
+        </tr>
+        <tr>
+          <td><code>ID_ALUNO</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg fk">FK &rarr; ALUNO</span><span class="tg nn">NN</span><p>Aluno para quem o treino foi prescrito.</p></td>
+          <td>Todo treino é prescrito para um aluno com matrícula ativa.</td>
+        </tr>
+        <tr>
+          <td><code>ID_PROFESSOR</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg fk">FK &rarr; FUNCIONARIO</span><span class="tg nn">NN</span><p>Professor responsável pela prescrição.</p></td>
+          <td>Somente funcionário com papel PROFESSOR pode prescrever treinos.</td>
+        </tr>
+        <tr>
+          <td><code>DT_CRIACAO</code></td>
+          <td><span class="tp">DATE</span><span class="tg nn">NN</span><p>Data de criação da ficha.</p></td>
+          <td>Permite acompanhar a evolução e o histórico de treinos do aluno.</td>
+        </tr>
+        <tr>
+          <td><code>DT_VALIDADE</code></td>
+          <td><span class="tp">DATE</span><span class="tg nn">NN</span><span class="tg ck">CK</span><p>Data de validade; deve ser igual ou posterior a DT_CRIACAO.</p></td>
+          <td>Treino vencido deve ser revisado pelo professor antes de continuar sendo usado.</td>
+        </tr>
+        <tr>
+          <td><code>DS_OBSERVACAO_MEDICA</code></td>
+          <td><span class="tp">TEXT</span><span class="tg nl">NL</span><p>Restrições ou observações médicas relevantes ao treino.</p></td>
+          <td>Registra limitações para a segurança do aluno; por ser dado de saúde, o acesso é restrito (LGPD).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dicionário de Dados - Academia Gaviões</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/include.js" defer></script>
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+
+    <main>
+      <div class="container">
+        <h1 class="page-title">Dicionário de Dados Conceitual</h1>
+        <p class="page-sub">
+          12 entidades e 66 atributos | MySQL 8 (InnoDB), utf8mb4
+        </p>
+
+        <div class="painel">
+          <h3>Entidades</h3>
+          <div class="indice">
+            <a href="#aluno">ALUNO</a>
+            <a href="#plano">PLANO</a>
+            <a href="#matricula">MATRICULA</a>
+            <a href="#funcionario">FUNCIONARIO</a>
+            <a href="#treino">TREINO</a>
+            <a href="#item_treino">ITEM_TREINO</a>
+            <a href="#aula_coletiva">AULA_COLETIVA</a>
+            <a href="#checkin_aula">CHECKIN_AULA</a>
+            <a href="#ocorrencia_turno">OCORRENCIA_TURNO</a>
+            <a href="#unidade">UNIDADE</a>
+            <a href="#estoque_material">ESTOQUE_MATERIAL</a>
+            <a href="#chamado_manutencao">CHAMADO_MANUTENCAO</a>
+          </div>
+        </div>
+
+        <div class="painel">
+          <h3>Legenda</h3>
+          <div class="legenda">
+            <span><b class="tg pk">PK</b> chave primária</span>
+            <span><b class="tg fk">FK</b> chave estrangeira</span>
+            <span><b class="tg nn">NN</b> NOT NULL</span>
+            <span><b class="tg uk">UK</b> valor único</span>
+            <span><b class="tg ai">AI</b> AUTO_INCREMENT</span>
+            <span><b class="tg nl">NL</b> aceita NULL</span>
+            <span><b class="tg ck">CK</b> restrição CHECK</span>
+          </div>
+          <p class="page-sub" style="margin: 12px 0 0">
+            Prefixos: ID_ identificador, NM_ nome, DT_ data, DS_ descrição/texto
+            livre, TP_ tipo, QT_ quantidade, VL_ valor, IN_ indicador (0/1), CD_
+            código.
+          </p>
+        </div>
+
+        <div data-include="aluno.html"></div>
+        <div data-include="plano.html"></div>
+        <div data-include="matricula.html"></div>
+        <div data-include="funcionario.html"></div>
+        <div data-include="treino.html"></div>
+        <div data-include="item_treino.html"></div>
+        <div data-include="aula_coletiva.html"></div>
+        <div data-include="checkin_aula.html"></div>
+        <div data-include="ocorrencia_turno.html"></div>
+        <div data-include="unidade.html"></div>
+        <div data-include="estoque_material.html"></div>
+        <div data-include="chamado_manutencao.html"></div>
+      </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+  </body>
+</html>

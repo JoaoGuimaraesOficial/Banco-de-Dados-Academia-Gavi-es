@@ -1,0 +1,48 @@
+<section class="card" id="plano">
+  <div class="card-head">
+    <h2>PLANO</h2>
+    <span class="qtd">5 atributos</span>
+  </div>
+  <div class="card-info">
+    <p>Produto comercial oferecido ao aluno, com periodicidade de cobrança e valor definidos.</p>
+    <p class="rel">Relaciona-se com MATRICULA (1:N).</p>
+  </div>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Atributo</th>
+          <th>Descrição</th>
+          <th>Regra de negócio associada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ID_PLANO</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg pk">PK</span><span class="tg ai">AI</span><p>Identificador único do plano.</p></td>
+          <td>Cada plano comercial é identificado de forma única.</td>
+        </tr>
+        <tr>
+          <td><code>NM_PLANO</code></td>
+          <td><span class="tp">VARCHAR(60)</span><span class="tg nn">NN</span><span class="tg uk">UK</span><p>Nome comercial do plano (ex.: Básico, Premium).</p></td>
+          <td>Não podem existir dois planos com o mesmo nome, para evitar confusão na venda e nos relatórios.</td>
+        </tr>
+        <tr>
+          <td><code>TP_RECORRENCIA</code></td>
+          <td><span class="tp">VARCHAR(15)</span><span class="tg nn">NN</span><span class="tg ck">CK</span><p>Periodicidade da cobrança: MENSAL, TRIMESTRAL, SEMESTRAL ou ANUAL.</p></td>
+          <td>Define o intervalo entre as cobranças; só são aceitos os valores previstos.</td>
+        </tr>
+        <tr>
+          <td><code>VL_MENSALIDADE</code></td>
+          <td><span class="tp">DECIMAL(10,2)</span><span class="tg nn">NN</span><span class="tg ck">CK</span><p>Valor da mensalidade em reais; deve ser maior que zero.</p></td>
+          <td>Serve de base para o cálculo das cobranças recorrentes de todas as matrículas do plano.</td>
+        </tr>
+        <tr>
+          <td><code>IN_ATIVO</code></td>
+          <td><span class="tp">TINYINT(1) DEFAULT 1</span><span class="tg nn">NN</span><p>Indica se o plano está disponível para venda.</p></td>
+          <td>Planos descontinuados deixam de ser vendidos, mas continuam vinculados às matrículas já existentes.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

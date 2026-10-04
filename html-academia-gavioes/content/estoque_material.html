@@ -1,0 +1,48 @@
+<section class="card" id="estoque_material">
+  <div class="card-head">
+    <h2>ESTOQUE_MATERIAL</h2>
+    <span class="qtd">5 atributos</span>
+  </div>
+  <div class="card-info">
+    <p>Material de apoio (limpeza, higiene e equipamentos) controlado por unidade.</p>
+    <p class="rel">Pertence a uma UNIDADE (N:1).</p>
+  </div>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Atributo</th>
+          <th>Descrição</th>
+          <th>Regra de negócio associada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ID_MATERIAL</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg pk">PK</span><span class="tg ai">AI</span><p>Identificador único do material.</p></td>
+          <td>Cada item de estoque é único dentro do sistema.</td>
+        </tr>
+        <tr>
+          <td><code>ID_UNIDADE</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg fk">FK &rarr; UNIDADE</span><span class="tg nn">NN</span><p>Unidade onde o material está armazenado.</p></td>
+          <td>O estoque é controlado por unidade, e cada unidade mantém o seu.</td>
+        </tr>
+        <tr>
+          <td><code>NM_MATERIAL</code></td>
+          <td><span class="tp">VARCHAR(80)</span><span class="tg nn">NN</span><p>Nome do material (ex.: toalha, álcool em gel, halter).</p></td>
+          <td>Identifica o item para consulta e reposição.</td>
+        </tr>
+        <tr>
+          <td><code>TP_MATERIAL</code></td>
+          <td><span class="tp">VARCHAR(20)</span><span class="tg nn">NN</span><span class="tg ck">CK</span><p>Categoria: LIMPEZA, HIGIENE ou EQUIPAMENTO.</p></td>
+          <td>Classifica os materiais para facilitar o controle e a reposição.</td>
+        </tr>
+        <tr>
+          <td><code>QT_ESTOQUE</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg nn">NN</span><span class="tg ck">CK</span><p>Quantidade disponível; nunca negativa.</p></td>
+          <td>O estoque não pode ficar negativo; quantidade baixa sinaliza necessidade de reposição.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

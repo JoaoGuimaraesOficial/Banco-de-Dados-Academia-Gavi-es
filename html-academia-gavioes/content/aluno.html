@@ -1,0 +1,63 @@
+<section class="card" id="aluno">
+  <div class="card-head">
+    <h2>ALUNO</h2>
+    <span class="qtd">8 atributos</span>
+  </div>
+  <div class="card-info">
+    <p>Pessoa cadastrada que utiliza os serviços da academia: treina, contrata planos e reserva aulas coletivas.</p>
+    <p class="rel">Relaciona-se com MATRICULA, TREINO e CHECKIN_AULA (1:N em todos).</p>
+  </div>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Atributo</th>
+          <th>Descrição</th>
+          <th>Regra de negócio associada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ID_ALUNO</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg pk">PK</span><span class="tg ai">AI</span><p>Identificador único do aluno, gerado automaticamente.</p></td>
+          <td>Cada aluno possui um único código no sistema, que nunca se repete nem é reaproveitado.</td>
+        </tr>
+        <tr>
+          <td><code>NM_ALUNO</code></td>
+          <td><span class="tp">VARCHAR(100)</span><span class="tg nn">NN</span><p>Nome completo do aluno.</p></td>
+          <td>O cadastro exige nome completo para identificação na recepção e no contrato.</td>
+        </tr>
+        <tr>
+          <td><code>ID_CPF</code></td>
+          <td><span class="tp">CHAR(11)</span><span class="tg nn">NN</span><span class="tg uk">UK</span><p>CPF somente com dígitos, sem pontos ou traço.</p></td>
+          <td>Um CPF só pode ter um cadastro de aluno; os dígitos verificadores devem ser validados antes da gravação.</td>
+        </tr>
+        <tr>
+          <td><code>NM_EMAIL</code></td>
+          <td><span class="tp">VARCHAR(120)</span><span class="tg nn">NN</span><span class="tg uk">UK</span><p>E-mail principal de contato.</p></td>
+          <td>Usado para avisos, cobranças e recuperação de acesso; não pode se repetir entre alunos.</td>
+        </tr>
+        <tr>
+          <td><code>DT_NASCIMENTO</code></td>
+          <td><span class="tp">DATE</span><span class="tg nn">NN</span><p>Data de nascimento do aluno.</p></td>
+          <td>Permite validar a idade mínima para matrícula e adequar o treino à faixa etária.</td>
+        </tr>
+        <tr>
+          <td><code>DS_FOTO_PERFIL</code></td>
+          <td><span class="tp">VARCHAR(255)</span><span class="tg nl">NL</span><p>Caminho ou URL da foto de perfil.</p></td>
+          <td>A foto é exibida na recepção para conferência visual da identidade; é opcional.</td>
+        </tr>
+        <tr>
+          <td><code>DS_BIOMETRIA_FACIAL</code></td>
+          <td><span class="tp">BLOB</span><span class="tg nl">NL</span><p>Modelo (template) da biometria facial, não a imagem original.</p></td>
+          <td>Usada no acesso por reconhecimento facial; só é armazenada com consentimento expresso do aluno (LGPD, dado pessoal sensível).</td>
+        </tr>
+        <tr>
+          <td><code>IN_ATIVO</code></td>
+          <td><span class="tp">TINYINT(1) DEFAULT 1</span><span class="tg nn">NN</span><p>Indicador de cadastro ativo (1 = ativo, 0 = inativo).</p></td>
+          <td>Aluno inativo não acessa a academia; o cadastro é inativado, nunca excluído, para preservar o histórico.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

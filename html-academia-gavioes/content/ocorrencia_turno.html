@@ -1,0 +1,53 @@
+<section class="card" id="ocorrencia_turno">
+  <div class="card-head">
+    <h2>OCORRENCIA_TURNO</h2>
+    <span class="qtd">6 atributos</span>
+  </div>
+  <div class="card-info">
+    <p>Registro de passagem de turno feito pela equipe, para comunicar fatos e pendências ao próximo turno.</p>
+    <p class="rel">Pertence a um FUNCIONARIO, o autor do registro (N:1).</p>
+  </div>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Atributo</th>
+          <th>Descrição</th>
+          <th>Regra de negócio associada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ID_OCORRENCIA</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg pk">PK</span><span class="tg ai">AI</span><p>Identificador único da ocorrência.</p></td>
+          <td>Cada registro de passagem de turno é único.</td>
+        </tr>
+        <tr>
+          <td><code>ID_FUNCIONARIO_AUTOR</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg fk">FK &rarr; FUNCIONARIO</span><span class="tg nn">NN</span><p>Funcionário que fez o registro.</p></td>
+          <td>Todo registro é rastreável ao funcionário que o escreveu.</td>
+        </tr>
+        <tr>
+          <td><code>DT_REGISTRO</code></td>
+          <td><span class="tp">DATETIME DEFAULT CURRENT_TIMESTAMP</span><span class="tg nn">NN</span><p>Data e hora do registro.</p></td>
+          <td>Mantém a cronologia dos acontecimentos entre os turnos.</td>
+        </tr>
+        <tr>
+          <td><code>TP_TURNO</code></td>
+          <td><span class="tp">VARCHAR(10)</span><span class="tg nn">NN</span><span class="tg ck">CK</span><p>Turno do registro: MANHA, TARDE ou NOITE.</p></td>
+          <td>Organiza as ocorrências por turno de trabalho.</td>
+        </tr>
+        <tr>
+          <td><code>DS_MENSAGEM</code></td>
+          <td><span class="tp">TEXT</span><span class="tg nn">NN</span><p>Conteúdo da ocorrência.</p></td>
+          <td>Comunica pendências e fatos relevantes ao turno seguinte.</td>
+        </tr>
+        <tr>
+          <td><code>IN_RESOLVIDO</code></td>
+          <td><span class="tp">TINYINT(1) DEFAULT 0</span><span class="tg nn">NN</span><p>Indica se a ocorrência foi resolvida (1 = sim, 0 = não).</p></td>
+          <td>Ocorrências pendentes ficam em destaque até serem marcadas como resolvidas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

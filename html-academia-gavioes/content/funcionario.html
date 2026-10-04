@@ -1,0 +1,48 @@
+<section class="card" id="funcionario">
+  <div class="card-head">
+    <h2>FUNCIONARIO</h2>
+    <span class="qtd">5 atributos</span>
+  </div>
+  <div class="card-info">
+    <p>Colaborador da academia (professores, instrutores, recepção e gestão), responsável por treinos, aulas, ocorrências e chamados.</p>
+    <p class="rel">Relaciona-se com TREINO (professor), AULA_COLETIVA (instrutor), OCORRENCIA_TURNO (autor) e CHAMADO_MANUTENCAO (abertura), todos 1:N.</p>
+  </div>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Atributo</th>
+          <th>Descrição</th>
+          <th>Regra de negócio associada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ID_FUNCIONARIO</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg pk">PK</span><span class="tg ai">AI</span><p>Identificador único do funcionário.</p></td>
+          <td>Todo colaborador possui um código único, usado para rastrear suas ações no sistema.</td>
+        </tr>
+        <tr>
+          <td><code>NM_FUNCIONARIO</code></td>
+          <td><span class="tp">VARCHAR(100)</span><span class="tg nn">NN</span><p>Nome completo do funcionário.</p></td>
+          <td>Identifica o responsável por treinos, aulas, ocorrências e chamados.</td>
+        </tr>
+        <tr>
+          <td><code>ID_CPF</code></td>
+          <td><span class="tp">CHAR(11)</span><span class="tg nn">NN</span><span class="tg uk">UK</span><p>CPF somente com dígitos.</p></td>
+          <td>Um CPF não pode ter dois cadastros de funcionário.</td>
+        </tr>
+        <tr>
+          <td><code>TP_PAPEL</code></td>
+          <td><span class="tp">VARCHAR(20)</span><span class="tg nn">NN</span><span class="tg ck">CK</span><p>Papel: PROFESSOR, INSTRUTOR, RECEPCIONISTA ou GERENTE.</p></td>
+          <td>O papel define as atribuições e permissões; apenas PROFESSOR cria treinos e apenas INSTRUTOR conduz aulas coletivas.</td>
+        </tr>
+        <tr>
+          <td><code>IN_ATIVO</code></td>
+          <td><span class="tp">TINYINT(1) DEFAULT 1</span><span class="tg nn">NN</span><p>Indica se o vínculo com a academia está ativo.</p></td>
+          <td>Funcionário desligado é inativado, nunca excluído, para manter o histórico de treinos e ocorrências.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

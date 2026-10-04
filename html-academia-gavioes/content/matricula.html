@@ -1,0 +1,58 @@
+<section class="card" id="matricula">
+  <div class="card-head">
+    <h2>MATRICULA</h2>
+    <span class="qtd">7 atributos</span>
+  </div>
+  <div class="card-info">
+    <p>Contratação de um plano por um aluno, com período de vigência e situação atual.</p>
+    <p class="rel">Pertence a um ALUNO e a um PLANO (N:1 para cada um).</p>
+  </div>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Atributo</th>
+          <th>Descrição</th>
+          <th>Regra de negócio associada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ID_MATRICULA</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg pk">PK</span><span class="tg ai">AI</span><p>Identificador único da matrícula.</p></td>
+          <td>Cada contratação de plano gera uma matrícula própria, preservando o histórico do aluno.</td>
+        </tr>
+        <tr>
+          <td><code>ID_ALUNO</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg fk">FK &rarr; ALUNO</span><span class="tg nn">NN</span><p>Aluno titular da matrícula.</p></td>
+          <td>Toda matrícula pertence a um aluno; um aluno pode ter várias matrículas ao longo do tempo.</td>
+        </tr>
+        <tr>
+          <td><code>ID_PLANO</code></td>
+          <td><span class="tp">INT UNSIGNED</span><span class="tg fk">FK &rarr; PLANO</span><span class="tg nn">NN</span><p>Plano contratado.</p></td>
+          <td>Toda matrícula está vinculada a um plano, que determina o valor e a recorrência.</td>
+        </tr>
+        <tr>
+          <td><code>DT_INICIO</code></td>
+          <td><span class="tp">DATE</span><span class="tg nn">NN</span><p>Data de início da vigência.</p></td>
+          <td>O acesso à academia é liberado a partir desta data.</td>
+        </tr>
+        <tr>
+          <td><code>DT_FIM</code></td>
+          <td><span class="tp">DATE</span><span class="tg nl">NL</span><span class="tg ck">CK</span><p>Data de término da vigência; deve ser igual ou posterior a DT_INICIO.</p></td>
+          <td>Após esta data o acesso é encerrado, salvo renovação; vazia quando a vigência é indeterminada.</td>
+        </tr>
+        <tr>
+          <td><code>TP_STATUS</code></td>
+          <td><span class="tp">VARCHAR(15)</span><span class="tg nn">NN</span><span class="tg ck">CK</span><p>Situação: ATIVA, TRANCADA, CANCELADA ou INADIMPLENTE.</p></td>
+          <td>Somente matrículas ATIVAS permitem acesso e check-in em aulas; um aluno só pode ter uma matrícula ativa por vez.</td>
+        </tr>
+        <tr>
+          <td><code>CD_ULTIMOS_DIGITOS_CARTAO</code></td>
+          <td><span class="tp">CHAR(4)</span><span class="tg nl">NL</span><p>Últimos 4 dígitos do cartão usado na cobrança.</p></td>
+          <td>Identifica o meio de pagamento sem armazenar o número completo do cartão, reduzindo o risco de vazamento.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
