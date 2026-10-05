@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dicionário de Dados</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #222;
+        line-height: 1.5;
+      }
+      h1 {
+        font-size: 24px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 8px;
+      }
+      h2 {
+        font-size: 18px;
+        color: #2c3e50;
+        margin-top: 40px;
+        background: #f0f3f6;
+        padding: 6px 10px;
+        border: 2.5px solid #2c3e50;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+      th,
+      td {
+        border: 2.5px solid #ccc;
+        padding: 6px 10px;
+        text-align: left;
+      }
+      th {
+        background: #2c3e50;
+        color: #fff;
+      }
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+      code {
+        background: #eee;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Dicionário de Dados — Academia Gaviões</h1>
+    <p>
+      Este documento reúne todos os atributos de cada entidade do modelo de
+      dados de acordo com valores retirados da entrevista no estabelecimento.
+    </p>
+
+    <h2>ALUNO</h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_ALUNO</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>Identificador interno</td>
+      </tr>
+      <tr>
+        <td>NM_ALUNO</td>
+        <td>varchar(120)</td>
+        <td>Sim</td>
+        <td>Nome completo</td>
+      </tr>
+      <tr>
+        <td>ID_CPF</td>
+        <td>varchar(11)</td>
+        <td>Sim (único)</td>
+        <td>Usado na busca pela recepção</td>
+      </tr>
+      <tr>
+        <td>NM_EMAIL</td>
+        <td>varchar(100)</td>
+        <td>Sim</td>
+        <td>Login no app e contato com SAC</td>
+      </tr>
+      <tr>
+        <td>DT_NASCIMENTO</td>
+        <td>date</td>
+        <td>Sim</td>
+        <td>Validação de idade/contrato</td>
+      </tr>
+      <tr>
+        <td>DS_FOTO_PERFIL</td>
+        <td>varchar(255)</td>
+        <td>Não</td>
+        <td>Pode ser cadastrada depois</td>
+      </tr>
+      <tr>
+        <td>DS_BIOMETRIA_FACIAL</td>
+        <td>text</td>
+        <td>Não</td>
+        <td>Válida em outras unidades</td>
+      </tr>
+      <tr>
+        <td>IN_ATIVO</td>
+        <td>boolean</td>
+        <td>Sim</td>
+        <td>Muda com inadimplência prolongada</td>
+      </tr>
+    </table>
+    <h2>PLANO</h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_PLANO</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>NM_PLANO</td>
+        <td>varchar(60)</td>
+        <td>Sim</td>
+        <td>Ex.: "Mensal", "Black"</td>
+      </tr>
+      <tr>
+        <td>TP_RECORRENTE / TP_NAO_RECORRENTE</td>
+        <td>varchar(20)</td>
+        <td>Sim</td>
+        <td>Cobrança automática ou avulsa</td>
+      </tr>
+      <tr>
+        <td>VL_MENSALIDADE</td>
+        <td>decimal(10,2)</td>
+        <td>Sim</td>
+        <td>&gt; 0</td>
+      </tr>
+      <tr>
+        <td>IN_ATIVO</td>
+        <td>boolean</td>
+        <td>Sim</td>
+        <td>Disponível para nova adesão</td>
+      </tr>
+    </table>
+
+    <h2>MATRICULA <small>(entidade associativa entre ALUNO e PLANO)</small></h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_MATRICULA</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>ID_ALUNO</td>
+        <td>integer</td>
+        <td>Sim (FK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>ID_PLANO</td>
+        <td>integer</td>
+        <td>Sim (FK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>DT_INICIO</td>
+        <td>date</td>
+        <td>Sim</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>DT_FIM</td>
+        <td>date</td>
+        <td>Não</td>
+        <td>Preenchida no cancelamento</td>
+      </tr>
+      <tr>
+        <td>Status (pago/pendente/inadimplente/cancelado)</td>
+        <td>varchar(20)</td>
+        <td>Sim</td>
+        <td>Inadimplente bloqueia a catraca</td>
+      </tr>
+      <tr>
+        <td>CD_ULTIMOS_DIGITOS_CARTAO</td>
+        <td>varchar(4)</td>
+        <td>Não</td>
+        <td>Conferência sem expor dado sensível</td>
+      </tr>
+    </table>
+
+    <h2>FUNCIONARIO</h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_FUNCIONARIO</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>NM_FUNCIONARIO</td>
+        <td>varchar(120)</td>
+        <td>Sim</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>ID_CPF</td>
+        <td>varchar(11)</td>
+        <td>Sim (único)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Papel (recepção/professor/gerente/financeiro)</td>
+        <td>varchar(20)</td>
+        <td>Sim</td>
+        <td>Define permissões de acesso</td>
+      </tr>
+      <tr>
+        <td>IN_ATIVO</td>
+        <td>boolean</td>
+        <td>Sim</td>
+        <td>—</td>
+      </tr>
+    </table>
+
+    <h2>TREINO</h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_TREINO</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>ID_ALUNO</td>
+        <td>integer</td>
+        <td>Sim (FK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>ID_PROFESSOR</td>
+        <td>integer</td>
+        <td>Sim (FK)</td>
+        <td>Referencia FUNCIONARIO</td>
+      </tr>
+      <tr>
+        <td>DT_CRIACAO / DT_VALIDADE</td>
+        <td>date</td>
+        <td>Sim</td>
+        <td>Define renovação da ficha</td>
+      </tr>
+      <tr>
+        <td>NM_EXERCICIO, QT_SERIES, QT_REPETICOES</td>
+        <td>—</td>
+        <td>Sim</td>
+        <td>Um treino tem de 1 a 100 exercícios</td>
+      </tr>
+      <tr>
+        <td>DS_CARGA</td>
+        <td>varchar(30)</td>
+        <td>Não</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>DS_OBSERVACAO_MEDICA</td>
+        <td>text</td>
+        <td>Não</td>
+        <td>Limitações físicas do aluno</td>
+      </tr>
+    </table>
+
+    <h2>AULA_COLETIVA</h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_AULA</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>NM_MODALIDADE</td>
+        <td>varchar(60)</td>
+        <td>Sim</td>
+        <td>Spinning, boxe, muay thai etc.</td>
+      </tr>
+      <tr>
+        <td>DT_HORARIO</td>
+        <td>datetime</td>
+        <td>Sim</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>QT_LIMITE_VAGAS</td>
+        <td>integer</td>
+        <td>Sim</td>
+        <td>19 para o spinning</td>
+      </tr>
+      <tr>
+        <td>ID_INSTRUTOR</td>
+        <td>integer</td>
+        <td>Sim (FK)</td>
+        <td>Referencia FUNCIONARIO</td>
+      </tr>
+    </table>
+
+    <h2>
+      CHECKIN_AULA
+      <small>(entidade associativa entre ALUNO e AULA_COLETIVA)</small>
+    </h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_CHECKIN</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>ID_AULA / ID_ALUNO</td>
+        <td>integer</td>
+        <td>Sim (FK)</td>
+        <td>Índice único (ID_AULA, ID_ALUNO) evita reserva duplicada</td>
+      </tr>
+      <tr>
+        <td>DT_REALIZACAO</td>
+        <td>datetime</td>
+        <td>Sim</td>
+        <td>—</td>
+      </tr>
+    </table>
+
+    <h2>OCORRENCIA_TURNO</h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_OCORRENCIA</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>DT_REGISTRO</td>
+        <td>datetime</td>
+        <td>Sim</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Turno (madrugada/manhã/tarde/noite)</td>
+        <td>varchar(20)</td>
+        <td>Sim</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>ID_FUNCIONARIO_AUTOR</td>
+        <td>integer</td>
+        <td>Sim (FK)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>DS_MENSAGEM</td>
+        <td>text</td>
+        <td>Sim</td>
+        <td>Pendência ou aviso operacional</td>
+      </tr>
+      <tr>
+        <td>IN_RESOLVIDO</td>
+        <td>boolean</td>
+        <td>Sim</td>
+        <td>—</td>
+      </tr>
+    </table>
+
+    <h2>ITEM_TREINO <small>(itens e exercícios da ficha de treino)</small></h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_ITEM_TREINO</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>Identificador único do exercício</td>
+      </tr>
+      <tr>
+        <td>ID_TREINO</td>
+        <td>integer</td>
+        <td>Sim (FK)</td>
+        <td>Referencia TREINO</td>
+      </tr>
+      <tr>
+        <td>NM_EXERCICIO</td>
+        <td>varchar(80)</td>
+        <td>Sim</td>
+        <td>Ex.: Supino reto, Agachamento livre</td>
+      </tr>
+      <tr>
+        <td>QT_SERIES</td>
+        <td>integer</td>
+        <td>Sim</td>
+        <td>Número de séries prescritas (> 0)</td>
+      </tr>
+      <tr>
+        <td>QT_REPETICOES</td>
+        <td>integer</td>
+        <td>Sim</td>
+        <td>Número de repetições por série (> 0)</td>
+      </tr>
+      <tr>
+        <td>DS_CARGA</td>
+        <td>varchar(30)</td>
+        <td>Não</td>
+        <td>Ex.: "15 kg", "Peso corporal"</td>
+      </tr>
+    </table>
+
+    <h2>UNIDADE</h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_UNIDADE</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>Identificador único da filial</td>
+      </tr>
+      <tr>
+        <td>NM_UNIDADE</td>
+        <td>varchar(80)</td>
+        <td>Sim (único)</td>
+        <td>Nome da filial (ex.: Unidade Central)</td>
+      </tr>
+      <tr>
+        <td>DS_ENDERECO</td>
+        <td>varchar(200)</td>
+        <td>Sim</td>
+        <td>Endereço completo da filial</td>
+      </tr>
+    </table>
+
+    <h2>ESTOQUE_MATERIAL</h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_MATERIAL</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>Identificador do item em estoque</td>
+      </tr>
+      <tr>
+        <td>ID_UNIDADE</td>
+        <td>integer</td>
+        <td>Sim (FK)</td>
+        <td>Referencia UNIDADE (estoque por filial)</td>
+      </tr>
+      <tr>
+        <td>NM_MATERIAL</td>
+        <td>varchar(80)</td>
+        <td>Sim</td>
+        <td>Ex.: Álcool em gel, Toalhas, Halteres</td>
+      </tr>
+      <tr>
+        <td>TP_MATERIAL</td>
+        <td>varchar(20)</td>
+        <td>Sim</td>
+        <td>Categoria: LIMPEZA, HIGIENE ou EQUIPAMENTO</td>
+      </tr>
+      <tr>
+        <td>QT_ESTOQUE</td>
+        <td>integer</td>
+        <td>Sim</td>
+        <td>Quantidade disponível (>= 0)</td>
+      </tr>
+    </table>
+
+    <h2>CHAMADO_MANUTENCAO</h2>
+    <table>
+      <tr>
+        <th>Atributo</th>
+        <th>Tipo</th>
+        <th>Obrigatório</th>
+        <th>Observação</th>
+      </tr>
+      <tr>
+        <td>ID_CHAMADO</td>
+        <td>integer</td>
+        <td>Sim (PK)</td>
+        <td>Identificador do chamado de reparo</td>
+      </tr>
+      <tr>
+        <td>ID_FUNCIONARIO_ABERTURA</td>
+        <td>integer</td>
+        <td>Sim (FK)</td>
+        <td>Referencia FUNCIONARIO que abriu o pedido</td>
+      </tr>
+      <tr>
+        <td>DT_ABERTURA</td>
+        <td>datetime</td>
+        <td>Sim</td>
+        <td>Data e hora da solicitação</td>
+      </tr>
+      <tr>
+        <td>DS_PROBLEMA</td>
+        <td>text</td>
+        <td>Sim</td>
+        <td>Descrição do defeito ou avaria</td>
+      </tr>
+      <tr>
+        <td>TP_STATUS</td>
+        <td>varchar(20)</td>
+        <td>Sim</td>
+        <td>Situação: ABERTO, EM_ANDAMENTO ou CONCLUIDO</td>
+      </tr>
+    </table>
+  </body>
+</html>
