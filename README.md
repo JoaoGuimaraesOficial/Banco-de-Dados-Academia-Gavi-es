@@ -25,13 +25,12 @@ João Victor Guimarães Moura - 48298549
 - Saldo devedor incorreto: falhas na integração entre o cancelamento de planos (feito via SAC) e o sistema geram bloqueios indevidos na catraca, principalmente quando o problema envolve outra unidade.
 - Falta de controle sobre itens promocionais e materiais de limpeza, sem registro de quantidade retirada/consumida.
 
-**Justificativa da escolha:** A academia reúne processos variados e reais — cadastro, controle de acesso por biometria facial, planos e pagamentos, prescrição de treinos, agendamento de aulas e diferentes níveis de permissão de acesso aos dados — o que torna o caso adequado para a complexidade exigida nesta etapa.
+**Justificativa da escolha:** A academia reúne processos variados e reais cadastro, controle de acesso por biometria facial, planos e pagamentos, prescrição de treinos, agendamento de aulas e diferentes níveis de permissão de acesso aos dados o que torna o caso adequado para a complexidade exigida nesta etapa.
 
 **Evidências da organização:**
-- Endereço e contato: *[inserir]*
-- Responsável entrevistado: *[inserir nome/cargo]*
-- Link oficial / Google Maps: *[inserir]*
-- Fotos da visita: anexadas em `/docs/evidencias`
+- Endereço: Av. Celso Garcia, 5492 - Tatuapé, São Paulo - SP, 03064-000
+- Responsável entrevistado: Eduardo Curzio e Leticia
+- Link oficial / Google Maps: https://share.google/RPpl0luAjH1SzWWri
 
 ---
 
@@ -43,8 +42,6 @@ João Victor Guimarães Moura - 48298549
 - **Prescrição de treinos:** professores criam e ajustam as fichas conforme experiência do aluno e limitações físicas relatadas.
 - **Agendamento de aulas coletivas:** check-in obrigatório pelo aplicativo para o spinning (limite de 19 vagas); demais modalidades (boxe, muay thai etc.) normalmente não exigem reserva.
 - **Comunicação entre turnos e manutenção:** registro de ocorrências e abertura de chamados técnicos, que seguem para o gerente e, se necessário, para a equipe regional.
-
-**Fluxogramas:** anexados em `/docs/fluxogramas` (matrícula/acesso e gestão de treinos).
 
 ---
 
