@@ -6,10 +6,15 @@
 ## Metadados
 
 Nomes dos alunos e RGM:
+
 Edilson Angel Arismendi Huanca - 49423452
+
 Igor Alves - 48123528
+
 Gabriel Alves Rodrigues - 47818191
+
 Gabriel Viana de Lima - 48368881
+
 João Victor Guimarães Moura - 48298549
 
 ---
