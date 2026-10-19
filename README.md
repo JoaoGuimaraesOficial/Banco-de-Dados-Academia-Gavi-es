@@ -21,7 +21,7 @@ João Victor Guimarães Moura - 48298549
 
 ## 1. Caracterização da Organização
 
-**Nome e natureza da organização:** Academia Gaviões — empresa com fins lucrativos do setor de fitness e bem-estar.
+**Nome e natureza da organização:** Academia Gaviões empresa com fins lucrativos do setor de fitness e bem-estar.
 
 **Contexto e porte:** Unidade que funciona 24 horas por dia, dividida em quatro turnos (madrugada, manhã, tarde e noite), com centenas de alunos atendidos diariamente. A equipe é formada por recepcionistas, professores, funcionários da limpeza, gerente, setor financeiro e personal trainers externos credenciados.
 
@@ -63,7 +63,7 @@ João Victor Guimarães Moura - 48298549
 - **RF08:** controlar o estoque de materiais internos e itens promocionais.
 
 ### 3.2 Requisitos Não Funcionais
-- **RNF01 (segurança/privacidade):** acesso baseado em papéis — professores não podem ver dados financeiros nem o número completo do cartão dos alunos.
+- **RNF01 (segurança/privacidade):** acesso baseado em papéis, professores não podem ver dados financeiros nem o número completo do cartão dos alunos.
 - **RNF02 (disponibilidade):** validação de acesso na catraca deve funcionar 24h, com resposta em menos de 2 segundos.
 - **RNF03 (integridade):** o histórico de treinos deve ser preservado mesmo após o desligamento do professor que os criou.
 
@@ -217,7 +217,7 @@ João Victor Guimarães Moura - 48298549
 ## 7. Justificativa Técnica
 
 - **ALUNO, PLANO e MATRICULA separados:** evita guardar dados de pagamento direto no cadastro do aluno. A entidade associativa MATRICULA preserva o histórico de renovações e trocas de plano sem duplicar dados cadastrais.
-- **TREINO ligado a FUNCIONARIO, mas independente do vínculo empregatício:** o desligamento de um professor não apaga os treinos que ele criou — apenas mantém a referência ao autor original, permitindo que outro professor assuma e continue o histórico, como relatado na entrevista.
+- **TREINO ligado a FUNCIONARIO, mas independente do vínculo empregatício:** o desligamento de um professor não apaga os treinos que ele criou apenas mantém a referência ao autor original, permitindo que outro professor assuma e continue o histórico, como relatado na entrevista.
 - **OCORRENCIA_TURNO como entidade própria:** a falha de comunicação entre turnos foi apontada como o principal gargalo operacional; essa entidade digitaliza o "livro de ocorrências" e permite marcar avisos como resolvidos.
 - **CHECKIN_AULA como associativa:** trata a reserva de aula como um relacionamento controlado, permitindo aplicar a regra de limite de vagas (19 no spinning) diretamente na modelagem.
 
