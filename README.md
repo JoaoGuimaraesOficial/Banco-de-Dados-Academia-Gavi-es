@@ -34,7 +34,7 @@ João Victor Guimarães Moura - 48298549
 
 **Evidências da organização:**
 - Endereço: Av. Celso Garcia, 5492 - Tatuapé, São Paulo - SP, 03064-000
-- Responsável entrevistado: Eduardo Curzio e Leticia
+- Responsável entrevistado: Eduardo Curzio e Leticia (Recepcionistas)
 - Link oficial / Google Maps: https://share.google/RPpl0luAjH1SzWWri
 
 ---
