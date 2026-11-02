@@ -343,19 +343,42 @@ As funcionalidades de estoque, manutenção e controle de unidades também fazem
 
 ---
 
-## 10. Uso de inteligência artificial
+## 10. Registro de Uso de Inteligência Artificial
 
-As ferramentas de inteligência artificial foram usadas como apoio durante a organização das informações e a elaboração da documentação.
+Durante o desenvolvimento do projeto, foram utilizadas ferramentas de inteligência artificial como apoio à organização e documentação das informações.
 
-| Item | Registro |
-|---|---|
-| **Ferramentas utilizadas** | Gemini. |
-| **Etapas de utilização** | Organização da entrevista, levantamento de requisitos, estruturação do Dicionário de Dados e elaboração do modelo conceitual. |
-| **Motivação** | Facilitar a organização das anotações e transformar as informações levantadas em uma documentação mais clara. |
-| **Material utilizado** | Transcrição da entrevista realizada na Academia Gaviões. |
-| **Verificação** | As informações e sugestões foram comparadas com as anotações da entrevista e com os conteúdos estudados na disciplina de Banco de Dados. |
+### 10.1 Ferramentas utilizadas
 
-A utilização dessas ferramentas teve caráter de apoio. As decisões finais sobre a modelagem e a documentação devem ser revisadas e validadas pelos integrantes do grupo.
+- ChatGPT
+- Gemini
+
+### 10.2 Objetivo do uso
+
+As ferramentas foram utilizadas para auxiliar na organização das informações da entrevista, estruturação dos requisitos, elaboração das regras de negócio e melhoria da documentação do projeto.
+
+### 10.3 Solicitações realizadas
+
+Foram solicitadas sugestões relacionadas à organização dos requisitos funcionais e não funcionais, identificação de entidades, elaboração das regras de negócio e estruturação do README.
+
+### 10.4 Respostas recebidas
+
+As ferramentas forneceram sugestões de organização, exemplos de documentação e possíveis melhorias para a apresentação do projeto.
+
+### 10.5 Sugestões rejeitadas ou corrigidas
+
+Algumas sugestões foram ajustadas ou descartadas quando não correspondiam às informações obtidas na entrevista ou apresentavam funcionalidades que não haviam sido confirmadas.
+
+### 10.6 Reflexão crítica
+
+O uso das ferramentas facilitou a organização e a documentação do trabalho. Entretanto, as respostas não foram consideradas automaticamente corretas, sendo necessário avaliar sua coerência com as informações disponíveis.
+
+### 10.7 Justificativa da versão final
+
+A versão final foi definida considerando as informações levantadas pelo grupo, o conteúdo estudado na disciplina e as sugestões que se mostraram adequadas ao projeto.
+
+### 10.8 Verificação e limitações
+
+O grupo considerou as ferramentas como apoio complementar, não como substitutas da análise e das decisões dos integrantes. As informações do projeto e as decisões sobre requisitos, regras de negócio e relacionamentos foram avaliadas com base no material disponível. Eventuais utilizações adicionais durante as correções deverão ser registradas nesta seção.
 
 ---
 
