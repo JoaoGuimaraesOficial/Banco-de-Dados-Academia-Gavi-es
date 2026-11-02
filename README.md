@@ -120,22 +120,22 @@ As regras de negócio são as condições que o sistema tem que respeitar durant
 
 **Legenda de origem:**
 
-- ✅ **Confirmada na entrevista:** foi falado pelos entrevistados.
-- ⚠️ **Não confirmada na entrevista:** a gente identificou como possibilidade ou necessidade, mas ainda precisa validar com a academia.
+- **Confirmada na entrevista:** foi falado pelos entrevistados.
+- **Não confirmada na entrevista:** a gente identificou como possibilidade ou necessidade, mas ainda precisa validar com a academia.
 
 ### 4.1 Regras operacionais
 
 | Código | Regra | Dados envolvidos | Justificativa | Origem |
 |---|---|---|---|---|
-| **RN01** | O cancelamento de plano só ocorre por solicitação formal via SAC. | MATRICULA (`ID_MATRICULA`, `DT_FIM`, status de cancelamento). | Dá rastreabilidade ao pedido e evita cancelamento indevido ou contestado depois, que pode gerar bloqueio errado na catraca. | ✅ |
-| **RN02** | A inadimplência prolongada, por volta de 60 dias segundo o entrevistado, pode cancelar o plano automaticamente e bloquear a catraca. | MATRICULA (`status`, `DT_INICIO`, `DT_FIM`), ALUNO (`IN_ATIVO`). | Limita o prejuízo financeiro e mantém a base de alunos ativos coerente com a situação dos pagamentos. | ✅ |
-| **RN03** | O spinning tem limite fixo de 19 vagas por horário, e o check-in é obrigatório pelo aplicativo. | AULA_COLETIVA (`NM_MODALIDADE`, `DT_HORARIO`, `QT_LIMITE_VAGAS`), CHECKIN_AULA (`ID_AULA`, `ID_ALUNO`, `DT_REALIZACAO`). | Respeita a capacidade da sala e das bicicletas, garantindo segurança e qualidade da aula. | ✅ |
-| **RN04** | Personal trainer externo só pode atuar com cadastro ativo e pagamento de taxa mensal. | Cadastro de personal externo (nome, CPF, status e taxa mensal — entidade a definir), PAGAMENTO. | Controla quem circula na academia e formaliza a contrapartida pelo uso da estrutura. | ✅ |
-| **RN07** | A matrícula exige idade mínima e apresentação de atestado médico ou PAR-Q. | ALUNO (`DT_NASCIMENTO`), documento de saúde anexado. | Protege a saúde do aluno e reduz os riscos pra academia. A idade mínima ainda precisa ser confirmada. | ⚠️ |
-| **RN08** | O acesso a outras unidades depende do plano contratado. | PLANO (possível atributo `IN_ACESSO_OUTRAS_UNIDADES`), ALUNO (`DS_BIOMETRIA_FACIAL`). | Diferencia os planos comercialmente e evita acesso indevido a outras unidades. | ⚠️ |
-| **RN09** | Planos com fidelidade têm multa em caso de cancelamento antecipado. | PLANO (possíveis atributos `QT_MESES_FIDELIDADE` e `VL_MULTA`), MATRICULA (`DT_INICIO`, `DT_FIM`). | Protege a receita prevista em contrato. O prazo e o valor da multa ainda não foram informados. | ⚠️ |
-| **RN10** | Toda retirada de material por funcionário deve ser registrada com funcionário responsável, material, quantidade e data. | FUNCIONARIO, ESTOQUE_MATERIAL e entidade de movimentação (quantidade e data). | Resolve o problema de falta de controle dos itens promocionais e de limpeza. | ⚠️ |
-| **RN11** | Ocorrências pendentes são transferidas ao turno seguinte até serem resolvidas. | OCORRENCIA_TURNO (`DT_REGISTRO`, turno, `ID_FUNCIONARIO_AUTOR`, `DS_MENSAGEM`, `IN_RESOLVIDO`). | Resolve a falha de comunicação entre turnos e evita que pendências sejam esquecidas. | ⚠️ |
+| **RN01** | O cancelamento de plano só ocorre por solicitação formal via SAC. | MATRICULA (`ID_MATRICULA`, `DT_FIM`, status de cancelamento). | Dá rastreabilidade ao pedido e evita cancelamento indevido ou contestado depois, que pode gerar bloqueio errado na catraca. | Confirmada |
+| **RN02** | A inadimplência prolongada, por volta de 60 dias segundo o entrevistado, pode cancelar o plano automaticamente e bloquear a catraca. | MATRICULA (`status`, `DT_INICIO`, `DT_FIM`), ALUNO (`IN_ATIVO`). | Limita o prejuízo financeiro e mantém a base de alunos ativos coerente com a situação dos pagamentos. | Confirmada |
+| **RN03** | O spinning tem limite fixo de 19 vagas por horário, e o check-in é obrigatório pelo aplicativo. | AULA_COLETIVA (`NM_MODALIDADE`, `DT_HORARIO`, `QT_LIMITE_VAGAS`), CHECKIN_AULA (`ID_AULA`, `ID_ALUNO`, `DT_REALIZACAO`). | Respeita a capacidade da sala e das bicicletas, garantindo segurança e qualidade da aula. | Confirmada |
+| **RN04** | Personal trainer externo só pode atuar com cadastro ativo e pagamento de taxa mensal. | Cadastro de personal externo (nome, CPF, status e taxa mensal — entidade a definir), PAGAMENTO. | Controla quem circula na academia e formaliza a contrapartida pelo uso da estrutura. | Confirmada |
+| **RN07** | A matrícula exige idade mínima e apresentação de atestado médico ou PAR-Q. | ALUNO (`DT_NASCIMENTO`), documento de saúde anexado. | Protege a saúde do aluno e reduz os riscos pra academia. A idade mínima ainda precisa ser confirmada. | Não confirmada |
+| **RN08** | O acesso a outras unidades depende do plano contratado. | PLANO (possível atributo `IN_ACESSO_OUTRAS_UNIDADES`), ALUNO (`DS_BIOMETRIA_FACIAL`). | Diferencia os planos comercialmente e evita acesso indevido a outras unidades. | Não confirmada |
+| **RN09** | Planos com fidelidade têm multa em caso de cancelamento antecipado. | PLANO (possíveis atributos `QT_MESES_FIDELIDADE` e `VL_MULTA`), MATRICULA (`DT_INICIO`, `DT_FIM`). | Protege a receita prevista em contrato. O prazo e o valor da multa ainda não foram informados. | Não confirmada |
+| **RN10** | Toda retirada de material por funcionário deve ser registrada com funcionário responsável, material, quantidade e data. | FUNCIONARIO, ESTOQUE_MATERIAL e entidade de movimentação (quantidade e data). | Resolve o problema de falta de controle dos itens promocionais e de limpeza. | Não confirmada |
+| **RN11** | Ocorrências pendentes são transferidas ao turno seguinte até serem resolvidas. | OCORRENCIA_TURNO (`DT_REGISTRO`, turno, `ID_FUNCIONARIO_AUTOR`, `DS_MENSAGEM`, `IN_RESOLVIDO`). | Resolve a falha de comunicação entre turnos e evita que pendências sejam esquecidas. | Não confirmada |
 
 A RN01 e a RN02 tratam de situações diferentes. O cancelamento pedido pelo aluno passa pelo SAC, enquanto o cancelamento por inadimplência segue uma regra operacional própria. O funcionamento exato do cancelamento automático ainda precisa ser confirmado com a academia.
 
@@ -143,9 +143,9 @@ A RN01 e a RN02 tratam de situações diferentes. O cancelamento pedido pelo alu
 
 | Código | Regra | Dados envolvidos | Justificativa | Origem |
 |---|---|---|---|---|
-| **RN05** | Recepção e professores só podem visualizar os quatro últimos dígitos do cartão do aluno. | MATRICULA (`CD_ULTIMOS_DIGITOS_CARTAO`). | Reduz o risco de exposição de dados financeiros e limita o acesso às informações do cartão. | ✅ |
-| **RN06** | Informações de saúde e limitações físicas ficam anexadas ao cadastro em formato digital, como PDF ou imagem. | ALUNO, TREINO (`DS_OBSERVACAO_MEDICA`). | Permite elaborar treinos mais seguros. Como são dados pessoais sensíveis, o acesso deve ser restrito de acordo com a função do usuário. | ✅ |
-| **RN12** | Todo professor deve possuir registro ativo no CREF. | FUNCIONARIO (tipo de funcionário = professor; possível atributo `CD_CREF`). | Permite verificar a habilitação profissional dos professores. | ⚠️ |
+| **RN05** | Recepção e professores só podem visualizar os quatro últimos dígitos do cartão do aluno. | MATRICULA (`CD_ULTIMOS_DIGITOS_CARTAO`). | Reduz o risco de exposição de dados financeiros e limita o acesso às informações do cartão. | Confirmada |
+| **RN06** | Informações de saúde e limitações físicas ficam anexadas ao cadastro em formato digital, como PDF ou imagem. | ALUNO, TREINO (`DS_OBSERVACAO_MEDICA`). | Permite elaborar treinos mais seguros. Como são dados pessoais sensíveis, o acesso deve ser restrito de acordo com a função do usuário. | Confirmada |
+| **RN12** | Todo professor deve possuir registro ativo no CREF. | FUNCIONARIO (tipo de funcionário = professor; possível atributo `CD_CREF`). | Permite verificar a habilitação profissional dos professores. | Não confirmada |
 
 ### 4.3 Regras prováveis ainda não incluídas
 
