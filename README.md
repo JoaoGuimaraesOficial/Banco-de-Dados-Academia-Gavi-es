@@ -1,4 +1,4 @@
-# Entrega 1 — Modelo Conceitual (DER)
+# Modelo Conceitual (DER)
 
 ### Sistema de gestão de informações da Academia Gaviões
 
