@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dicionario de Dados - Academia Gavioes</title>
+    <title>Dicionário de Dados - Academia Gaviões</title>
 
     <style>
       body {
@@ -82,7 +82,7 @@
       a {
         color: #2c3e50;
       }
-      
+
       .tag {
         display: inline-block;
         font-size: 12px;
@@ -131,241 +131,186 @@
   </head>
 
   <body>
-    <h1>Dicionario de Dados - Academia Gavioes</h1>
-
+    <h1>Dicionário de Dados - Academia Gaviões</h1>
     <p>
-      Esse documento junta os atributos, tipos, chaves e regras de cada entidade
-      do modelo de dados da Academia Gavioes. Foi feito com base no que a gente
-      levantou no estabelecimento e nas decisoes de modelagem do grupo.
+      Esse documento junta os atributos, tipos, chaves e relacionamentos de cada
+      entidade do modelo de dados da Academia Gaviões. Foi feito com base no que
+      a gente levantou no estabelecimento e nas decisões de modelagem do grupo.
     </p>
-
-    <h2>1. Identificacao do documento</h2>
-
+    <h2>1. Identificação do documento</h2>
     <div class="scroll">
       <table>
         <tr>
           <th>Item</th>
-          <th>Informacao</th>
+          <th>Informação</th>
         </tr>
         <tr>
           <td>Projeto</td>
-          <td>Banco de Dados - Academia Gavioes</td>
+          <td>Banco de Dados - Academia Gaviões</td>
         </tr>
         <tr>
           <td>Entrega</td>
-          <td>Entrega 1 - Modelo Conceitual (DER)</td>
+          <td>Entrega 2 - Modelo Conceitual (DER)</td>
         </tr>
         <tr>
           <td>Documento</td>
-          <td>
-            Dicionario de Dados consolidado (README.md + dicionario_dados.html)
-          </td>
+          <td>Dicionário de Dados</td>
         </tr>
         <tr>
-          <td>Consolidacao</td>
-          <td>29/10/2026</td>
+          <td>Atualização</td>
+          <td>07/11/2026</td>
         </tr>
         <tr>
           <td>Integrantes</td>
           <td>
-            Edilson Angel Arismendi Huanca (49423452)<br />
-            Igor Alves (48123528)<br />
-            Gabriel Alves Rodrigues (47818191)<br />
-            Gabriel Viana de Lima (48368881)<br />
-            Joao Victor Guimaraes Moura (48298549)
+            Edilson Angel Arismendi Huanca (49423452)<br />Igor Alves
+            (48123528)<br />Gabriel Alves Rodrigues (47818191)<br />Gabriel
+            Viana de Lima (48368881)<br />João Victor Guimarães Moura (48298549)
           </td>
         </tr>
       </table>
     </div>
-
-    <h2>2. Visao geral do banco de dados</h2>
-
+    <h2>2. Visão geral do banco de dados</h2>
     <p>
       O banco atende uma unidade da academia que funciona 24 horas, em quatro
-      turnos (madrugada, manha, tarde e noite). Ele cobre cadastro de alunos,
-      planos e matriculas, treinos, aulas coletivas com check-in, comunicacao
-      entre turnos, estoque de materiais e chamados de manutencao. Sao
-      <strong>12 entidades</strong>.
+      turnos (madrugada, manhã, tarde e noite). Ele guarda os dados de alunos,
+      planos, matrículas e pagamentos, treinos, aulas coletivas com check-in,
+      comunicação entre turnos, chamados de manutenção e estoque de materiais.
+      São <strong>13 entidades</strong>.
     </p>
-
     <div class="scroll">
       <table>
         <tr>
-          <th>Convencao</th>
-          <th>Definicao</th>
+          <th>Convenção</th>
+          <th>Definição</th>
         </tr>
         <tr>
           <td>SGBD</td>
           <td>MySQL 8 (InnoDB)</td>
         </tr>
         <tr>
-          <td>Codificacao</td>
-          <td>utf8mb4_0900_ai_ci</td>
+          <td>Codificação</td>
+          <td>utf8mb4, com collation utf8mb4_0900_ai_ci</td>
         </tr>
         <tr>
           <td>Prefixos</td>
           <td>
             <code>ID_</code> identificador, <code>NM_</code> nome,
-            <code>DT_</code> data, <code>CD_</code> codigo,
+            <code>DT_</code> data, <code>CD_</code> código,
             <code>QT_</code> quantidade, <code>TP_</code> tipo/categoria,
             <code>IN_</code> indicador booleano,
-            <code>DS_</code> descricao/texto livre, <code>VL_</code> valor
-            monetario
+            <code>DS_</code> descrição/texto livre, <code>VL_</code> valor
+            monetário
           </td>
         </tr>
         <tr>
-          <td>Notacao da composicao</td>
+          <td>Notação da composição</td>
           <td>
-            <code>@</code> identificador, <code>+</code> elementos obrigatorios,
-            <code>( )</code> opcional, <code>[ | ]</code> escolha entre
-            alternativas, <code>n{ }m</code> iteracao
-          </td>
-        </tr>
-        <tr>
-          <td>Legenda de origem</td>
-          <td>
-            <span class="tag">Consolidado (README + HTML)</span> consta nos dois
-            documentos.
-            <span class="aviso" style="display: inline">a validar</span> o grupo
-            precisa confirmar.
+            <code>@</code> identificador, <code>+</code> elementos obrigatórios,
+            <code>( )</code> opcional
           </td>
         </tr>
       </table>
     </div>
-
-    <p class="meta">
-      Todos os valores de exemplo sao ficticios e servem apenas para ilustrar a
-      estrutura dos atributos.
-    </p>
-    
-    <h2>3. Relacao de entidades</h2>
-
+    <h2>3. Relação de entidades</h2>
     <div class="scroll">
       <table>
         <tr>
           <th>Entidade</th>
-          <th>Descricao</th>
-          <th>Origem</th>
+          <th>Descrição</th>
         </tr>
-
         <tr>
           <td><a href="#aluno">ALUNO</a></td>
           <td>
-            Cliente contratante; entidade central para acesso, cobranca e
+            Cliente que contrata a academia; é a base para acesso, cobrança e
             treinos.
           </td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
         </tr>
-
         <tr>
           <td><a href="#plano">PLANO</a></td>
           <td>
-            Modalidade comercial contratada, separada do cadastro do aluno para
-            preservar o historico financeiro.
+            Plano comercial que o aluno pode contratar, separado do cadastro do
+            aluno.
           </td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
         </tr>
-
         <tr>
           <td><a href="#matricula">MATRICULA</a></td>
-          <td>
-            Associa aluno e plano, permitindo varios vinculos ao longo do tempo.
-          </td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
+          <td>Liga o aluno a um plano e guarda o período do contrato.</td>
         </tr>
-
+        <tr>
+          <td><a href="#pagamento">PAGAMENTO</a></td>
+          <td>Pagamentos feitos em cada matrícula.</td>
+        </tr>
         <tr>
           <td><a href="#funcionario">FUNCIONARIO</a></td>
           <td>
-            Recepcionistas, professores, gerente e financeiro; necessario para
-            autoria de treinos e controle de permissoes.
+            Quem trabalha na academia: recepção, professores, gerente e
+            financeiro.
           </td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
         </tr>
-
         <tr>
           <td><a href="#treino">TREINO</a></td>
-          <td>
-            Ficha de exercicios prescrita, vinculada a um aluno e a um
-            professor.
-          </td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
+          <td>Ficha de treino de um aluno, montada por um professor.</td>
         </tr>
-
         <tr>
           <td><a href="#aula_coletiva">AULA_COLETIVA</a></td>
-          <td>Sessoes com horario e limite de vagas.</td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
+          <td>
+            Aulas em grupo, com horário, instrutor, unidade e limite de vagas.
+          </td>
         </tr>
-
         <tr>
           <td><a href="#checkin_aula">CHECKIN_AULA</a></td>
-          <td>Associa aluno e aula, controlando o limite de participantes.</td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
+          <td>Reserva do aluno em uma aula coletiva.</td>
         </tr>
-
         <tr>
           <td><a href="#ocorrencia_turno">OCORRENCIA_TURNO</a></td>
-          <td>
-            Registro de comunicacao entre turnos, criado para resolver o
-            principal problema identificado na entrevista.
-          </td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
+          <td>Recados e pendências que um turno deixa para o próximo.</td>
         </tr>
-
         <tr>
           <td><a href="#item_treino">ITEM_TREINO</a></td>
-          <td>Itens e exercicios que compoem a ficha de treino.</td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
+          <td>Exercícios que fazem parte de uma ficha de treino.</td>
         </tr>
-
         <tr>
           <td><a href="#unidade">UNIDADE</a></td>
-          <td>Filial da academia (identificacao e endereco).</td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
+          <td>Filial da academia.</td>
         </tr>
-
-        <tr>
-          <td><a href="#estoque_material">ESTOQUE_MATERIAL</a></td>
-          <td>Itens em estoque, controlados por filial.</td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
-        </tr>
-
         <tr>
           <td><a href="#chamado_manutencao">CHAMADO_MANUTENCAO</a></td>
-          <td>Chamados de reparo de equipamentos, abertos por funcionarios.</td>
-          <td><span class="tag">Consolidado (README + HTML)</span></td>
+          <td>
+            Pedidos de reparo de equipamentos, abertos pelos funcionários.
+          </td>
+        </tr>
+        <tr>
+          <td><a href="#estoque_material">ESTOQUE_MATERIAL</a></td>
+          <td>
+            Materiais e itens mantidos em estoque em cada unidade da academia.
+          </td>
         </tr>
       </table>
     </div>
-
-    <h2>4. Dicionario detalhado das entidades</h2>
-
-    <!--  ALUNO - feito -->
+    <h2>4. Dicionário detalhado das entidades</h2>
     <h3 id="aluno">ALUNO</h3>
     <p>
-      Cliente contratante; entidade central para acesso, cobranca e treinos.
-      <span class="tag">Consolidado (README + HTML)</span>
+      Cliente que contrata a academia; é a base para acesso, cobrança e treinos.
     </p>
     <p class="meta">
-      <strong>Composicao:</strong>
+      <strong>Composição:</strong>
       <code
         >= @ID_ALUNO + NM_ALUNO + ID_CPF + NM_EMAIL + DT_NASCIMENTO +
         (DS_FOTO_PERFIL) + (DS_BIOMETRIA_FACIAL) + IN_ATIVO</code
       >
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_ALUNO</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
           <td>Identificador interno</td>
         </tr>
@@ -378,383 +323,371 @@
         <tr>
           <td>ID_CPF</td>
           <td>varchar(11)</td>
-          <td>Sim (unico)</td>
-          <td>Usado na busca pela recepcao</td>
+          <td>Sim (único)</td>
+          <td>Usado na busca pela recepção</td>
         </tr>
         <tr>
           <td>NM_EMAIL</td>
           <td>varchar(100)</td>
           <td>Sim</td>
-          <td>Login no app e contato com SAC</td>
+          <td>
+            E-mail de contato; também serve para buscar o aluno na recepção
+          </td>
         </tr>
         <tr>
           <td>DT_NASCIMENTO</td>
           <td>date</td>
           <td>Sim</td>
-          <td>Validacao de idade/contrato</td>
+          <td>Data de nascimento do aluno</td>
         </tr>
         <tr>
           <td>DS_FOTO_PERFIL</td>
           <td>varchar(255)</td>
-          <td>Nao</td>
-          <td>Pode ser cadastrada depois</td>
+          <td>Não</td>
+          <td>Foto de perfil; pode ser cadastrada depois</td>
         </tr>
         <tr>
           <td>DS_BIOMETRIA_FACIAL</td>
           <td>text</td>
-          <td>Nao</td>
-          <td>Valida em outras unidades</td>
+          <td>Não</td>
+          <td>Cadastro facial usado na catraca; vale em outras unidades</td>
         </tr>
         <tr>
           <td>IN_ATIVO</td>
-          <td>boolean</td>
+          <td>tinyint(1)</td>
           <td>Sim</td>
-          <td>Muda com inadimplencia prolongada</td>
+          <td>Cadastro ativo; muda com inadimplência prolongada</td>
         </tr>
       </table>
     </div>
-
     <p class="meta">
-      <strong>Indices:</strong> PK em ID_ALUNO; indices secundarios em ID_CPF e
+      <strong>Índices:</strong> PK em ID_ALUNO; índices secundários em ID_CPF e
       NM_ALUNO.
     </p>
-    <p class="meta">
-      <strong>Regras relacionadas:</strong> RN02, RN06 (ver secao 6)
-    </p>
-
-    <div class="nota">
-      A RN06 fala em anexar informacoes de saude ao cadastro do aluno, mas
-      nenhum atributo desta entidade guarda esse anexo (ver I06).
-    </div>
-
-    <!--  PLANO - feito -->
     <h3 id="plano">PLANO</h3>
     <p>
-      Modalidade comercial contratada, separada do cadastro do aluno para
-      preservar o historico financeiro.
-      <span class="tag">Consolidado (README + HTML)</span>
+      Plano comercial que o aluno pode contratar, separado do cadastro do aluno.
     </p>
     <p class="meta">
-      <strong>Composicao:</strong>
+      <strong>Composição:</strong>
       <code
-        >= @ID_PLANO + NM_PLANO + [TP_RECORRENTE | TP_NAO_RECORRENTE] +
-        VL_MENSALIDADE + IN_ATIVO</code
+        >= @ID_PLANO + NM_PLANO + TP_RECORRENCIA + VL_MENSALIDADE +
+        IN_ATIVO</code
       >
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_PLANO</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
-          <td>-</td>
+          <td>Identificador do plano</td>
         </tr>
         <tr>
           <td>NM_PLANO</td>
           <td>varchar(60)</td>
           <td>Sim</td>
-          <td>
-            Ex.: "Mensal", "Black"
-            <span class="aviso"
-              >a validar: o exemplo "Black" nao aparece na entrevista (ver
-              I08)</span
-            >
-          </td>
+          <td>Nome do plano</td>
         </tr>
         <tr>
-          <td>TP_RECORRENTE / TP_NAO_RECORRENTE</td>
+          <td>TP_RECORRENCIA</td>
           <td>varchar(20)</td>
           <td>Sim</td>
           <td>
-            Cobranca automatica ou avulsa
-            <span class="aviso"
-              >a validar: nome do atributo difere do modelo logico (ver
-              I04)</span
-            >
+            Tipo de cobrança: recorrente (automática no cartão) ou não
+            recorrente (avulsa)
           </td>
         </tr>
         <tr>
           <td>VL_MENSALIDADE</td>
           <td>decimal(10,2)</td>
           <td>Sim</td>
-          <td>&gt; 0</td>
+          <td>Valor da mensalidade (maior que 0)</td>
         </tr>
         <tr>
           <td>IN_ATIVO</td>
-          <td>boolean</td>
+          <td>tinyint(1)</td>
           <td>Sim</td>
-          <td>Disponivel para nova adesao</td>
+          <td>Plano disponível para novas adesões</td>
         </tr>
       </table>
     </div>
-
-    <p class="meta">
-      <strong>Regras relacionadas:</strong> nenhuma regra numerada do README
-      cita esta entidade (ver secao 6)
-    </p>
-
-    <!--  MATRICULA  -->
     <h3 id="matricula">
       MATRICULA <small>(entidade associativa entre ALUNO e PLANO)</small>
     </h3>
-    <p>
-      Associa aluno e plano, permitindo varios vinculos ao longo do tempo.
-      <span class="tag">Consolidado (README + HTML)</span>
-    </p>
+    <p>Liga o aluno a um plano e guarda o período do contrato.</p>
     <p class="meta">
-      <strong>Composicao:</strong>
+      <strong>Composição:</strong>
       <code
-        >= @ID_MATRICULA + ID_ALUNO + ID_PLANO + DT_INICIO + (DT_FIM) + [TP_PAGO
-        | TP_PENDENTE | TP_INADIMPLENTE | TP_CANCELADO] +
-        (CD_ULTIMOS_DIGITOS_CARTAO)</code
+        >= @ID_MATRICULA + ID_ALUNO + ID_PLANO + DT_INICIO + (DT_FIM) +
+        TP_STATUS + (CD_ULTIMOS_DIGITOS_CARTAO)</code
       >
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_MATRICULA</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
-          <td>-</td>
+          <td>Identificador da matrícula</td>
         </tr>
         <tr>
           <td>ID_ALUNO</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (FK)</td>
-          <td>-</td>
+          <td>Referencia ALUNO</td>
         </tr>
         <tr>
           <td>ID_PLANO</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (FK)</td>
-          <td>-</td>
+          <td>Referencia PLANO</td>
         </tr>
         <tr>
           <td>DT_INICIO</td>
           <td>date</td>
           <td>Sim</td>
-          <td>-</td>
+          <td>Data de início do contrato</td>
         </tr>
         <tr>
           <td>DT_FIM</td>
           <td>date</td>
-          <td>Nao</td>
+          <td>Não</td>
           <td>Preenchida no cancelamento</td>
         </tr>
         <tr>
-          <td>Status (pago/pendente/inadimplente/cancelado)</td>
+          <td>TP_STATUS</td>
           <td>varchar(20)</td>
           <td>Sim</td>
           <td>
-            Inadimplente bloqueia a catraca
-            <span class="aviso"
-              >a validar: rotulo descritivo, nao um nome de atributo (ver
-              I04)</span
-            >
+            Situação da matrícula: pago, pendente, inadimplente ou cancelado;
+            inadimplente bloqueia a catraca
           </td>
         </tr>
         <tr>
           <td>CD_ULTIMOS_DIGITOS_CARTAO</td>
           <td>varchar(4)</td>
-          <td>Nao</td>
-          <td>Conferencia sem expor dado sensivel</td>
+          <td>Não</td>
+          <td>
+            Só os 4 últimos dígitos do cartão, sem expor o número completo
+          </td>
         </tr>
       </table>
     </div>
-
+    <h3 id="pagamento">PAGAMENTO</h3>
+    <p>Pagamentos feitos em cada matrícula.</p>
     <p class="meta">
-      <strong>Regras relacionadas:</strong> RN01, RN02, RN05 (ver secao 6)
-    </p>
-
-    <!--  FUNCIONARIO - feito -->
-    <h3 id="funcionario">FUNCIONARIO</h3>
-    <p>
-      Recepcionistas, professores, gerente e financeiro; necessario para autoria
-      de treinos e controle de permissoes.
-      <span class="tag">Consolidado (README + HTML)</span>
-    </p>
-    <p class="meta">
-      <strong>Composicao:</strong>
+      <strong>Composição:</strong>
       <code
-        >= @ID_FUNCIONARIO + NM_FUNCIONARIO + ID_CPF + [TP_RECEPCAO |
-        TP_PROFESSOR | TP_GERENTE | TP_FINANCEIRO] + IN_ATIVO</code
+        >= @ID_PAGAMENTO + ID_MATRICULA + DT_PAGAMENTO + VL_PAGAMENTO +
+        TP_FORMA_PAGAMENTO + TP_STATUS</code
       >
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
+        </tr>
+        <tr>
+          <td>ID_PAGAMENTO</td>
+          <td>int</td>
+          <td>Sim (PK)</td>
+          <td>Identificador do pagamento</td>
+        </tr>
+        <tr>
+          <td>ID_MATRICULA</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>Referencia MATRICULA</td>
+        </tr>
+        <tr>
+          <td>DT_PAGAMENTO</td>
+          <td>date</td>
+          <td>Sim</td>
+          <td>Data do pagamento</td>
+        </tr>
+        <tr>
+          <td>VL_PAGAMENTO</td>
+          <td>decimal(10,2)</td>
+          <td>Sim</td>
+          <td>Valor pago (maior que 0)</td>
+        </tr>
+        <tr>
+          <td>TP_FORMA_PAGAMENTO</td>
+          <td>varchar(20)</td>
+          <td>Sim</td>
+          <td>
+            Forma de pagamento: PIX, dinheiro, cartão de crédito ou cartão de
+            débito
+          </td>
+        </tr>
+        <tr>
+          <td>TP_STATUS</td>
+          <td>varchar(20)</td>
+          <td>Sim</td>
+          <td>Situação do pagamento, como realizado ou cartão recusado</td>
+        </tr>
+      </table>
+    </div>
+    <h3 id="funcionario">FUNCIONARIO</h3>
+    <p>
+      Quem trabalha na academia: recepção, professores, gerente e financeiro.
+    </p>
+    <p class="meta">
+      <strong>Composição:</strong>
+      <code
+        >= @ID_FUNCIONARIO + NM_FUNCIONARIO + ID_CPF + TP_PAPEL + IN_ATIVO</code
+      >
+    </p>
+    <div class="scroll">
+      <table>
+        <tr>
+          <th>Atributo</th>
+          <th>Tipo</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_FUNCIONARIO</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
-          <td>-</td>
+          <td>Identificador do funcionário</td>
         </tr>
         <tr>
           <td>NM_FUNCIONARIO</td>
           <td>varchar(120)</td>
           <td>Sim</td>
-          <td>-</td>
+          <td>Nome completo</td>
         </tr>
         <tr>
           <td>ID_CPF</td>
           <td>varchar(11)</td>
-          <td>Sim (unico)</td>
-          <td>-</td>
+          <td>Sim (único)</td>
+          <td>CPF do funcionário</td>
         </tr>
         <tr>
-          <td>Papel (recepcao/professor/gerente/financeiro)</td>
+          <td>TP_PAPEL</td>
           <td>varchar(20)</td>
           <td>Sim</td>
           <td>
-            Define permissoes de acesso
-            <span class="aviso"
-              >a validar: rotulo descritivo, nao um nome de atributo (ver
-              I04)</span
-            >
+            Função na academia: recepção, professor, gerente ou financeiro;
+            define as permissões de acesso
           </td>
         </tr>
         <tr>
           <td>IN_ATIVO</td>
-          <td>boolean</td>
+          <td>tinyint(1)</td>
           <td>Sim</td>
-          <td>-</td>
+          <td>Funcionário em atividade</td>
         </tr>
       </table>
     </div>
-
-    <p class="meta">
-      <strong>Regras relacionadas:</strong> RNF03 (ver secao 6)
-    </p>
-
-    <!--  TREINO - feito -->
     <h3 id="treino">TREINO</h3>
-    <p>
-      Ficha de exercicios prescrita, vinculada a um aluno e a um professor.
-      <span class="tag">Consolidado (README + HTML)</span>
-    </p>
+    <p>Ficha de treino de um aluno, montada por um professor.</p>
     <p class="meta">
-      <strong>Composicao:</strong>
+      <strong>Composição:</strong>
       <code
         >= @ID_TREINO + ID_ALUNO + ID_PROFESSOR + DT_CRIACAO + DT_VALIDADE +
-        1{ITEM_EXERCICIO}100 + (DS_OBSERVACAO_MEDICA)</code
+        (DS_OBSERVACAO_MEDICA)</code
       >
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_TREINO</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
-          <td>-</td>
+          <td>Identificador da ficha de treino</td>
         </tr>
         <tr>
           <td>ID_ALUNO</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (FK)</td>
-          <td>-</td>
+          <td>Referencia ALUNO</td>
         </tr>
         <tr>
           <td>ID_PROFESSOR</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (FK)</td>
-          <td>Referencia FUNCIONARIO</td>
+          <td>Referencia FUNCIONARIO (professor que montou o treino)</td>
         </tr>
         <tr>
-          <td>DT_CRIACAO / DT_VALIDADE</td>
+          <td>DT_CRIACAO</td>
           <td>date</td>
           <td>Sim</td>
-          <td>Define renovacao da ficha</td>
+          <td>Data em que a ficha foi criada</td>
         </tr>
         <tr>
-          <td>NM_EXERCICIO, QT_SERIES, QT_REPETICOES</td>
-          <td>-</td>
+          <td>DT_VALIDADE</td>
+          <td>date</td>
           <td>Sim</td>
           <td>
-            Um treino tem de 1 a 100 exercicios
-            <span class="aviso"
-              >a validar: esses atributos tambem aparecem em ITEM_TREINO (ver
-              I05)</span
-            >
+            Data limite da ficha; depois dela o treino precisa ser renovado
           </td>
-        </tr>
-        <tr>
-          <td>DS_CARGA</td>
-          <td>varchar(30)</td>
-          <td>Nao</td>
-          <td>-</td>
         </tr>
         <tr>
           <td>DS_OBSERVACAO_MEDICA</td>
           <td>text</td>
-          <td>Nao</td>
-          <td>Limitacoes fisicas do aluno</td>
+          <td>Não</td>
+          <td>Limitações físicas do aluno</td>
         </tr>
       </table>
     </div>
-
-    <p class="meta">
-      <strong>Regras relacionadas:</strong> RN06, RNF03 (ver secao 6)
-    </p>
-
-    <div class="nota">
-      Cada item de exercicio = NM_EXERCICIO + QT_SERIES + QT_REPETICOES +
-      (DS_CARGA).
-    </div>
-
-    <!--  AULA_COLETIVA - feito -->
     <h3 id="aula_coletiva">AULA_COLETIVA</h3>
-    <p>
-      Sessoes com horario e limite de vagas.
-      <span class="tag">Consolidado (README + HTML)</span>
-    </p>
+    <p>Aulas em grupo, com horário, instrutor, unidade e limite de vagas.</p>
     <p class="meta">
-      <strong>Composicao:</strong>
+      <strong>Composição:</strong>
       <code
-        >= @ID_AULA + NM_MODALIDADE + DT_HORARIO + QT_LIMITE_VAGAS +
-        ID_INSTRUTOR</code
+        >= @ID_AULA + ID_INSTRUTOR + ID_UNIDADE + NM_MODALIDADE + DT_HORARIO +
+        QT_LIMITE_VAGAS</code
       >
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_AULA</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
-          <td>-</td>
+          <td>Identificador da aula</td>
+        </tr>
+        <tr>
+          <td>ID_INSTRUTOR</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>Referencia FUNCIONARIO (instrutor da aula)</td>
+        </tr>
+        <tr>
+          <td>ID_UNIDADE</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>Referencia UNIDADE</td>
         </tr>
         <tr>
           <td>NM_MODALIDADE</td>
@@ -766,405 +699,314 @@
           <td>DT_HORARIO</td>
           <td>datetime</td>
           <td>Sim</td>
-          <td>-</td>
+          <td>Data e horário da aula</td>
         </tr>
         <tr>
           <td>QT_LIMITE_VAGAS</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim</td>
           <td>19 para o spinning</td>
         </tr>
-        <tr>
-          <td>ID_INSTRUTOR</td>
-          <td>integer</td>
-          <td>Sim (FK)</td>
-          <td>Referencia FUNCIONARIO</td>
-        </tr>
       </table>
     </div>
-
-    <p class="meta"><strong>Regras relacionadas:</strong> RN03 (ver secao 6)</p>
-
-    <div class="nota">
-      Esta entidade nao tem ligacao com UNIDADE neste documento (ver I02).
-    </div>
-
-    <!--  CHECKIN_AULA - feito -->
     <h3 id="checkin_aula">
       CHECKIN_AULA
       <small>(entidade associativa entre ALUNO e AULA_COLETIVA)</small>
     </h3>
-    <p>
-      Associa aluno e aula, controlando o limite de participantes.
-      <span class="tag">Consolidado (README + HTML)</span>
-    </p>
+    <p>Reserva do aluno em uma aula coletiva.</p>
     <p class="meta">
-      <strong>Composicao:</strong>
+      <strong>Composição:</strong>
       <code>= @ID_CHECKIN + ID_AULA + ID_ALUNO + DT_REALIZACAO</code>
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_CHECKIN</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
-          <td>-</td>
+          <td>Identificador do check-in</td>
         </tr>
         <tr>
-          <td>ID_AULA / ID_ALUNO</td>
-          <td>integer</td>
+          <td>ID_AULA</td>
+          <td>int</td>
           <td>Sim (FK)</td>
-          <td>Indice unico (ID_AULA, ID_ALUNO) evita reserva duplicada</td>
+          <td>Referencia AULA_COLETIVA</td>
+        </tr>
+        <tr>
+          <td>ID_ALUNO</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>Referencia ALUNO</td>
         </tr>
         <tr>
           <td>DT_REALIZACAO</td>
           <td>datetime</td>
           <td>Sim</td>
-          <td>-</td>
+          <td>Data e hora do check-in</td>
         </tr>
       </table>
     </div>
-
     <p class="meta">
-      <strong>Indices:</strong> Indice unico composto em (ID_AULA, ID_ALUNO).
+      <strong>Índices:</strong> Índice único composto em (ID_AULA, ID_ALUNO),
+      que evita reserva duplicada.
     </p>
-    <p class="meta"><strong>Regras relacionadas:</strong> RN03 (ver secao 6)</p>
-
-    <!--  OCORRENCIA_TURNO - feito -->
     <h3 id="ocorrencia_turno">OCORRENCIA_TURNO</h3>
-    <p>
-      Registro de comunicacao entre turnos, criado para resolver o principal
-      problema identificado na entrevista.
-      <span class="tag">Consolidado (README + HTML)</span>
-    </p>
+    <p>Recados e pendências que um turno deixa para o próximo.</p>
     <p class="meta">
-      <strong>Composicao:</strong>
+      <strong>Composição:</strong>
       <code
-        >= @ID_OCORRENCIA + DT_REGISTRO + [TP_MADRUGADA | TP_MANHA | TP_TARDE |
-        TP_NOITE] + ID_FUNCIONARIO_AUTOR + DS_MENSAGEM + IN_RESOLVIDO</code
+        >= @ID_OCORRENCIA + ID_FUNCIONARIO_AUTOR + DT_REGISTRO + TP_TURNO +
+        DS_MENSAGEM + IN_RESOLVIDO</code
       >
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_OCORRENCIA</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
-          <td>-</td>
+          <td>Identificador da ocorrência</td>
+        </tr>
+        <tr>
+          <td>ID_FUNCIONARIO_AUTOR</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>Referencia FUNCIONARIO (quem registrou)</td>
         </tr>
         <tr>
           <td>DT_REGISTRO</td>
           <td>datetime</td>
           <td>Sim</td>
-          <td>-</td>
+          <td>Data e hora do registro</td>
         </tr>
         <tr>
-          <td>Turno (madrugada/manha/tarde/noite)</td>
+          <td>TP_TURNO</td>
           <td>varchar(20)</td>
           <td>Sim</td>
-          <td>
-            -
-            <span class="aviso"
-              >a validar: rotulo descritivo, nao um nome de atributo (ver
-              I04)</span
-            >
-          </td>
-        </tr>
-        <tr>
-          <td>ID_FUNCIONARIO_AUTOR</td>
-          <td>integer</td>
-          <td>Sim (FK)</td>
-          <td>-</td>
+          <td>Turno: madrugada, manhã, tarde ou noite</td>
         </tr>
         <tr>
           <td>DS_MENSAGEM</td>
           <td>text</td>
           <td>Sim</td>
-          <td>Pendencia ou aviso operacional</td>
+          <td>Pendência ou aviso para a equipe do próximo turno</td>
         </tr>
         <tr>
           <td>IN_RESOLVIDO</td>
-          <td>boolean</td>
+          <td>tinyint(1)</td>
           <td>Sim</td>
-          <td>-</td>
+          <td>Começa como não resolvida</td>
         </tr>
       </table>
     </div>
-
-    <p class="meta">
-      <strong>Regras relacionadas:</strong> nenhuma regra numerada do README
-      cita esta entidade (ver secao 6)
-    </p>
-
-    <!--  ITEM_TREINO - feito -->
     <h3 id="item_treino">
-      ITEM_TREINO <small>(itens e exercicios da ficha de treino)</small>
+      ITEM_TREINO <small>(itens e exercícios da ficha de treino)</small>
     </h3>
-    <p>
-      Itens e exercicios que compoem a ficha de treino.
-    </p>
+    <p>Exercícios que fazem parte de uma ficha de treino.</p>
     <p class="meta">
-      <strong>Composicao:</strong> ainda nao definida no README (ver I10).
+      <strong>Composição:</strong>
+      <code
+        >= @ID_ITEM_TREINO + ID_TREINO + NM_EXERCICIO + QT_SERIES +
+        QT_REPETICOES + (DS_CARGA)</code
+      >
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_ITEM_TREINO</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
-          <td>Identificador unico do exercicio</td>
+          <td>Identificador do exercício na ficha</td>
         </tr>
         <tr>
           <td>ID_TREINO</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (FK)</td>
           <td>Referencia TREINO</td>
         </tr>
         <tr>
           <td>NM_EXERCICIO</td>
-          <td>varchar(80)</td>
+          <td>varchar(100)</td>
           <td>Sim</td>
-          <td>Ex.: Supino reto, Agachamento livre</td>
+          <td>Nome do exercício</td>
         </tr>
         <tr>
           <td>QT_SERIES</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim</td>
-          <td>Numero de series prescritas (&gt; 0)</td>
+          <td>Número de séries</td>
         </tr>
         <tr>
           <td>QT_REPETICOES</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim</td>
-          <td>Numero de repeticoes por serie (&gt; 0)</td>
+          <td>Repetições por série</td>
         </tr>
         <tr>
           <td>DS_CARGA</td>
           <td>varchar(30)</td>
-          <td>Nao</td>
-          <td>Ex.: "15 kg", "Peso corporal"</td>
+          <td>Não</td>
+          <td>Carga do exercício</td>
         </tr>
       </table>
     </div>
-
-    <p class="meta">
-      <strong>Regras relacionadas:</strong> nenhuma regra numerada do README
-      cita esta entidade (ver secao 6)
-    </p>
-
-    <!--  UNIDADE - feito -->
     <h3 id="unidade">UNIDADE</h3>
-    <p>
-      Filial da academia (identificacao e endereco).
-      
-    </p>
+    <p>Filial da academia.</p>
     <p class="meta">
-      <strong>Composicao:</strong> ainda nao definida no README (ver I10).
+      <strong>Composição:</strong>
+      <code>= @ID_UNIDADE + NM_UNIDADE + DS_ENDERECO</code>
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_UNIDADE</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
-          <td>Identificador unico da filial</td>
+          <td>Identificador da unidade</td>
         </tr>
         <tr>
           <td>NM_UNIDADE</td>
-          <td>varchar(80)</td>
-          <td>Sim (unico)</td>
-          <td>
-            Nome da filial (ex.: Unidade Central)
-            <span class="aviso"
-              >a validar: o exemplo "Unidade Central" nao aparece na entrevista
-              (ver I08)</span
-            >
-          </td>
+          <td>varchar(100)</td>
+          <td>Sim</td>
+          <td>Nome da unidade</td>
         </tr>
         <tr>
           <td>DS_ENDERECO</td>
-          <td>varchar(200)</td>
+          <td>varchar(255)</td>
           <td>Sim</td>
-          <td>Endereco completo da filial</td>
+          <td>Endereço completo da unidade</td>
         </tr>
       </table>
     </div>
-
-    <p class="meta">
-      <strong>Regras relacionadas:</strong> nenhuma regra numerada do README
-      cita esta entidade (ver secao 6)
-    </p>
-
-    <div class="nota">
-      Hoje so ESTOQUE_MATERIAL referencia esta entidade (ver I02).
-    </div>
-
-    <!--  ESTOQUE_MATERIAL - feito -->
-    <h3 id="estoque_material">ESTOQUE_MATERIAL</h3>
-    <p>
-      Itens em estoque, controlados por filial.
-      
-    </p>
-    <p class="meta">
-      <strong>Composicao:</strong> ainda nao definida no README (ver I10).
-    </p>
-
-    <div class="scroll">
-      <table>
-        <tr>
-          <th>Atributo</th>
-          <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
-        </tr>
-        <tr>
-          <td>ID_MATERIAL</td>
-          <td>integer</td>
-          <td>Sim (PK)</td>
-          <td>Identificador do item em estoque</td>
-        </tr>
-        <tr>
-          <td>ID_UNIDADE</td>
-          <td>integer</td>
-          <td>Sim (FK)</td>
-          <td>Referencia UNIDADE (estoque por filial)</td>
-        </tr>
-        <tr>
-          <td>NM_MATERIAL</td>
-          <td>varchar(80)</td>
-          <td>Sim</td>
-          <td>
-            Ex.: Alcool em gel, Toalhas, Halteres
-            <span class="aviso"
-              >a validar: apenas o alcool aparece na entrevista; toalhas e
-              halteres nao (ver I08)</span
-            >
-          </td>
-        </tr>
-        <tr>
-          <td>TP_MATERIAL</td>
-          <td>varchar(20)</td>
-          <td>Sim</td>
-          <td>
-            Categoria: LIMPEZA, HIGIENE ou EQUIPAMENTO
-            <span class="aviso"
-              >a validar: nao ha categoria para itens promocionais, que o RF08
-              cita (ver I07)</span
-            >
-          </td>
-        </tr>
-        <tr>
-          <td>QT_ESTOQUE</td>
-          <td>integer</td>
-          <td>Sim</td>
-          <td>Quantidade disponivel (&gt;= 0)</td>
-        </tr>
-      </table>
-    </div>
-
-    <p class="meta">
-      <strong>Regras relacionadas:</strong> nenhuma regra numerada do README
-      cita esta entidade (ver secao 6)
-    </p>
-
-    <!-- CHAMADO_MANUTENCAO - feito -->
     <h3 id="chamado_manutencao">CHAMADO_MANUTENCAO</h3>
-    <p>
-      Chamados de reparo de equipamentos, abertos por funcionarios.
-      
-    </p>
+    <p>Pedidos de reparo de equipamentos, abertos pelos funcionários.</p>
     <p class="meta">
-      <strong>Composicao:</strong> ainda nao definida no README (ver I10).
+      <strong>Composição:</strong>
+      <code
+        >= @ID_CHAMADO + ID_FUNCIONARIO_ABERTURA + DT_ABERTURA + DS_PROBLEMA +
+        TP_STATUS</code
+      >
     </p>
-
     <div class="scroll">
       <table>
         <tr>
           <th>Atributo</th>
           <th>Tipo</th>
-          <th>Obrigatorio</th>
-          <th>Observacao</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
         </tr>
         <tr>
           <td>ID_CHAMADO</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (PK)</td>
-          <td>Identificador do chamado de reparo</td>
+          <td>Identificador do chamado</td>
         </tr>
         <tr>
           <td>ID_FUNCIONARIO_ABERTURA</td>
-          <td>integer</td>
+          <td>int</td>
           <td>Sim (FK)</td>
-          <td>Referencia FUNCIONARIO que abriu o pedido</td>
+          <td>Referencia FUNCIONARIO (quem abriu o pedido)</td>
         </tr>
         <tr>
           <td>DT_ABERTURA</td>
           <td>datetime</td>
           <td>Sim</td>
-          <td>Data e hora da solicitacao</td>
+          <td>Data e hora em que o chamado foi aberto</td>
         </tr>
         <tr>
           <td>DS_PROBLEMA</td>
           <td>text</td>
           <td>Sim</td>
-          <td>Descricao do defeito ou avaria</td>
+          <td>Descrição do defeito</td>
         </tr>
         <tr>
           <td>TP_STATUS</td>
           <td>varchar(20)</td>
           <td>Sim</td>
-          <td>
-            Situacao: ABERTO, EM_ANDAMENTO ou CONCLUIDO
-            <span class="aviso"
-              >a validar: esses valores nao vem da entrevista, que descreve
-              ajuste local, gerente e equipe regional (ver I08)</span
-            >
-          </td>
+          <td>Situação do chamado</td>
         </tr>
       </table>
     </div>
-
+    <h3 id="estoque_material">ESTOQUE_MATERIAL</h3>
+    <p>Materiais e itens mantidos em estoque em cada unidade da academia.</p>
     <p class="meta">
-      <strong>Regras relacionadas:</strong> nenhuma regra numerada do README
-      cita esta entidade (ver secao 6)
+      <strong>Composição:</strong>
+      <code
+        >= @ID_MATERIAL + ID_UNIDADE + NM_MATERIAL + TP_MATERIAL +
+        QT_ESTOQUE</code
+      >
     </p>
-    
-    <h2>5. Chaves primarias e estrangeiras</h2>
-
-    <h3>Chaves primarias</h3>
+    <div class="scroll">
+      <table>
+        <tr>
+          <th>Atributo</th>
+          <th>Tipo</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
+        </tr>
+        <tr>
+          <td>ID_MATERIAL</td>
+          <td>int</td>
+          <td>Sim (PK)</td>
+          <td>Identificador do material em estoque</td>
+        </tr>
+        <tr>
+          <td>ID_UNIDADE</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>Referencia UNIDADE, indicando onde o material está armazenado</td>
+        </tr>
+        <tr>
+          <td>NM_MATERIAL</td>
+          <td>varchar(100)</td>
+          <td>Sim</td>
+          <td>Nome ou identificação do material</td>
+        </tr>
+        <tr>
+          <td>TP_MATERIAL</td>
+          <td>varchar(50)</td>
+          <td>Sim</td>
+          <td>Categoria ou tipo do material</td>
+        </tr>
+        <tr>
+          <td>QT_ESTOQUE</td>
+          <td>int</td>
+          <td>Sim</td>
+          <td>Quantidade disponível em estoque</td>
+        </tr>
+      </table>
+    </div>
+    <h2>5. Chaves primárias e estrangeiras</h2>
+    <h3>Chaves primárias</h3>
     <div class="scroll">
       <table>
         <tr>
           <th>Entidade</th>
-          <th>Chave primaria</th>
+          <th>Chave primária</th>
         </tr>
         <tr>
           <td>ALUNO</td>
@@ -1177,6 +1019,10 @@
         <tr>
           <td>MATRICULA</td>
           <td>ID_MATRICULA</td>
+        </tr>
+        <tr>
+          <td>PAGAMENTO</td>
+          <td>ID_PAGAMENTO</td>
         </tr>
         <tr>
           <td>FUNCIONARIO</td>
@@ -1207,16 +1053,15 @@
           <td>ID_UNIDADE</td>
         </tr>
         <tr>
-          <td>ESTOQUE_MATERIAL</td>
-          <td>ID_MATERIAL</td>
-        </tr>
-        <tr>
           <td>CHAMADO_MANUTENCAO</td>
           <td>ID_CHAMADO</td>
         </tr>
+        <tr>
+          <td>ESTOQUE_MATERIAL</td>
+          <td>ID_MATERIAL</td>
+        </tr>
       </table>
     </div>
-
     <h3>Chaves estrangeiras e relacionamentos</h3>
     <div class="scroll">
       <table>
@@ -1224,286 +1069,74 @@
           <th>Chave estrangeira</th>
           <th>Referencia</th>
           <th>Relacionamento</th>
-          <th>Origem</th>
         </tr>
         <tr>
           <td>MATRICULA.ID_ALUNO</td>
           <td>ALUNO.ID_ALUNO</td>
-          <td>1 aluno : 1 ou N matriculas</td>
-          <td>README, secao 6</td>
+          <td>1 aluno : 1 ou N matrículas</td>
         </tr>
         <tr>
           <td>MATRICULA.ID_PLANO</td>
           <td>PLANO.ID_PLANO</td>
-          <td>1 plano : 0 ou N matriculas</td>
-          <td>README, secao 6</td>
+          <td>1 plano : 0 ou N matrículas</td>
+        </tr>
+        <tr>
+          <td>PAGAMENTO.ID_MATRICULA</td>
+          <td>MATRICULA.ID_MATRICULA</td>
+          <td>1 matrícula : N pagamentos</td>
         </tr>
         <tr>
           <td>TREINO.ID_ALUNO</td>
           <td>ALUNO.ID_ALUNO</td>
           <td>1 aluno : 0 ou N treinos</td>
-          <td>README, secao 6</td>
         </tr>
         <tr>
           <td>TREINO.ID_PROFESSOR</td>
           <td>FUNCIONARIO.ID_FUNCIONARIO</td>
-          <td>1 funcionario : 0 ou N treinos</td>
-          <td>README, secao 6</td>
+          <td>1 funcionário : 0 ou N treinos</td>
+        </tr>
+        <tr>
+          <td>ITEM_TREINO.ID_TREINO</td>
+          <td>TREINO.ID_TREINO</td>
+          <td>1 treino : N itens</td>
         </tr>
         <tr>
           <td>AULA_COLETIVA.ID_INSTRUTOR</td>
           <td>FUNCIONARIO.ID_FUNCIONARIO</td>
-          <td>nao definida no README</td>
-          <td>HTML</td>
+          <td>1 funcionário : N aulas</td>
+        </tr>
+        <tr>
+          <td>AULA_COLETIVA.ID_UNIDADE</td>
+          <td>UNIDADE.ID_UNIDADE</td>
+          <td>1 unidade : N aulas</td>
         </tr>
         <tr>
           <td>CHECKIN_AULA.ID_AULA</td>
           <td>AULA_COLETIVA.ID_AULA</td>
-          <td>
-            N:M entre ALUNO e AULA_COLETIVA, via CHECKIN_AULA (0,N) - (0,N)
-          </td>
-          <td>README, secao 6</td>
+          <td>1 aula : N check-ins</td>
         </tr>
         <tr>
           <td>CHECKIN_AULA.ID_ALUNO</td>
           <td>ALUNO.ID_ALUNO</td>
           <td>
-            N:M entre ALUNO e AULA_COLETIVA, via CHECKIN_AULA (0,N) - (0,N)
+            1 aluno : N check-ins (ALUNO e AULA_COLETIVA se relacionam de N para
+            N por meio de CHECKIN_AULA)
           </td>
-          <td>README, secao 6</td>
         </tr>
         <tr>
           <td>OCORRENCIA_TURNO.ID_FUNCIONARIO_AUTOR</td>
           <td>FUNCIONARIO.ID_FUNCIONARIO</td>
-          <td>1 funcionario : 0 ou N ocorrencias</td>
-          <td>README, secao 6</td>
-        </tr>
-        <tr>
-          <td>ITEM_TREINO.ID_TREINO</td>
-          <td>TREINO.ID_TREINO</td>
-          <td>nao definida no README</td>
-          <td>HTML</td>
-        </tr>
-        <tr>
-          <td>ESTOQUE_MATERIAL.ID_UNIDADE</td>
-          <td>UNIDADE.ID_UNIDADE</td>
-          <td>nao definida no README</td>
-          <td>HTML</td>
+          <td>1 funcionário : 0 ou N ocorrências</td>
         </tr>
         <tr>
           <td>CHAMADO_MANUTENCAO.ID_FUNCIONARIO_ABERTURA</td>
           <td>FUNCIONARIO.ID_FUNCIONARIO</td>
-          <td>nao definida no README</td>
-          <td>HTML</td>
-        </tr>
-      </table>
-    </div>
-
-    <p class="meta">
-      As cardinalidades do README foram escritas em palavras para evitar
-      ambiguidade (ver I09). Onde o README nao define a cardinalidade, a gente
-      preferiu nao inventar.
-    </p>
-    
-    <h2>6. Regras de negocio relacionadas as entidades</h2>
-
-    <div class="scroll">
-      <table>
-        <tr>
-          <th>Codigo</th>
-          <th>Regra</th>
-          <th>Entidades relacionadas</th>
+          <td>1 funcionário : N chamados</td>
         </tr>
         <tr>
-          <td>RN01</td>
-          <td>
-            O cancelamento de plano so ocorre por solicitacao formal via SAC.
-          </td>
-          <td>MATRICULA</td>
-        </tr>
-        <tr>
-          <td>RN02</td>
-          <td>
-            Inadimplencia por periodo prolongado (segundo o entrevistado, cerca
-            de 60 dias) cancela o plano automaticamente e bloqueia a catraca.
-          </td>
-          <td>MATRICULA, ALUNO</td>
-        </tr>
-        <tr>
-          <td>RN03</td>
-          <td>O spinning tem limite fixo de 19 vagas por horario.</td>
-          <td>AULA_COLETIVA, CHECKIN_AULA</td>
-        </tr>
-        <tr>
-          <td>RN04</td>
-          <td>
-            Personal trainers externos so podem atuar mediante cadastro ativo e
-            pagamento de taxa mensal.
-          </td>
-          <td>Nenhuma entidade deste dicionario (ver I03)</td>
-        </tr>
-        <tr>
-          <td>RN05</td>
-          <td>
-            Recepcao e professores so visualizam os ultimos 4 digitos do cartao
-            do aluno (conformidade com a LGPD).
-          </td>
-          <td>MATRICULA</td>
-        </tr>
-        <tr>
-          <td>RN06</td>
-          <td>
-            Informacoes de saude e limitacoes fisicas sao anexadas ao cadastro
-            em formato digital (PDF/imagem).
-          </td>
-          <td>ALUNO, TREINO (ver I06)</td>
-        </tr>
-        <tr>
-          <td>RNF03</td>
-          <td>
-            Requisito nao funcional: o historico de treinos deve ser preservado
-            mesmo apos o desligamento do professor que os criou.
-          </td>
-          <td>TREINO, FUNCIONARIO</td>
-        </tr>
-      </table>
-    </div>
-
-    <h2>7. Observacoes sobre inconsistencias</h2>
-
-    <p>
-      Nada abaixo foi corrigido por conta propria: as informacoes foram
-      preservadas como estavam e cada ponto precisa ser confirmado pelo grupo.
-      As referencias ao modelo logico dizem respeito ao diagrama feito no
-      dbdesigner.net, que nao e um dos dois documentos analisados.
-    </p>
-
-    <div class="scroll">
-      <table>
-        <tr>
-          <th>ID</th>
-          <th>Assunto</th>
-          <th>O que foi encontrado</th>
-          <th>O que confirmar</th>
-        </tr>
-
-        <tr>
-          <td>I01</td>
-          <td>Entidades no README</td>
-          <td>O README (secoes 5 e 6) descreve 8 entidades; o HTML tem 12.</td>
-          <td>
-            Atualizar o README com ITEM_TREINO, UNIDADE, ESTOQUE_MATERIAL e
-            CHAMADO_MANUTENCAO.
-          </td>
-        </tr>
-
-        <tr>
-          <td>I02</td>
-          <td>UNIDADE em AULA_COLETIVA</td>
-          <td>
-            No modelo logico, AULA_COLETIVA tem ID_UNIDADE. No README e no HTML
-            nao tem, e so ESTOQUE_MATERIAL referencia UNIDADE.
-          </td>
-          <td>Confirmar se AULA_COLETIVA deve ter ID_UNIDADE.</td>
-        </tr>
-
-        <tr>
-          <td>I03</td>
-          <td>PERSONAL_TRAINER</td>
-          <td>
-            A RN04 cita personal trainers externos e o modelo logico tem a
-            tabela PERSONAL_TRAINER, mas ela nao esta no README nem no HTML.
-          </td>
-          <td>
-            Confirmar se a entidade entra no dicionario e com quais atributos.
-          </td>
-        </tr>
-
-        <tr>
-          <td>I04</td>
-          <td>Nomes de atributos</td>
-          <td>
-            README e HTML usam rotulos descritivos (Status, Papel, Turno,
-            TP_RECORRENTE / TP_NAO_RECORRENTE). O modelo logico usa TP_STATUS,
-            TP_PAPEL, TP_TURNO e TP_RECORRENCIA.
-          </td>
-          <td>Definir o nome final de cada atributo.</td>
-        </tr>
-
-        <tr>
-          <td>I05</td>
-          <td>TREINO e ITEM_TREINO</td>
-          <td>
-            TREINO ainda tem a linha NM_EXERCICIO, QT_SERIES, QT_REPETICOES, e
-            ITEM_TREINO guarda os mesmos atributos. A composicao do README
-            tambem mantem o grupo dentro de TREINO.
-          </td>
-          <td>
-            Confirmar se a linha sai de TREINO. Ela foi mantida para nao perder
-            informacao.
-          </td>
-        </tr>
-
-        <tr>
-          <td>I06</td>
-          <td>RN06 e o modelo</td>
-          <td>
-            A RN06 fala em anexar PDF ou imagem ao cadastro do aluno, mas o
-            unico campo de saude e DS_OBSERVACAO_MEDICA (texto) em TREINO.
-          </td>
-          <td>Definir onde o anexo e guardado.</td>
-        </tr>
-
-        <tr>
-          <td>I07</td>
-          <td>RF08 e TP_MATERIAL</td>
-          <td>
-            O RF08 cita itens promocionais, mas as categorias de TP_MATERIAL sao
-            so LIMPEZA, HIGIENE e EQUIPAMENTO.
-          </td>
-          <td>Confirmar se falta uma categoria.</td>
-        </tr>
-
-        <tr>
-          <td>I08</td>
-          <td>Valores sem origem na entrevista</td>
-          <td>
-            Exemplos como "Black" e "Unidade Central", itens como toalhas e
-            halteres, as categorias de TP_MATERIAL e os status do chamado nao
-            aparecem na entrevista.
-          </td>
-          <td>Confirmar ou trocar por valores da academia.</td>
-        </tr>
-
-        <tr>
-          <td>I09</td>
-          <td>Notacao de cardinalidade</td>
-          <td>
-            No README, o par (min,max) aparece do lado oposto ao usual. Exemplo:
-            ALUNO (1,1) - possui - (1,N) MATRICULA, embora um aluno tenha varias
-            matriculas.
-          </td>
-          <td>Confirmar a notacao usada no DER.</td>
-        </tr>
-
-        <tr>
-          <td>I10</td>
-          <td>Composicao das novas entidades</td>
-          <td>
-            O README nao traz a composicao formal (= @ID + ...) de ITEM_TREINO,
-            UNIDADE, ESTOQUE_MATERIAL e CHAMADO_MANUTENCAO.
-          </td>
-          <td>Definir as composicoes.</td>
-        </tr>
-
-        <tr>
-          <td>I11</td>
-          <td>Numeracao do README</td>
-          <td>
-            A numeracao do README pula do item 6 para o 7 (Justificativa
-            Tecnica), sem a secao do DER. Nao afeta o dicionario.
-          </td>
-          <td>Conferir se a secao do DER foi removida de proposito.</td>
+          <td>ESTOQUE_MATERIAL.ID_UNIDADE</td>
+          <td>UNIDADE.ID_UNIDADE</td>
+          <td>1 unidade : N materiais em estoque</td>
         </tr>
       </table>
     </div>
