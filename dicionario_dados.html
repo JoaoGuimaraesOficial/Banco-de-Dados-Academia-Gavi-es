@@ -295,10 +295,10 @@
     </p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_ALUNO + NM_ALUNO + ID_CPF + NM_EMAIL + DT_NASCIMENTO +
-        (DS_FOTO_PERFIL) + (DS_BIOMETRIA_FACIAL) + IN_ATIVO</code
-      >
+      <code>
+        @ID_ALUNO + NM_ALUNO + ID_CPF + NM_EMAIL + DT_NASCIMENTO +
+        (DS_FOTO_PERFIL) + (DS_BIOMETRIA_FACIAL) + IN_ATIVO
+      </code>
     </p>
     <div class="scroll">
       <table>
@@ -370,10 +370,9 @@
     </p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_PLANO + NM_PLANO + TP_RECORRENCIA + VL_MENSALIDADE +
-        IN_ATIVO</code
-      >
+      <code>
+        @ID_PLANO + NM_PLANO + TP_RECORRENCIA + VL_MENSALIDADE + IN_ATIVO
+      </code>
     </p>
     <div class="scroll">
       <table>
@@ -424,10 +423,10 @@
     <p>Liga o aluno a um plano e guarda o período do contrato.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_MATRICULA + ID_ALUNO + ID_PLANO + DT_INICIO + (DT_FIM) +
-        TP_STATUS + (CD_ULTIMOS_DIGITOS_CARTAO)</code
-      >
+      <code>
+        @ID_MATRICULA + ID_ALUNO + ID_PLANO + DT_INICIO + (DT_FIM) + TP_STATUS +
+        (CD_ULTIMOS_DIGITOS_CARTAO)
+      </code>
     </p>
     <div class="scroll">
       <table>
@@ -490,10 +489,10 @@
     <p>Pagamentos feitos em cada matrícula.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_PAGAMENTO + ID_MATRICULA + DT_PAGAMENTO + VL_PAGAMENTO +
-        TP_FORMA_PAGAMENTO + TP_STATUS</code
-      >
+      <code>
+        @ID_PAGAMENTO + ID_MATRICULA + DT_PAGAMENTO + VL_PAGAMENTO +
+        TP_FORMA_PAGAMENTO + TP_STATUS
+      </code>
     </p>
     <div class="scroll">
       <table>
@@ -540,7 +539,7 @@
           <td>TP_STATUS</td>
           <td>varchar(20)</td>
           <td>Sim</td>
-          <td>Situação do pagamento, como realizado ou cartão recusado</td>
+          <td>Situação do pagamento: pago ou pendente</td>
         </tr>
       </table>
     </div>
@@ -550,9 +549,9 @@
     </p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_FUNCIONARIO + NM_FUNCIONARIO + ID_CPF + TP_PAPEL + IN_ATIVO</code
-      >
+      <code>
+        @ID_FUNCIONARIO + NM_FUNCIONARIO + ID_CPF + TP_PAPEL + IN_ATIVO
+      </code>
     </p>
     <div class="scroll">
       <table>
@@ -601,10 +600,10 @@
     <p>Ficha de treino de um aluno, montada por um professor.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_TREINO + ID_ALUNO + ID_PROFESSOR + DT_CRIACAO + DT_VALIDADE +
-        (DS_OBSERVACAO_MEDICA)</code
-      >
+      <code>
+        @ID_TREINO + ID_ALUNO + ID_PROFESSOR + DT_CRIACAO + DT_VALIDADE +
+        (DS_OBSERVACAO_MEDICA)
+      </code>
     </p>
     <div class="scroll">
       <table>
@@ -658,10 +657,10 @@
     <p>Aulas em grupo, com horário, instrutor, unidade e limite de vagas.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_AULA + ID_INSTRUTOR + ID_UNIDADE + NM_MODALIDADE + DT_HORARIO +
-        QT_LIMITE_VAGAS</code
-      >
+      <code>
+        @ID_AULA + ID_INSTRUTOR + ID_UNIDADE + NM_MODALIDADE + DT_HORARIO +
+        QT_LIMITE_VAGAS
+      </code>
     </p>
     <div class="scroll">
       <table>
@@ -713,10 +712,10 @@
       CHECKIN_AULA
       <small>(entidade associativa entre ALUNO e AULA_COLETIVA)</small>
     </h3>
-    <p>Reserva do aluno em uma aula coletiva.</p>
+    <p>Registro da presença do aluno em uma aula coletiva.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>= @ID_CHECKIN + ID_AULA + ID_ALUNO + DT_REALIZACAO</code>
+      <code> @ID_CHECKIN + ID_AULA + ID_ALUNO + DT_REALIZACAO</code>
     </p>
     <div class="scroll">
       <table>
@@ -754,16 +753,16 @@
     </div>
     <p class="meta">
       <strong>Índices:</strong> Índice único composto em (ID_AULA, ID_ALUNO),
-      que evita reserva duplicada.
+      que evita registros duplicados do mesmo aluno na mesma aula.
     </p>
     <h3 id="ocorrencia_turno">OCORRENCIA_TURNO</h3>
     <p>Recados e pendências que um turno deixa para o próximo.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_OCORRENCIA + ID_FUNCIONARIO_AUTOR + DT_REGISTRO + TP_TURNO +
-        DS_MENSAGEM + IN_RESOLVIDO</code
-      >
+      <code>
+        @ID_OCORRENCIA + ID_FUNCIONARIO_AUTOR + DT_REGISTRO + TP_TURNO +
+        DS_MENSAGEM + IN_RESOLVIDO
+      </code>
     </p>
     <div class="scroll">
       <table>
@@ -817,10 +816,10 @@
     <p>Exercícios que fazem parte de uma ficha de treino.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_ITEM_TREINO + ID_TREINO + NM_EXERCICIO + QT_SERIES +
-        QT_REPETICOES + (DS_CARGA)</code
-      >
+      <code>
+        @ID_ITEM_TREINO + ID_TREINO + NM_EXERCICIO + QT_SERIES + QT_REPETICOES +
+        (DS_CARGA)
+      </code>
     </p>
     <div class="scroll">
       <table>
@@ -872,7 +871,7 @@
     <p>Filial da academia.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>= @ID_UNIDADE + NM_UNIDADE + DS_ENDERECO</code>
+      <code> @ID_UNIDADE + NM_UNIDADE + DS_ENDERECO</code>
     </p>
     <div class="scroll">
       <table>
@@ -906,10 +905,10 @@
     <p>Pedidos de reparo de equipamentos, abertos pelos funcionários.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_CHAMADO + ID_FUNCIONARIO_ABERTURA + DT_ABERTURA + DS_PROBLEMA +
-        TP_STATUS</code
-      >
+      <code>
+        @ID_CHAMADO + ID_FUNCIONARIO_ABERTURA + DT_ABERTURA + DS_PROBLEMA +
+        TP_STATUS
+      </code>
     </p>
     <div class="scroll">
       <table>
@@ -955,10 +954,9 @@
     <p>Materiais e itens mantidos em estoque em cada unidade da academia.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code
-        >= @ID_MATERIAL + ID_UNIDADE + NM_MATERIAL + TP_MATERIAL +
-        QT_ESTOQUE</code
-      >
+      <code>
+        @ID_MATERIAL + ID_UNIDADE + NM_MATERIAL + TP_MATERIAL + QT_ESTOQUE
+      </code>
     </p>
     <div class="scroll">
       <table>
