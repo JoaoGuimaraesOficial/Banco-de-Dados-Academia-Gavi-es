@@ -44,7 +44,7 @@ A equipe tem recepcionistas, professores, funcionários da limpeza, gerente e pe
 
 ### 1.2 Porte da organização
 
-> Números, não adjetivos. Preencham com valores confirmados com a academia e registrem a fonte. A E1 dizia apenas "centenas de alunos", o que não basta.
+> Números, não adjetivos. Preenchidas com valores confirmados com a academia, registrando a fonte.
 
 | Indicador | Valor | Fonte / data |
 |---|---|---|
@@ -744,4 +744,4 @@ O grupo registra aqui o que o modelo atual **não** cobre, para evitar que o pro
 mysql -u root -p < docs/academia_gavioes.sql
 ```
 
-**Massa de dados:** Inclui matrícula cancelada com cobrança pendente depois do cancelamento (P2), aluno ativo sem matrícula vigente, materiais com estoque baixo e ocorrências pendentes (P1, P3 e P4). O volume é pequeno e **não** é proporcional ao porte real; para a defesa.
+**Massa de dados:** Foram incluídos registros de teste para representar situações importantes do sistema, como matrículas canceladas com cobranças pendentes, alunos sem matrícula vigente, materiais com estoque baixo e ocorrências pendentes.
