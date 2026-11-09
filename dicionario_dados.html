@@ -133,10 +133,13 @@
   <body>
     <h1>Dicionário de Dados - Academia Gaviões</h1>
     <p>
-      Esse documento junta os atributos, tipos, chaves e relacionamentos de cada
-      entidade do modelo de dados da Academia Gaviões. Foi feito com base no que
-      a gente levantou no estabelecimento e nas decisões de modelagem do grupo.
+      Este documento reúne os atributos, tipos de dados, chaves, restrições e
+      relacionamentos de cada entidade do banco de dados da Academia Gaviões.
+      Foi elaborado com base no levantamento realizado no estabelecimento e nas
+      decisões de modelagem do grupo. As estruturas descritas correspondem ao
+      script SQL de implementação.
     </p>
+
     <h2>1. Identificação do documento</h2>
     <div class="scroll">
       <table>
@@ -150,7 +153,7 @@
         </tr>
         <tr>
           <td>Entrega</td>
-          <td>Entrega 2 - Modelo Conceitual (DER)</td>
+          <td>Entrega 2 - Modelo Lógico e Implementação SQL</td>
         </tr>
         <tr>
           <td>Documento</td>
@@ -158,25 +161,28 @@
         </tr>
         <tr>
           <td>Atualização</td>
-          <td>07/11/2026</td>
+          <td>09/11/2026</td>
         </tr>
         <tr>
           <td>Integrantes</td>
           <td>
-            Edilson Angel Arismendi Huanca (49423452)<br />Igor Alves
-            (48123528)<br />Gabriel Alves Rodrigues (47818191)<br />Gabriel
-            Viana de Lima (48368881)<br />João Victor Guimarães Moura (48298549)
+            Edilson Angel Arismendi Huanca (49423452)<br />
+            Igor Alves (48123528)<br />
+            Gabriel Alves Rodrigues (47818191)<br />
+            Gabriel Viana de Lima (48368881)<br />
+            João Victor Guimarães Moura (48298549)
           </td>
         </tr>
       </table>
     </div>
+
     <h2>2. Visão geral do banco de dados</h2>
     <p>
-      O banco atende uma unidade da academia que funciona 24 horas, em quatro
-      turnos (madrugada, manhã, tarde e noite). Ele guarda os dados de alunos,
-      planos, matrículas e pagamentos, treinos, aulas coletivas com check-in,
-      comunicação entre turnos, chamados de manutenção e estoque de materiais.
-      São <strong>13 entidades</strong>.
+      O banco contempla o gerenciamento de alunos, planos, matrículas,
+      pagamentos e notas fiscais demonstrativas, funcionários, treinos,
+      exercícios, aulas coletivas, check-ins, unidades, ocorrências de turno,
+      chamados de manutenção e estoque de materiais. O modelo implementado
+      possui <strong>14 entidades</strong>.
     </p>
     <div class="scroll">
       <table>
@@ -186,7 +192,11 @@
         </tr>
         <tr>
           <td>SGBD</td>
-          <td>MySQL 8 (InnoDB)</td>
+          <td>MySQL 8.0.46 (InnoDB)</td>
+        </tr>
+        <tr>
+          <td>Banco de dados</td>
+          <td><code>academia_gavioes</code></td>
         </tr>
         <tr>
           <td>Codificação</td>
@@ -195,23 +205,23 @@
         <tr>
           <td>Prefixos</td>
           <td>
-            <code>ID_</code> identificador, <code>NM_</code> nome,
-            <code>DT_</code> data, <code>CD_</code> código,
-            <code>QT_</code> quantidade, <code>TP_</code> tipo/categoria,
-            <code>IN_</code> indicador booleano,
-            <code>DS_</code> descrição/texto livre, <code>VL_</code> valor
-            monetário
+            <code>ID_</code> identificador; <code>NM_</code> nome;
+            <code>DT_</code> data; <code>CD_</code> código;
+            <code>NR_</code> número; <code>QT_</code> quantidade;
+            <code>TP_</code> tipo/categoria/status; <code>IN_</code> indicador;
+            <code>DS_</code> descrição; <code>VL_</code> valor monetário.
           </td>
         </tr>
         <tr>
           <td>Notação da composição</td>
           <td>
-            <code>@</code> identificador, <code>+</code> elementos obrigatórios,
-            <code>( )</code> opcional
+            <code>@</code> identificador; <code>+</code> atributo obrigatório;
+            <code>( )</code> atributo opcional.
           </td>
         </tr>
       </table>
     </div>
+
     <h2>3. Relação de entidades</h2>
     <div class="scroll">
       <table>
@@ -221,84 +231,88 @@
         </tr>
         <tr>
           <td><a href="#aluno">ALUNO</a></td>
-          <td>
-            Cliente que contrata a academia; é a base para acesso, cobrança e
-            treinos.
-          </td>
+          <td>Cadastro dos alunos da academia.</td>
         </tr>
         <tr>
           <td><a href="#plano">PLANO</a></td>
-          <td>
-            Plano comercial que o aluno pode contratar, separado do cadastro do
-            aluno.
-          </td>
+          <td>Planos comerciais disponíveis para contratação.</td>
         </tr>
         <tr>
           <td><a href="#matricula">MATRICULA</a></td>
-          <td>Liga o aluno a um plano e guarda o período do contrato.</td>
-        </tr>
-        <tr>
-          <td><a href="#pagamento">PAGAMENTO</a></td>
-          <td>Pagamentos feitos em cada matrícula.</td>
-        </tr>
-        <tr>
-          <td><a href="#funcionario">FUNCIONARIO</a></td>
           <td>
-            Quem trabalha na academia: recepção, professores, gerente e
-            financeiro.
+            Vínculo entre aluno e plano, com período e situação contratual.
           </td>
         </tr>
         <tr>
+          <td><a href="#pagamento">PAGAMENTO</a></td>
+          <td>Registros de cobranças e pagamentos vinculados às matrículas.</td>
+        </tr>
+        <tr>
+          <td><a href="#nota_fiscal">NOTA_FISCAL</a></td>
+          <td>
+            Registros demonstrativos de notas fiscais vinculados aos pagamentos.
+          </td>
+        </tr>
+        <tr>
+          <td><a href="#funcionario">FUNCIONARIO</a></td>
+          <td>Cadastro dos funcionários e suas funções.</td>
+        </tr>
+        <tr>
           <td><a href="#treino">TREINO</a></td>
-          <td>Ficha de treino de um aluno, montada por um professor.</td>
+          <td>
+            Ficha de treino de um aluno, elaborada por um funcionário indicado
+            como professor.
+          </td>
+        </tr>
+        <tr>
+          <td><a href="#item_treino">ITEM_TREINO</a></td>
+          <td>Exercícios que compõem uma ficha de treino.</td>
         </tr>
         <tr>
           <td><a href="#aula_coletiva">AULA_COLETIVA</a></td>
           <td>
-            Aulas em grupo, com horário, instrutor, unidade e limite de vagas.
+            Aulas em grupo, com instrutor, unidade, horário e limite de vagas.
           </td>
         </tr>
         <tr>
           <td><a href="#checkin_aula">CHECKIN_AULA</a></td>
-          <td>Reserva do aluno em uma aula coletiva.</td>
-        </tr>
-        <tr>
-          <td><a href="#ocorrencia_turno">OCORRENCIA_TURNO</a></td>
-          <td>Recados e pendências que um turno deixa para o próximo.</td>
-        </tr>
-        <tr>
-          <td><a href="#item_treino">ITEM_TREINO</a></td>
-          <td>Exercícios que fazem parte de uma ficha de treino.</td>
+          <td>Registro da participação de um aluno em uma aula coletiva.</td>
         </tr>
         <tr>
           <td><a href="#unidade">UNIDADE</a></td>
-          <td>Filial da academia.</td>
+          <td>Unidades da academia.</td>
+        </tr>
+        <tr>
+          <td><a href="#ocorrencia_turno">OCORRENCIA_TURNO</a></td>
+          <td>
+            Recados e pendências registrados pelos funcionários durante os
+            turnos.
+          </td>
         </tr>
         <tr>
           <td><a href="#chamado_manutencao">CHAMADO_MANUTENCAO</a></td>
-          <td>
-            Pedidos de reparo de equipamentos, abertos pelos funcionários.
-          </td>
+          <td>Solicitações de manutenção abertas por funcionários.</td>
         </tr>
         <tr>
           <td><a href="#estoque_material">ESTOQUE_MATERIAL</a></td>
-          <td>
-            Materiais e itens mantidos em estoque em cada unidade da academia.
-          </td>
+          <td>Materiais armazenados em cada unidade.</td>
         </tr>
       </table>
     </div>
+
     <h2>4. Dicionário detalhado das entidades</h2>
+
     <h3 id="aluno">ALUNO</h3>
     <p>
-      Cliente que contrata a academia; é a base para acesso, cobrança e treinos.
+      Cadastro do aluno, utilizado como referência para matrículas, treinos e
+      participação em aulas.
     </p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>
-        @ID_ALUNO + NM_ALUNO + ID_CPF + NM_EMAIL + DT_NASCIMENTO +
-        (DS_FOTO_PERFIL) + (DS_BIOMETRIA_FACIAL) + IN_ATIVO
-      </code>
+      <code
+        >@ID_ALUNO + NM_ALUNO + ID_CPF + NM_EMAIL + DT_NASCIMENTO +
+        (DS_FOTO_PERFIL) + (DS_BIOMETRIA_FACIAL) + IN_ATIVO</code
+      >
     </p>
     <div class="scroll">
       <table>
@@ -311,68 +325,69 @@
         <tr>
           <td>ID_ALUNO</td>
           <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador interno</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador interno do aluno.</td>
         </tr>
         <tr>
           <td>NM_ALUNO</td>
           <td>varchar(120)</td>
           <td>Sim</td>
-          <td>Nome completo</td>
+          <td>Nome completo do aluno.</td>
         </tr>
         <tr>
           <td>ID_CPF</td>
           <td>varchar(11)</td>
-          <td>Sim (único)</td>
-          <td>Usado na busca pela recepção</td>
+          <td>Sim (UNIQUE)</td>
+          <td>CPF armazenado sem pontuação; não pode se repetir.</td>
         </tr>
         <tr>
           <td>NM_EMAIL</td>
           <td>varchar(100)</td>
           <td>Sim</td>
-          <td>
-            E-mail de contato; também serve para buscar o aluno na recepção
-          </td>
+          <td>E-mail de contato do aluno.</td>
         </tr>
         <tr>
           <td>DT_NASCIMENTO</td>
           <td>date</td>
           <td>Sim</td>
-          <td>Data de nascimento do aluno</td>
+          <td>Data de nascimento.</td>
         </tr>
         <tr>
           <td>DS_FOTO_PERFIL</td>
           <td>varchar(255)</td>
           <td>Não</td>
-          <td>Foto de perfil; pode ser cadastrada depois</td>
+          <td>Caminho ou referência do arquivo da foto de perfil.</td>
         </tr>
         <tr>
           <td>DS_BIOMETRIA_FACIAL</td>
           <td>text</td>
           <td>Não</td>
-          <td>Cadastro facial usado na catraca; vale em outras unidades</td>
+          <td>
+            Campo destinado ao registro ou referência dos dados de biometria
+            facial.
+          </td>
         </tr>
         <tr>
           <td>IN_ATIVO</td>
           <td>tinyint(1)</td>
-          <td>Sim</td>
-          <td>Cadastro ativo; muda com inadimplência prolongada</td>
+          <td>Sim (DEFAULT 1)</td>
+          <td>Indicador de cadastro ativo: 1 para ativo e 0 para inativo.</td>
         </tr>
       </table>
     </div>
     <p class="meta">
-      <strong>Índices:</strong> PK em ID_ALUNO; índices secundários em ID_CPF e
-      NM_ALUNO.
+      <strong>Índices e restrições:</strong> PK em ID_ALUNO; UNIQUE em ID_CPF;
+      índice IDX_ALUNO_NM_ALUNO em NM_ALUNO; CHECK para aceitar somente 0 ou 1
+      em IN_ATIVO.
     </p>
+
     <h3 id="plano">PLANO</h3>
-    <p>
-      Plano comercial que o aluno pode contratar, separado do cadastro do aluno.
-    </p>
+    <p>Plano comercial que pode ser contratado por meio de uma matrícula.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>
-        @ID_PLANO + NM_PLANO + TP_RECORRENCIA + VL_MENSALIDADE + IN_ATIVO
-      </code>
+      <code
+        >@ID_PLANO + NM_PLANO + TP_RECORRENCIA + VL_MENSALIDADE + IN_ATIVO</code
+      >
     </p>
     <div class="scroll">
       <table>
@@ -385,48 +400,57 @@
         <tr>
           <td>ID_PLANO</td>
           <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador do plano</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador do plano.</td>
         </tr>
         <tr>
           <td>NM_PLANO</td>
           <td>varchar(60)</td>
           <td>Sim</td>
-          <td>Nome do plano</td>
+          <td>Nome comercial do plano.</td>
         </tr>
         <tr>
           <td>TP_RECORRENCIA</td>
           <td>varchar(20)</td>
           <td>Sim</td>
           <td>
-            Tipo de cobrança: recorrente (automática no cartão) ou não
-            recorrente (avulsa)
+            Tipo de recorrência: <code>recorrente</code> ou
+            <code>não recorrente</code>.
           </td>
         </tr>
         <tr>
           <td>VL_MENSALIDADE</td>
           <td>decimal(10,2)</td>
           <td>Sim</td>
-          <td>Valor da mensalidade (maior que 0)</td>
+          <td>Valor associado ao plano; deve ser maior que zero.</td>
         </tr>
         <tr>
           <td>IN_ATIVO</td>
           <td>tinyint(1)</td>
-          <td>Sim</td>
-          <td>Plano disponível para novas adesões</td>
+          <td>Sim (DEFAULT 1)</td>
+          <td>Indicador de disponibilidade: 1 para ativo e 0 para inativo.</td>
         </tr>
       </table>
     </div>
+    <p class="meta">
+      <strong>Restrições:</strong> CHECK para VL_MENSALIDADE maior que zero;
+      CHECK para os valores permitidos em TP_RECORRENCIA e para IN_ATIVO igual a
+      0 ou 1.
+    </p>
+
     <h3 id="matricula">
       MATRICULA <small>(entidade associativa entre ALUNO e PLANO)</small>
     </h3>
-    <p>Liga o aluno a um plano e guarda o período do contrato.</p>
+    <p>
+      Vincula um aluno a um plano e registra o período e a situação da
+      matrícula.
+    </p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>
-        @ID_MATRICULA + ID_ALUNO + ID_PLANO + DT_INICIO + (DT_FIM) + TP_STATUS +
-        (CD_ULTIMOS_DIGITOS_CARTAO)
-      </code>
+      <code
+        >@ID_MATRICULA + ID_ALUNO + ID_PLANO + DT_INICIO + (DT_FIM) + TP_STATUS
+        + (CD_ULTIMOS_DIGITOS_CARTAO)</code
+      >
     </p>
     <div class="scroll">
       <table>
@@ -439,40 +463,43 @@
         <tr>
           <td>ID_MATRICULA</td>
           <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador da matrícula</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador da matrícula.</td>
         </tr>
         <tr>
           <td>ID_ALUNO</td>
           <td>int</td>
           <td>Sim (FK)</td>
-          <td>Referencia ALUNO</td>
+          <td>Referencia ALUNO(ID_ALUNO).</td>
         </tr>
         <tr>
           <td>ID_PLANO</td>
           <td>int</td>
           <td>Sim (FK)</td>
-          <td>Referencia PLANO</td>
+          <td>Referencia PLANO(ID_PLANO).</td>
         </tr>
         <tr>
           <td>DT_INICIO</td>
           <td>date</td>
           <td>Sim</td>
-          <td>Data de início do contrato</td>
+          <td>Data de início do contrato.</td>
         </tr>
         <tr>
           <td>DT_FIM</td>
           <td>date</td>
           <td>Não</td>
-          <td>Preenchida no cancelamento</td>
+          <td>
+            Data de encerramento; pode permanecer NULL enquanto não houver data
+            final definida.
+          </td>
         </tr>
         <tr>
           <td>TP_STATUS</td>
           <td>varchar(20)</td>
           <td>Sim</td>
           <td>
-            Situação da matrícula: pago, pendente, inadimplente ou cancelado;
-            inadimplente bloqueia a catraca
+            Situação: <code>pago</code>, <code>pendente</code>,
+            <code>inadimplente</code> ou <code>cancelado</code>.
           </td>
         </tr>
         <tr>
@@ -480,19 +507,29 @@
           <td>varchar(4)</td>
           <td>Não</td>
           <td>
-            Só os 4 últimos dígitos do cartão, sem expor o número completo
+            Armazena somente os quatro últimos dígitos do cartão, quando
+            informados.
           </td>
         </tr>
       </table>
     </div>
+    <p class="meta">
+      <strong>Restrições:</strong> FKs para ALUNO e PLANO; CHECK para os status
+      permitidos; CHECK para garantir que DT_FIM seja NULL ou igual/posterior a
+      DT_INICIO.
+    </p>
+
     <h3 id="pagamento">PAGAMENTO</h3>
-    <p>Pagamentos feitos em cada matrícula.</p>
+    <p>
+      Registra cobranças e pagamentos associados a uma matrícula. O status
+      diferencia pagamentos confirmados daqueles que permanecem pendentes.
+    </p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>
-        @ID_PAGAMENTO + ID_MATRICULA + DT_PAGAMENTO + VL_PAGAMENTO +
-        TP_FORMA_PAGAMENTO + TP_STATUS
-      </code>
+      <code
+        >@ID_PAGAMENTO + ID_MATRICULA + DT_PAGAMENTO + VL_PAGAMENTO +
+        TP_FORMA_PAGAMENTO + TP_STATUS</code
+      >
     </p>
     <div class="scroll">
       <table>
@@ -505,53 +542,182 @@
         <tr>
           <td>ID_PAGAMENTO</td>
           <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador do pagamento</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador do registro de pagamento.</td>
         </tr>
         <tr>
           <td>ID_MATRICULA</td>
           <td>int</td>
           <td>Sim (FK)</td>
-          <td>Referencia MATRICULA</td>
+          <td>Referencia MATRICULA(ID_MATRICULA).</td>
         </tr>
         <tr>
           <td>DT_PAGAMENTO</td>
           <td>date</td>
           <td>Sim</td>
-          <td>Data do pagamento</td>
+          <td>
+            Data registrada para o pagamento ou cobrança. Nos registros
+            pendentes da massa de teste, representa a data de referência da
+            cobrança, não a confirmação do recebimento.
+          </td>
         </tr>
         <tr>
           <td>VL_PAGAMENTO</td>
           <td>decimal(10,2)</td>
           <td>Sim</td>
-          <td>Valor pago (maior que 0)</td>
+          <td>Valor registrado; deve ser maior que zero.</td>
         </tr>
         <tr>
           <td>TP_FORMA_PAGAMENTO</td>
-          <td>varchar(20)</td>
+          <td>varchar(30)</td>
           <td>Sim</td>
           <td>
-            Forma de pagamento: PIX, dinheiro, cartão de crédito ou cartão de
-            débito
+            Forma registrada: <code>PIX</code>, <code>dinheiro</code>,
+            <code>cartão de crédito</code> ou <code>cartão de débito</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>TP_STATUS</td>
+          <td>varchar(30)</td>
+          <td>Sim</td>
+          <td>
+            Situação do registro: <code>pago</code> ou <code>pendente</code>.
+          </td>
+        </tr>
+      </table>
+    </div>
+    <p class="meta">
+      <strong>Restrições:</strong> FK para MATRICULA; CHECK para valor maior que
+      zero, formas de pagamento e status permitidos.
+    </p>
+    <p class="nota">
+      Observação: a estrutura atual utiliza um único campo de data. Para
+      distinguir formalmente vencimento da cobrança e data efetiva de
+      recebimento, seria necessário acrescentar campos específicos ao modelo.
+    </p>
+
+    <h3 id="nota_fiscal">NOTA_FISCAL</h3>
+    <p>
+      Armazena registros demonstrativos de notas fiscais associados aos
+      pagamentos confirmados. No escopo deste projeto acadêmico, os dados são
+      fictícios e não representam emissão fiscal oficial.
+    </p>
+    <p class="meta">
+      <strong>Composição:</strong>
+      <code
+        >@ID_NOTA_FISCAL + ID_PAGAMENTO + NR_NOTA_FISCAL + (NR_SERIE) +
+        (CD_VERIFICACAO) + DT_EMISSAO + VL_SERVICO + DS_SERVICO + TP_STATUS +
+        (DS_ARQUIVO_PDF)</code
+      >
+    </p>
+    <div class="scroll">
+      <table>
+        <tr>
+          <th>Atributo</th>
+          <th>Tipo</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
+        </tr>
+        <tr>
+          <td>ID_NOTA_FISCAL</td>
+          <td>int</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador interno da nota fiscal.</td>
+        </tr>
+        <tr>
+          <td>ID_PAGAMENTO</td>
+          <td>int</td>
+          <td>Sim (FK, UNIQUE)</td>
+          <td>
+            Referencia PAGAMENTO(ID_PAGAMENTO). A restrição UNIQUE permite no
+            máximo uma nota fiscal associada a cada pagamento.
+          </td>
+        </tr>
+        <tr>
+          <td>NR_NOTA_FISCAL</td>
+          <td>varchar(30)</td>
+          <td>Sim (UNIQUE)</td>
+          <td>
+            Número identificador da nota; não pode se repetir. Na massa de
+            teste, recebe numeração fictícia com prefixo TESTE-.
+          </td>
+        </tr>
+        <tr>
+          <td>NR_SERIE</td>
+          <td>varchar(10)</td>
+          <td>Não</td>
+          <td>Série atribuída ao registro demonstrativo.</td>
+        </tr>
+        <tr>
+          <td>CD_VERIFICACAO</td>
+          <td>varchar(60)</td>
+          <td>Não</td>
+          <td>
+            Código demonstrativo de verificação; não corresponde a uma validação
+            fiscal real.
+          </td>
+        </tr>
+        <tr>
+          <td>DT_EMISSAO</td>
+          <td>datetime</td>
+          <td>Sim</td>
+          <td>Data e horário registrados como emissão.</td>
+        </tr>
+        <tr>
+          <td>VL_SERVICO</td>
+          <td>decimal(10,2)</td>
+          <td>Sim</td>
+          <td>Valor do serviço; deve ser maior que zero.</td>
+        </tr>
+        <tr>
+          <td>DS_SERVICO</td>
+          <td>varchar(255)</td>
+          <td>Sim</td>
+          <td>
+            Descrição do serviço associado ao pagamento, incluindo o plano na
+            massa de teste.
           </td>
         </tr>
         <tr>
           <td>TP_STATUS</td>
           <td>varchar(20)</td>
-          <td>Sim</td>
-          <td>Situação do pagamento: pago ou pendente</td>
+          <td>Sim (DEFAULT 'pendente')</td>
+          <td>
+            Situação do registro: <code>emitida</code>,
+            <code>cancelada</code> ou <code>pendente</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>DS_ARQUIVO_PDF</td>
+          <td>varchar(255)</td>
+          <td>Não</td>
+          <td>
+            Caminho ou referência do arquivo PDF, quando houver. Não é
+            preenchido na massa de teste atual.
+          </td>
         </tr>
       </table>
     </div>
+    <p class="meta">
+      <strong>Índices e restrições:</strong> PK em ID_NOTA_FISCAL; FK para
+      PAGAMENTO; UNIQUE em ID_PAGAMENTO e NR_NOTA_FISCAL; CHECK para VL_SERVICO
+      maior que zero e para os status permitidos.
+    </p>
+    <p class="nota">
+      Os registros inseridos pelo script utilizam números e códigos de teste.
+      Portanto, não devem ser apresentados como documentos fiscais válidos.
+    </p>
+
     <h3 id="funcionario">FUNCIONARIO</h3>
     <p>
-      Quem trabalha na academia: recepção, professores, gerente e financeiro.
+      Cadastro dos funcionários, com identificação e função exercida na
+      academia.
     </p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>
-        @ID_FUNCIONARIO + NM_FUNCIONARIO + ID_CPF + TP_PAPEL + IN_ATIVO
-      </code>
+      <code
+        >@ID_FUNCIONARIO + NM_FUNCIONARIO + ID_CPF + TP_PAPEL + IN_ATIVO</code
+      >
     </p>
     <div class="scroll">
       <table>
@@ -564,46 +730,60 @@
         <tr>
           <td>ID_FUNCIONARIO</td>
           <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador do funcionário</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador do funcionário.</td>
         </tr>
         <tr>
           <td>NM_FUNCIONARIO</td>
           <td>varchar(120)</td>
           <td>Sim</td>
-          <td>Nome completo</td>
+          <td>Nome completo.</td>
         </tr>
         <tr>
           <td>ID_CPF</td>
           <td>varchar(11)</td>
-          <td>Sim (único)</td>
-          <td>CPF do funcionário</td>
+          <td>Sim (UNIQUE)</td>
+          <td>CPF armazenado sem pontuação; não pode se repetir.</td>
         </tr>
         <tr>
           <td>TP_PAPEL</td>
           <td>varchar(20)</td>
           <td>Sim</td>
           <td>
-            Função na academia: recepção, professor, gerente ou financeiro;
-            define as permissões de acesso
+            Função cadastrada: <code>recepção</code>, <code>professor</code>,
+            <code>gerente</code> ou <code>financeiro</code>.
           </td>
         </tr>
         <tr>
           <td>IN_ATIVO</td>
           <td>tinyint(1)</td>
-          <td>Sim</td>
-          <td>Funcionário em atividade</td>
+          <td>Sim (DEFAULT 1)</td>
+          <td>Indicador de vínculo ativo: 1 para ativo e 0 para inativo.</td>
         </tr>
       </table>
     </div>
+    <p class="meta">
+      <strong>Restrições:</strong> UNIQUE em ID_CPF; CHECK para os papéis
+      permitidos e para IN_ATIVO igual a 0 ou 1.
+    </p>
+    <p class="nota">
+      TP_PAPEL identifica a função do funcionário, mas o script atual não
+      implementa controle de permissões de acesso por cargo. As FKs de TREINO e
+      AULA_COLETIVA também não verificam, sozinhas, se o funcionário indicado
+      possui o papel de professor.
+    </p>
+
     <h3 id="treino">TREINO</h3>
-    <p>Ficha de treino de um aluno, montada por um professor.</p>
+    <p>
+      Ficha de treino vinculada a um aluno e a um funcionário indicado como
+      professor.
+    </p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>
-        @ID_TREINO + ID_ALUNO + ID_PROFESSOR + DT_CRIACAO + DT_VALIDADE +
-        (DS_OBSERVACAO_MEDICA)
-      </code>
+      <code
+        >@ID_TREINO + ID_ALUNO + ID_PROFESSOR + DT_CRIACAO + DT_VALIDADE +
+        (DS_OBSERVACAO_MEDICA)</code
+      >
     </p>
     <div class="scroll">
       <table>
@@ -616,210 +796,65 @@
         <tr>
           <td>ID_TREINO</td>
           <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador da ficha de treino</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador da ficha de treino.</td>
         </tr>
         <tr>
           <td>ID_ALUNO</td>
           <td>int</td>
           <td>Sim (FK)</td>
-          <td>Referencia ALUNO</td>
+          <td>Referencia ALUNO(ID_ALUNO).</td>
         </tr>
         <tr>
           <td>ID_PROFESSOR</td>
           <td>int</td>
           <td>Sim (FK)</td>
-          <td>Referencia FUNCIONARIO (professor que montou o treino)</td>
+          <td>
+            Referencia FUNCIONARIO(ID_FUNCIONARIO), indicando o funcionário
+            responsável pela ficha.
+          </td>
         </tr>
         <tr>
           <td>DT_CRIACAO</td>
           <td>date</td>
           <td>Sim</td>
-          <td>Data em que a ficha foi criada</td>
+          <td>Data de criação da ficha.</td>
         </tr>
         <tr>
           <td>DT_VALIDADE</td>
           <td>date</td>
           <td>Sim</td>
           <td>
-            Data limite da ficha; depois dela o treino precisa ser renovado
+            Data de validade da ficha; deve ser igual ou posterior à data de
+            criação.
           </td>
         </tr>
         <tr>
           <td>DS_OBSERVACAO_MEDICA</td>
           <td>text</td>
           <td>Não</td>
-          <td>Limitações físicas do aluno</td>
-        </tr>
-      </table>
-    </div>
-    <h3 id="aula_coletiva">AULA_COLETIVA</h3>
-    <p>Aulas em grupo, com horário, instrutor, unidade e limite de vagas.</p>
-    <p class="meta">
-      <strong>Composição:</strong>
-      <code>
-        @ID_AULA + ID_INSTRUTOR + ID_UNIDADE + NM_MODALIDADE + DT_HORARIO +
-        QT_LIMITE_VAGAS
-      </code>
-    </p>
-    <div class="scroll">
-      <table>
-        <tr>
-          <th>Atributo</th>
-          <th>Tipo</th>
-          <th>Obrigatório</th>
-          <th>Observação</th>
-        </tr>
-        <tr>
-          <td>ID_AULA</td>
-          <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador da aula</td>
-        </tr>
-        <tr>
-          <td>ID_INSTRUTOR</td>
-          <td>int</td>
-          <td>Sim (FK)</td>
-          <td>Referencia FUNCIONARIO (instrutor da aula)</td>
-        </tr>
-        <tr>
-          <td>ID_UNIDADE</td>
-          <td>int</td>
-          <td>Sim (FK)</td>
-          <td>Referencia UNIDADE</td>
-        </tr>
-        <tr>
-          <td>NM_MODALIDADE</td>
-          <td>varchar(60)</td>
-          <td>Sim</td>
-          <td>Spinning, boxe, muay thai etc.</td>
-        </tr>
-        <tr>
-          <td>DT_HORARIO</td>
-          <td>datetime</td>
-          <td>Sim</td>
-          <td>Data e horário da aula</td>
-        </tr>
-        <tr>
-          <td>QT_LIMITE_VAGAS</td>
-          <td>int</td>
-          <td>Sim</td>
-          <td>19 para o spinning</td>
-        </tr>
-      </table>
-    </div>
-    <h3 id="checkin_aula">
-      CHECKIN_AULA
-      <small>(entidade associativa entre ALUNO e AULA_COLETIVA)</small>
-    </h3>
-    <p>Registro da presença do aluno em uma aula coletiva.</p>
-    <p class="meta">
-      <strong>Composição:</strong>
-      <code> @ID_CHECKIN + ID_AULA + ID_ALUNO + DT_REALIZACAO</code>
-    </p>
-    <div class="scroll">
-      <table>
-        <tr>
-          <th>Atributo</th>
-          <th>Tipo</th>
-          <th>Obrigatório</th>
-          <th>Observação</th>
-        </tr>
-        <tr>
-          <td>ID_CHECKIN</td>
-          <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador do check-in</td>
-        </tr>
-        <tr>
-          <td>ID_AULA</td>
-          <td>int</td>
-          <td>Sim (FK)</td>
-          <td>Referencia AULA_COLETIVA</td>
-        </tr>
-        <tr>
-          <td>ID_ALUNO</td>
-          <td>int</td>
-          <td>Sim (FK)</td>
-          <td>Referencia ALUNO</td>
-        </tr>
-        <tr>
-          <td>DT_REALIZACAO</td>
-          <td>datetime</td>
-          <td>Sim</td>
-          <td>Data e hora do check-in</td>
+          <td>
+            Observações relacionadas a limitações ou cuidados físicos informados
+            para o aluno.
+          </td>
         </tr>
       </table>
     </div>
     <p class="meta">
-      <strong>Índices:</strong> Índice único composto em (ID_AULA, ID_ALUNO),
-      que evita registros duplicados do mesmo aluno na mesma aula.
+      <strong>Restrições:</strong> FKs para ALUNO e FUNCIONARIO; CHECK para
+      DT_VALIDADE maior ou igual a DT_CRIACAO.
     </p>
-    <h3 id="ocorrencia_turno">OCORRENCIA_TURNO</h3>
-    <p>Recados e pendências que um turno deixa para o próximo.</p>
-    <p class="meta">
-      <strong>Composição:</strong>
-      <code>
-        @ID_OCORRENCIA + ID_FUNCIONARIO_AUTOR + DT_REGISTRO + TP_TURNO +
-        DS_MENSAGEM + IN_RESOLVIDO
-      </code>
-    </p>
-    <div class="scroll">
-      <table>
-        <tr>
-          <th>Atributo</th>
-          <th>Tipo</th>
-          <th>Obrigatório</th>
-          <th>Observação</th>
-        </tr>
-        <tr>
-          <td>ID_OCORRENCIA</td>
-          <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador da ocorrência</td>
-        </tr>
-        <tr>
-          <td>ID_FUNCIONARIO_AUTOR</td>
-          <td>int</td>
-          <td>Sim (FK)</td>
-          <td>Referencia FUNCIONARIO (quem registrou)</td>
-        </tr>
-        <tr>
-          <td>DT_REGISTRO</td>
-          <td>datetime</td>
-          <td>Sim</td>
-          <td>Data e hora do registro</td>
-        </tr>
-        <tr>
-          <td>TP_TURNO</td>
-          <td>varchar(20)</td>
-          <td>Sim</td>
-          <td>Turno: madrugada, manhã, tarde ou noite</td>
-        </tr>
-        <tr>
-          <td>DS_MENSAGEM</td>
-          <td>text</td>
-          <td>Sim</td>
-          <td>Pendência ou aviso para a equipe do próximo turno</td>
-        </tr>
-        <tr>
-          <td>IN_RESOLVIDO</td>
-          <td>tinyint(1)</td>
-          <td>Sim</td>
-          <td>Começa como não resolvida</td>
-        </tr>
-      </table>
-    </div>
+
     <h3 id="item_treino">
       ITEM_TREINO <small>(itens e exercícios da ficha de treino)</small>
     </h3>
-    <p>Exercícios que fazem parte de uma ficha de treino.</p>
+    <p>Exercícios que compõem uma ficha de treino.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>
-        @ID_ITEM_TREINO + ID_TREINO + NM_EXERCICIO + QT_SERIES + QT_REPETICOES +
-        (DS_CARGA)
-      </code>
+      <code
+        >@ID_ITEM_TREINO + ID_TREINO + NM_EXERCICIO + QT_SERIES + QT_REPETICOES
+        + (DS_CARGA)</code
+      >
     </p>
     <div class="scroll">
       <table>
@@ -832,46 +867,51 @@
         <tr>
           <td>ID_ITEM_TREINO</td>
           <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador do exercício na ficha</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador do item de treino.</td>
         </tr>
         <tr>
           <td>ID_TREINO</td>
           <td>int</td>
           <td>Sim (FK)</td>
-          <td>Referencia TREINO</td>
+          <td>Referencia TREINO(ID_TREINO).</td>
         </tr>
         <tr>
           <td>NM_EXERCICIO</td>
           <td>varchar(100)</td>
           <td>Sim</td>
-          <td>Nome do exercício</td>
+          <td>Nome do exercício.</td>
         </tr>
         <tr>
           <td>QT_SERIES</td>
           <td>int</td>
           <td>Sim</td>
-          <td>Número de séries</td>
+          <td>Quantidade de séries; deve ser maior que zero.</td>
         </tr>
         <tr>
           <td>QT_REPETICOES</td>
           <td>int</td>
           <td>Sim</td>
-          <td>Repetições por série</td>
+          <td>Quantidade de repetições; deve ser maior que zero.</td>
         </tr>
         <tr>
           <td>DS_CARGA</td>
           <td>varchar(30)</td>
           <td>Não</td>
-          <td>Carga do exercício</td>
+          <td>Descrição da carga ou duração, conforme o exercício.</td>
         </tr>
       </table>
     </div>
+    <p class="meta">
+      <strong>Restrições:</strong> FK para TREINO; CHECK para QT_SERIES e
+      QT_REPETICOES maiores que zero.
+    </p>
+
     <h3 id="unidade">UNIDADE</h3>
-    <p>Filial da academia.</p>
+    <p>Cadastro das unidades da academia.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code> @ID_UNIDADE + NM_UNIDADE + DS_ENDERECO</code>
+      <code>@ID_UNIDADE + NM_UNIDADE + DS_ENDERECO</code>
     </p>
     <div class="scroll">
       <table>
@@ -884,31 +924,220 @@
         <tr>
           <td>ID_UNIDADE</td>
           <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador da unidade</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador da unidade.</td>
         </tr>
         <tr>
           <td>NM_UNIDADE</td>
           <td>varchar(100)</td>
           <td>Sim</td>
-          <td>Nome da unidade</td>
+          <td>Nome da unidade.</td>
         </tr>
         <tr>
           <td>DS_ENDERECO</td>
           <td>varchar(255)</td>
           <td>Sim</td>
-          <td>Endereço completo da unidade</td>
+          <td>Endereço da unidade.</td>
         </tr>
       </table>
     </div>
-    <h3 id="chamado_manutencao">CHAMADO_MANUTENCAO</h3>
-    <p>Pedidos de reparo de equipamentos, abertos pelos funcionários.</p>
+
+    <h3 id="aula_coletiva">AULA_COLETIVA</h3>
+    <p>Aulas em grupo, com horário, instrutor, unidade e limite de vagas.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>
-        @ID_CHAMADO + ID_FUNCIONARIO_ABERTURA + DT_ABERTURA + DS_PROBLEMA +
-        TP_STATUS
-      </code>
+      <code
+        >@ID_AULA + ID_INSTRUTOR + ID_UNIDADE + NM_MODALIDADE + DT_HORARIO +
+        QT_LIMITE_VAGAS</code
+      >
+    </p>
+    <div class="scroll">
+      <table>
+        <tr>
+          <th>Atributo</th>
+          <th>Tipo</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
+        </tr>
+        <tr>
+          <td>ID_AULA</td>
+          <td>int</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador da aula.</td>
+        </tr>
+        <tr>
+          <td>ID_INSTRUTOR</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>
+            Referencia FUNCIONARIO(ID_FUNCIONARIO), indicando o funcionário
+            responsável pela aula.
+          </td>
+        </tr>
+        <tr>
+          <td>ID_UNIDADE</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>Referencia UNIDADE(ID_UNIDADE).</td>
+        </tr>
+        <tr>
+          <td>NM_MODALIDADE</td>
+          <td>varchar(60)</td>
+          <td>Sim</td>
+          <td>Modalidade da aula, como spinning, boxe ou muay thai.</td>
+        </tr>
+        <tr>
+          <td>DT_HORARIO</td>
+          <td>datetime</td>
+          <td>Sim</td>
+          <td>Data e horário programados para a aula.</td>
+        </tr>
+        <tr>
+          <td>QT_LIMITE_VAGAS</td>
+          <td>int</td>
+          <td>Sim</td>
+          <td>Limite de vagas; deve ser maior que zero.</td>
+        </tr>
+      </table>
+    </div>
+    <p class="meta">
+      <strong>Restrições:</strong> FKs para FUNCIONARIO e UNIDADE; CHECK para
+      QT_LIMITE_VAGAS maior que zero.
+    </p>
+    <p class="nota">
+      O CHECK valida que o limite cadastrado seja positivo, mas o script não
+      impede automaticamente que a quantidade de check-ins ultrapasse esse
+      limite. A consulta de auditoria A01 identifica essa situação.
+    </p>
+
+    <h3 id="checkin_aula">
+      CHECKIN_AULA
+      <small>(entidade associativa entre ALUNO e AULA_COLETIVA)</small>
+    </h3>
+    <p>Registra a participação ou presença de um aluno em uma aula coletiva.</p>
+    <p class="meta">
+      <strong>Composição:</strong>
+      <code>@ID_CHECKIN + ID_AULA + ID_ALUNO + DT_REALIZACAO</code>
+    </p>
+    <div class="scroll">
+      <table>
+        <tr>
+          <th>Atributo</th>
+          <th>Tipo</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
+        </tr>
+        <tr>
+          <td>ID_CHECKIN</td>
+          <td>int</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador do check-in.</td>
+        </tr>
+        <tr>
+          <td>ID_AULA</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>Referencia AULA_COLETIVA(ID_AULA).</td>
+        </tr>
+        <tr>
+          <td>ID_ALUNO</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>Referencia ALUNO(ID_ALUNO).</td>
+        </tr>
+        <tr>
+          <td>DT_REALIZACAO</td>
+          <td>datetime</td>
+          <td>Sim</td>
+          <td>Data e horário em que o check-in foi registrado.</td>
+        </tr>
+      </table>
+    </div>
+    <p class="meta">
+      <strong>Índices e restrições:</strong> FKs para AULA_COLETIVA e ALUNO;
+      UNIQUE composto em (ID_AULA, ID_ALUNO), impedindo mais de um registro do
+      mesmo aluno para a mesma aula.
+    </p>
+
+    <h3 id="ocorrencia_turno">OCORRENCIA_TURNO</h3>
+    <p>
+      Registra recados, problemas e pendências identificados pelos funcionários
+      durante os turnos.
+    </p>
+    <p class="meta">
+      <strong>Composição:</strong>
+      <code
+        >@ID_OCORRENCIA + ID_FUNCIONARIO_AUTOR + DT_REGISTRO + TP_TURNO +
+        DS_MENSAGEM + IN_RESOLVIDO</code
+      >
+    </p>
+    <div class="scroll">
+      <table>
+        <tr>
+          <th>Atributo</th>
+          <th>Tipo</th>
+          <th>Obrigatório</th>
+          <th>Observação</th>
+        </tr>
+        <tr>
+          <td>ID_OCORRENCIA</td>
+          <td>int</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador da ocorrência.</td>
+        </tr>
+        <tr>
+          <td>ID_FUNCIONARIO_AUTOR</td>
+          <td>int</td>
+          <td>Sim (FK)</td>
+          <td>
+            Referencia FUNCIONARIO(ID_FUNCIONARIO), identificando quem registrou
+            a ocorrência.
+          </td>
+        </tr>
+        <tr>
+          <td>DT_REGISTRO</td>
+          <td>datetime</td>
+          <td>Sim</td>
+          <td>Data e horário do registro.</td>
+        </tr>
+        <tr>
+          <td>TP_TURNO</td>
+          <td>varchar(20)</td>
+          <td>Sim</td>
+          <td>
+            Turno: <code>madrugada</code>, <code>manhã</code>,
+            <code>tarde</code> ou <code>noite</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>DS_MENSAGEM</td>
+          <td>text</td>
+          <td>Sim</td>
+          <td>Descrição do recado, problema ou pendência.</td>
+        </tr>
+        <tr>
+          <td>IN_RESOLVIDO</td>
+          <td>tinyint(1)</td>
+          <td>Sim (DEFAULT 0)</td>
+          <td>
+            Indicador de resolução: 0 para não resolvido e 1 para resolvido.
+          </td>
+        </tr>
+      </table>
+    </div>
+    <p class="meta">
+      <strong>Restrições:</strong> FK para FUNCIONARIO; CHECK para os turnos
+      permitidos e para IN_RESOLVIDO igual a 0 ou 1.
+    </p>
+
+    <h3 id="chamado_manutencao">CHAMADO_MANUTENCAO</h3>
+    <p>Registra solicitações de manutenção abertas pelos funcionários.</p>
+    <p class="meta">
+      <strong>Composição:</strong>
+      <code
+        >@ID_CHAMADO + ID_FUNCIONARIO_ABERTURA + DT_ABERTURA + DS_PROBLEMA +
+        TP_STATUS</code
+      >
     </p>
     <div class="scroll">
       <table>
@@ -921,42 +1150,54 @@
         <tr>
           <td>ID_CHAMADO</td>
           <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador do chamado</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador do chamado.</td>
         </tr>
         <tr>
           <td>ID_FUNCIONARIO_ABERTURA</td>
           <td>int</td>
           <td>Sim (FK)</td>
-          <td>Referencia FUNCIONARIO (quem abriu o pedido)</td>
+          <td>
+            Referencia FUNCIONARIO(ID_FUNCIONARIO), identificando quem abriu a
+            solicitação.
+          </td>
         </tr>
         <tr>
           <td>DT_ABERTURA</td>
           <td>datetime</td>
           <td>Sim</td>
-          <td>Data e hora em que o chamado foi aberto</td>
+          <td>Data e horário de abertura.</td>
         </tr>
         <tr>
           <td>DS_PROBLEMA</td>
           <td>text</td>
           <td>Sim</td>
-          <td>Descrição do defeito</td>
+          <td>Descrição do problema ou defeito identificado.</td>
         </tr>
         <tr>
           <td>TP_STATUS</td>
           <td>varchar(20)</td>
           <td>Sim</td>
-          <td>Situação do chamado</td>
+          <td>
+            Situação: <code>aberto</code>, <code>em andamento</code> ou
+            <code>concluído</code>.
+          </td>
         </tr>
       </table>
     </div>
+    <p class="meta">
+      <strong>Restrições:</strong> FK para FUNCIONARIO; CHECK para os status
+      permitidos.
+    </p>
+
     <h3 id="estoque_material">ESTOQUE_MATERIAL</h3>
-    <p>Materiais e itens mantidos em estoque em cada unidade da academia.</p>
+    <p>Registra materiais e suas quantidades em cada unidade da academia.</p>
     <p class="meta">
       <strong>Composição:</strong>
-      <code>
-        @ID_MATERIAL + ID_UNIDADE + NM_MATERIAL + TP_MATERIAL + QT_ESTOQUE
-      </code>
+      <code
+        >@ID_MATERIAL + ID_UNIDADE + NM_MATERIAL + TP_MATERIAL +
+        QT_ESTOQUE</code
+      >
     </p>
     <div class="scroll">
       <table>
@@ -969,35 +1210,43 @@
         <tr>
           <td>ID_MATERIAL</td>
           <td>int</td>
-          <td>Sim (PK)</td>
-          <td>Identificador do material em estoque</td>
+          <td>Sim (PK, AUTO_INCREMENT)</td>
+          <td>Identificador do registro de material.</td>
         </tr>
         <tr>
           <td>ID_UNIDADE</td>
           <td>int</td>
           <td>Sim (FK)</td>
-          <td>Referencia UNIDADE, indicando onde o material está armazenado</td>
+          <td>
+            Referencia UNIDADE(ID_UNIDADE), indicando onde o material está
+            armazenado.
+          </td>
         </tr>
         <tr>
           <td>NM_MATERIAL</td>
           <td>varchar(100)</td>
           <td>Sim</td>
-          <td>Nome ou identificação do material</td>
+          <td>Nome ou identificação do material.</td>
         </tr>
         <tr>
           <td>TP_MATERIAL</td>
           <td>varchar(50)</td>
           <td>Sim</td>
-          <td>Categoria ou tipo do material</td>
+          <td>Categoria ou tipo do material.</td>
         </tr>
         <tr>
           <td>QT_ESTOQUE</td>
           <td>int</td>
           <td>Sim</td>
-          <td>Quantidade disponível em estoque</td>
+          <td>Quantidade registrada; não pode ser negativa.</td>
         </tr>
       </table>
     </div>
+    <p class="meta">
+      <strong>Restrições:</strong> FK para UNIDADE; CHECK para QT_ESTOQUE maior
+      ou igual a zero.
+    </p>
+
     <h2>5. Chaves primárias e estrangeiras</h2>
     <h3>Chaves primárias</h3>
     <div class="scroll">
@@ -1023,12 +1272,20 @@
           <td>ID_PAGAMENTO</td>
         </tr>
         <tr>
+          <td>NOTA_FISCAL</td>
+          <td>ID_NOTA_FISCAL</td>
+        </tr>
+        <tr>
           <td>FUNCIONARIO</td>
           <td>ID_FUNCIONARIO</td>
         </tr>
         <tr>
           <td>TREINO</td>
           <td>ID_TREINO</td>
+        </tr>
+        <tr>
+          <td>ITEM_TREINO</td>
+          <td>ID_ITEM_TREINO</td>
         </tr>
         <tr>
           <td>AULA_COLETIVA</td>
@@ -1039,16 +1296,12 @@
           <td>ID_CHECKIN</td>
         </tr>
         <tr>
-          <td>OCORRENCIA_TURNO</td>
-          <td>ID_OCORRENCIA</td>
-        </tr>
-        <tr>
-          <td>ITEM_TREINO</td>
-          <td>ID_ITEM_TREINO</td>
-        </tr>
-        <tr>
           <td>UNIDADE</td>
           <td>ID_UNIDADE</td>
+        </tr>
+        <tr>
+          <td>OCORRENCIA_TURNO</td>
+          <td>ID_OCORRENCIA</td>
         </tr>
         <tr>
           <td>CHAMADO_MANUTENCAO</td>
@@ -1060,6 +1313,7 @@
         </tr>
       </table>
     </div>
+
     <h3>Chaves estrangeiras e relacionamentos</h3>
     <div class="scroll">
       <table>
@@ -1071,72 +1325,223 @@
         <tr>
           <td>MATRICULA.ID_ALUNO</td>
           <td>ALUNO.ID_ALUNO</td>
-          <td>1 aluno : 1 ou N matrículas</td>
+          <td>
+            1 aluno : 0 ou N matrículas; cada matrícula pertence a 1 aluno.
+          </td>
         </tr>
         <tr>
           <td>MATRICULA.ID_PLANO</td>
           <td>PLANO.ID_PLANO</td>
-          <td>1 plano : 0 ou N matrículas</td>
+          <td>
+            1 plano : 0 ou N matrículas; cada matrícula referencia 1 plano.
+          </td>
         </tr>
         <tr>
           <td>PAGAMENTO.ID_MATRICULA</td>
           <td>MATRICULA.ID_MATRICULA</td>
-          <td>1 matrícula : N pagamentos</td>
+          <td>
+            1 matrícula : 0 ou N pagamentos; cada pagamento pertence a 1
+            matrícula.
+          </td>
+        </tr>
+        <tr>
+          <td>NOTA_FISCAL.ID_PAGAMENTO</td>
+          <td>PAGAMENTO.ID_PAGAMENTO</td>
+          <td>
+            1 pagamento : 0 ou 1 nota fiscal; cada nota fiscal pertence a 1
+            pagamento. A restrição UNIQUE em ID_PAGAMENTO impede mais de uma
+            nota para o mesmo pagamento.
+          </td>
         </tr>
         <tr>
           <td>TREINO.ID_ALUNO</td>
           <td>ALUNO.ID_ALUNO</td>
-          <td>1 aluno : 0 ou N treinos</td>
+          <td>1 aluno : 0 ou N treinos; cada treino pertence a 1 aluno.</td>
         </tr>
         <tr>
           <td>TREINO.ID_PROFESSOR</td>
           <td>FUNCIONARIO.ID_FUNCIONARIO</td>
-          <td>1 funcionário : 0 ou N treinos</td>
+          <td>
+            1 funcionário : 0 ou N treinos; cada treino referencia 1
+            funcionário.
+          </td>
         </tr>
         <tr>
           <td>ITEM_TREINO.ID_TREINO</td>
           <td>TREINO.ID_TREINO</td>
-          <td>1 treino : N itens</td>
+          <td>1 treino : 0 ou N itens; cada item pertence a 1 treino.</td>
         </tr>
         <tr>
           <td>AULA_COLETIVA.ID_INSTRUTOR</td>
           <td>FUNCIONARIO.ID_FUNCIONARIO</td>
-          <td>1 funcionário : N aulas</td>
+          <td>
+            1 funcionário : 0 ou N aulas; cada aula referencia 1 funcionário.
+          </td>
         </tr>
         <tr>
           <td>AULA_COLETIVA.ID_UNIDADE</td>
           <td>UNIDADE.ID_UNIDADE</td>
-          <td>1 unidade : N aulas</td>
+          <td>1 unidade : 0 ou N aulas; cada aula ocorre em 1 unidade.</td>
         </tr>
         <tr>
           <td>CHECKIN_AULA.ID_AULA</td>
           <td>AULA_COLETIVA.ID_AULA</td>
-          <td>1 aula : N check-ins</td>
+          <td>1 aula : 0 ou N check-ins; cada check-in pertence a 1 aula.</td>
         </tr>
         <tr>
           <td>CHECKIN_AULA.ID_ALUNO</td>
           <td>ALUNO.ID_ALUNO</td>
           <td>
-            1 aluno : N check-ins (ALUNO e AULA_COLETIVA se relacionam de N para
-            N por meio de CHECKIN_AULA)
+            1 aluno : 0 ou N check-ins. ALUNO e AULA_COLETIVA se relacionam em
+            N:N por CHECKIN_AULA, com unicidade por aluno e aula.
           </td>
         </tr>
         <tr>
           <td>OCORRENCIA_TURNO.ID_FUNCIONARIO_AUTOR</td>
           <td>FUNCIONARIO.ID_FUNCIONARIO</td>
-          <td>1 funcionário : 0 ou N ocorrências</td>
+          <td>
+            1 funcionário : 0 ou N ocorrências; cada ocorrência possui 1 autor.
+          </td>
         </tr>
         <tr>
           <td>CHAMADO_MANUTENCAO.ID_FUNCIONARIO_ABERTURA</td>
           <td>FUNCIONARIO.ID_FUNCIONARIO</td>
-          <td>1 funcionário : N chamados</td>
+          <td>
+            1 funcionário : 0 ou N chamados; cada chamado possui 1 funcionário
+            responsável pela abertura.
+          </td>
         </tr>
         <tr>
           <td>ESTOQUE_MATERIAL.ID_UNIDADE</td>
           <td>UNIDADE.ID_UNIDADE</td>
-          <td>1 unidade : N materiais em estoque</td>
+          <td>
+            1 unidade : 0 ou N registros de materiais; cada registro pertence a
+            1 unidade.
+          </td>
         </tr>
       </table>
     </div>
+
+    <h3>Outras restrições de unicidade</h3>
+    <div class="scroll">
+      <table>
+        <tr>
+          <th>Tabela</th>
+          <th>Restrição</th>
+          <th>Finalidade</th>
+        </tr>
+        <tr>
+          <td>ALUNO</td>
+          <td>UNIQUE (ID_CPF)</td>
+          <td>Impede CPF duplicado entre alunos.</td>
+        </tr>
+        <tr>
+          <td>FUNCIONARIO</td>
+          <td>UNIQUE (ID_CPF)</td>
+          <td>Impede CPF duplicado entre funcionários.</td>
+        </tr>
+        <tr>
+          <td>NOTA_FISCAL</td>
+          <td>UNIQUE (NR_NOTA_FISCAL)</td>
+          <td>Impede repetição do número de nota no cadastro.</td>
+        </tr>
+        <tr>
+          <td>NOTA_FISCAL</td>
+          <td>UNIQUE (ID_PAGAMENTO)</td>
+          <td>Permite no máximo uma nota fiscal por pagamento.</td>
+        </tr>
+        <tr>
+          <td>CHECKIN_AULA</td>
+          <td>UNIQUE (ID_AULA, ID_ALUNO)</td>
+          <td>
+            Impede que o mesmo aluno tenha mais de um check-in para a mesma
+            aula.
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <h2>6. Regras de integridade implementadas</h2>
+    <div class="scroll">
+      <table>
+        <tr>
+          <th>Tabela</th>
+          <th>Regra implementada no SQL</th>
+        </tr>
+        <tr>
+          <td>ALUNO</td>
+          <td>IN_ATIVO deve ser 0 ou 1.</td>
+        </tr>
+        <tr>
+          <td>PLANO</td>
+          <td>
+            VL_MENSALIDADE deve ser maior que zero; TP_RECORRENCIA deve ser
+            'recorrente' ou 'não recorrente'; IN_ATIVO deve ser 0 ou 1.
+          </td>
+        </tr>
+        <tr>
+          <td>FUNCIONARIO</td>
+          <td>
+            TP_PAPEL deve ser 'recepção', 'professor', 'gerente' ou
+            'financeiro'; IN_ATIVO deve ser 0 ou 1.
+          </td>
+        </tr>
+        <tr>
+          <td>MATRICULA</td>
+          <td>
+            TP_STATUS deve ser 'pago', 'pendente', 'inadimplente' ou
+            'cancelado'; DT_FIM deve ser NULL ou maior/igual a DT_INICIO.
+          </td>
+        </tr>
+        <tr>
+          <td>PAGAMENTO</td>
+          <td>
+            VL_PAGAMENTO deve ser maior que zero; forma e status devem pertencer
+            aos valores permitidos no CHECK.
+          </td>
+        </tr>
+        <tr>
+          <td>NOTA_FISCAL</td>
+          <td>
+            VL_SERVICO deve ser maior que zero; TP_STATUS deve ser 'emitida',
+            'cancelada' ou 'pendente'.
+          </td>
+        </tr>
+        <tr>
+          <td>TREINO</td>
+          <td>DT_VALIDADE deve ser maior ou igual a DT_CRIACAO.</td>
+        </tr>
+        <tr>
+          <td>ITEM_TREINO</td>
+          <td>QT_SERIES e QT_REPETICOES devem ser maiores que zero.</td>
+        </tr>
+        <tr>
+          <td>AULA_COLETIVA</td>
+          <td>QT_LIMITE_VAGAS deve ser maior que zero.</td>
+        </tr>
+        <tr>
+          <td>OCORRENCIA_TURNO</td>
+          <td>
+            TP_TURNO deve ser um dos quatro turnos permitidos; IN_RESOLVIDO deve
+            ser 0 ou 1.
+          </td>
+        </tr>
+        <tr>
+          <td>CHAMADO_MANUTENCAO</td>
+          <td>TP_STATUS deve ser 'aberto', 'em andamento' ou 'concluído'.</td>
+        </tr>
+        <tr>
+          <td>ESTOQUE_MATERIAL</td>
+          <td>QT_ESTOQUE deve ser maior ou igual a zero.</td>
+        </tr>
+      </table>
+    </div>
+    <p class="nota">
+      As regras acima representam as restrições declaradas no script SQL. Elas
+      não significam que todas as regras operacionais da academia estejam
+      automatizadas: por exemplo, o controle de permissões por cargo e o
+      bloqueio de check-ins quando o limite de vagas é atingido não são
+      implementados diretamente pelas restrições atuais.
+    </p>
   </body>
 </html>
