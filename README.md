@@ -167,23 +167,204 @@ O texto completo está em [`levantamento/levantamento.md`](levantamento/levantam
 
 ## 3. Processos de negócio
 
-Os campos citados correspondem às colunas do [dicionário de dados](dicionario_dados.html) e do [script SQL](docs/academia_gavioes.sql).
+Os processos de negócio foram identificados a partir da entrevista realizada na Academia Gaviões e das informações levantadas sobre o funcionamento da unidade. Foram organizados dez processos principais, envolvendo cadastro, matrícula, pagamento, acesso, cancelamento, treinos, aulas coletivas, comunicação entre turnos, manutenção e estoque.
+
+Os campos citados correspondem às informações do [dicionário de dados](dicionario_dados.html) e do [script SQL](docs/academia_gavioes.sql). Algumas atividades são realizadas no sistema Evo ou por setores externos e não estão totalmente representadas no banco desenvolvido.
+
+### 3.1 Resumo dos processos
 
 | Código | Processo | Descrição |
 |---|---|---|
-| PR01 | **Cadastro do aluno** | A recepção registra no Evo nome completo, CPF, e-mail, data de nascimento, foto de perfil (opcional) e cadastro facial (opcional), e marca o aluno como ativo. |
-| PR02 | **Matrícula** | O aluno escolhe um plano (nome, tipo de recorrência e mensalidade). A matrícula guarda aluno, plano, data de início, data de fim (só no cancelamento), status (pago, pendente, inadimplente ou cancelado) e, no plano recorrente, os 4 últimos dígitos do cartão. |
-| PR03 | **Pagamento** | Cada pagamento registra matrícula, data, valor, forma (PIX, dinheiro, crédito ou débito) e status (pago ou pendente). Cobrança recusada ou não paga deixa a matrícula pendente ou inadimplente. |
-| PR04 | **Controle de acesso** | A catraca lê o rosto e consulta a situação financeira. Se a matrícula está inadimplente, bloqueia; se a facial falha, a recepção libera à mão. Esse log fica no Evo (fora do banco). |
-| PR05 | **Cancelamento** | O aluno pede ao SAC por e-mail, com CPF. O SAC cancela, e a matrícula recebe data de fim e status `cancelado`. Após cerca de dois meses de inadimplência o sistema cancela sozinho. |
-| PR06 | **Prescrição de treinos** | O professor cria a ficha de um aluno com datas de criação e validade e observação médica opcional. Cada ficha tem exercícios com nome, séries, repetições e carga (opcional). |
-| PR07 | **Aulas e check-in** | A aula tem instrutor, unidade, modalidade, data e hora e limite de vagas. O check-in do aluno registra aula, aluno e data e hora, e vale uma vez por aluno e aula. |
-| PR08 | **Comunicação entre turnos** | O funcionário registra a ocorrência com data e hora, turno, mensagem e se foi resolvida. |
-| PR09 | **Manutenção** | O funcionário abre um chamado com data e hora, descrição do problema e status (aberto, em andamento ou concluído). O que é complexo sobe ao gerente e ao regional. |
-| PR10 | **Controle de estoque** | Cada material tem unidade, nome, categoria e quantidade em estoque. |
+| PR01 | **Cadastro do aluno** | A recepção registra os dados pessoais do aluno no Evo, incluindo nome, CPF, e-mail, nascimento e, quando aplicável, foto e biometria facial. |
+| PR02 | **Matrícula** | O aluno escolhe um plano e a recepção registra o vínculo, as datas e a situação da matrícula. |
+| PR03 | **Pagamento** | O pagamento é registrado com valor, data, forma e status. Pendências podem afetar a situação da matrícula. |
+| PR04 | **Controle de acesso** | A catraca verifica a identificação facial e a situação da matrícula para liberar ou bloquear a entrada. |
+| PR05 | **Cancelamento** | O aluno solicita o cancelamento ao SAC, que realiza o procedimento e atualiza a situação da matrícula. |
+| PR06 | **Prescrição de treinos** | O professor monta a ficha de treino do aluno, com exercícios, séries, repetições, cargas e prazo de validade. |
+| PR07 | **Aulas e check-in** | O aluno consulta as aulas disponíveis e realiza check-in quando a modalidade exige agendamento. |
+| PR08 | **Comunicação entre turnos** | Os funcionários registram avisos e ocorrências para acompanhamento pelos turnos seguintes. |
+| PR09 | **Manutenção** | Problemas nos equipamentos ou instalações são registrados e encaminhados aos responsáveis. |
+| PR10 | **Controle de estoque** | A equipe acompanha a quantidade de materiais disponíveis e identifica a necessidade de reposição. |
 
----
+### 3.2 Detalhamento dos processos
 
+#### PR01 — Cadastro do aluno
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Aluno e recepção. |
+| Início | O aluno procura a academia para realizar o cadastro. |
+| Etapa 1 | A recepção solicita nome completo, CPF, e-mail e data de nascimento. |
+| Etapa 2 | Os dados são conferidos e registrados no sistema Evo. |
+| Etapa 3 | A foto de perfil e a biometria facial podem ser cadastradas. |
+| Etapa 4 | A recepção verifica as informações antes de concluir o cadastro. |
+| Informações utilizadas | Nome, CPF, e-mail, nascimento, foto e biometria facial. |
+| Exceções | Dados incorretos ou incompletos precisam ser corrigidos. |
+| Resultado | Aluno cadastrado e disponível para matrícula. |
+| Integração | `ALUNO`. O reconhecimento facial é utilizado pelo Evo. |
+
+#### PR02 — Matrícula
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Aluno e recepção. |
+| Início | O aluno cadastrado decide contratar um plano. |
+| Etapa 1 | A recepção apresenta os planos disponíveis e seus valores. |
+| Etapa 2 | O aluno escolhe o plano conforme suas necessidades. |
+| Etapa 3 | O sistema registra o vínculo entre aluno e plano. |
+| Etapa 4 | São registradas a data de início e a situação da matrícula. |
+| Etapa 5 | No plano recorrente, podem ser armazenados os quatro últimos dígitos do cartão. |
+| Informações utilizadas | Aluno, plano, tipo de recorrência, mensalidade, datas e status. |
+| Exceções | Problemas nos dados ou na contratação precisam ser verificados pela recepção. |
+| Resultado | Matrícula vinculada ao aluno e ao plano escolhido. |
+| Integração | `ALUNO`, `PLANO` e `MATRICULA`. |
+
+#### PR03 — Pagamento
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Financeiro, sistema Evo e recepção para consulta. |
+| Início | Existe uma cobrança relacionada à matrícula do aluno. |
+| Etapa 1 | O sistema identifica a matrícula e o valor correspondente. |
+| Etapa 2 | Nos planos recorrentes, a cobrança é realizada automaticamente no cartão cadastrado. |
+| Etapa 3 | Nos planos não recorrentes, o pagamento pode ser feito por PIX, dinheiro, crédito ou débito. |
+| Etapa 4 | São registrados o valor, a data, a forma de pagamento e o status. |
+| Etapa 5 | A situação financeira fica disponível para consulta. |
+| Informações utilizadas | Matrícula, valor, data, forma de pagamento e status. |
+| Exceções | Pagamentos recusados ou não confirmados podem deixar a matrícula pendente ou inadimplente. |
+| Resultado | Pagamento registrado e situação financeira identificada. |
+| Integração | `MATRICULA` e `PAGAMENTO`. |
+
+#### PR04 — Controle de acesso
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Sistema de catraca e recepção. |
+| Início | O aluno chega à academia e tenta entrar. |
+| Etapa 1 | A catraca realiza a identificação facial. |
+| Etapa 2 | O sistema consulta a situação da matrícula. |
+| Etapa 3 | Se a identificação e a matrícula estiverem regulares, a entrada é liberada. |
+| Etapa 4 | Se houver bloqueio financeiro, a entrada não é liberada. |
+| Etapa 5 | Caso o reconhecimento facial falhe, a recepção verifica a situação do aluno. |
+| Etapa 6 | Quando autorizado, o funcionário pode liberar a entrada manualmente. |
+| Informações utilizadas | Identificação facial, cadastro do aluno e situação da matrícula. |
+| Exceções | Falha na biometria, inadimplência ou inconsistência cadastral. |
+| Resultado | Entrada liberada ou bloqueada. |
+| Integração | `ALUNO` e `MATRICULA`. O registro das passagens fica no Evo, fora deste banco. |
+
+#### PR05 — Cancelamento
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Aluno e SAC. |
+| Início | O aluno solicita o cancelamento do plano. |
+| Etapa 1 | O aluno envia a solicitação ao SAC por e-mail, informando o CPF. |
+| Etapa 2 | O SAC identifica a matrícula e verifica a situação do aluno. |
+| Etapa 3 | O setor responsável realiza o procedimento de cancelamento. |
+| Etapa 4 | A matrícula recebe o status `cancelado` e a data de encerramento. |
+| Etapa 5 | O aluno recebe a confirmação do atendimento. |
+| Informações utilizadas | CPF, matrícula, situação financeira, data de fim e status. |
+| Exceções | Falhas no cancelamento podem gerar saldo devedor incorreto e bloqueio na catraca. A recepção encaminha essas situações ao SAC. |
+| Resultado | Matrícula cancelada e situação atualizada. |
+| Integração | `MATRICULA` e `PAGAMENTO`. O atendimento do SAC não possui tabela própria neste modelo. |
+
+#### PR06 — Prescrição de treinos
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Professor e aluno. |
+| Início | O aluno precisa de uma ficha de treino. |
+| Etapa 1 | O professor consulta as informações necessárias sobre o aluno. |
+| Etapa 2 | São consideradas a experiência, o tempo de prática e as limitações físicas informadas. |
+| Etapa 3 | O professor seleciona os exercícios. |
+| Etapa 4 | São definidas as séries, repetições e cargas, quando aplicável. |
+| Etapa 5 | A ficha recebe data de criação e validade. |
+| Etapa 6 | O treino fica disponível para consulta no aplicativo. |
+| Etapa 7 | Quando necessário, a ficha pode ser renovada por outro professor. |
+| Informações utilizadas | Aluno, professor, exercícios, séries, repetições, cargas, datas e observações médicas. |
+| Exceções | Treinos vencidos ou mudanças nas limitações do aluno podem exigir atualização. |
+| Resultado | Ficha de treino criada ou atualizada. |
+| Integração | `ALUNO`, `FUNCIONARIO`, `TREINO` e `ITEM_TREINO`. |
+
+#### PR07 — Aulas e check-in
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Aluno, instrutor e sistema Evo. |
+| Início | O aluno deseja participar de uma aula coletiva. |
+| Etapa 1 | O aluno consulta as modalidades e os horários disponíveis. |
+| Etapa 2 | O sistema identifica a aula, o instrutor, a unidade e o limite de vagas. |
+| Etapa 3 | Quando a modalidade exige agendamento, o aluno realiza o check-in pelo aplicativo. |
+| Etapa 4 | São verificadas as vagas disponíveis. |
+| Etapa 5 | O check-in é associado ao aluno e à aula. |
+| Etapa 6 | O instrutor realiza a atividade no horário previsto. |
+| Informações utilizadas | Aluno, modalidade, instrutor, unidade, horário, limite de vagas e check-in. |
+| Exceções | Falta de vagas ou tentativa de check-in duplicado. O spinning possui 19 bicicletas e exige check-in; outras modalidades normalmente não exigem reserva. |
+| Resultado | Participação ou check-in registrado, conforme a modalidade. |
+| Integração | `ALUNO`, `FUNCIONARIO`, `UNIDADE`, `AULA_COLETIVA` e `CHECKIN_AULA`. |
+
+#### PR08 — Comunicação entre turnos
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Funcionários e gerência. |
+| Início | Um funcionário identifica uma ocorrência ou informação que precisa ser comunicada. |
+| Etapa 1 | O funcionário descreve o problema ou aviso. |
+| Etapa 2 | A ocorrência é registrada com data, horário e turno. |
+| Etapa 3 | O registro fica disponível para acompanhamento. |
+| Etapa 4 | A equipe do turno seguinte consulta as informações pendentes. |
+| Etapa 5 | Quando a situação é resolvida, o registro é atualizado. |
+| Informações utilizadas | Funcionário responsável, data, horário, turno, mensagem e situação da ocorrência. |
+| Exceções | Ocorrências não comunicadas podem permanecer pendentes entre os turnos. |
+| Resultado | Avisos e problemas registrados para acompanhamento. |
+| Integração | `FUNCIONARIO` e `OCORRENCIA_TURNO`. |
+
+#### PR09 — Manutenção
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Funcionários, professores, gerente e equipe de manutenção. |
+| Início | É identificado um problema em equipamento ou instalação. |
+| Etapa 1 | O funcionário verifica o problema identificado. |
+| Etapa 2 | Problemas simples podem ser resolvidos pela equipe da unidade. |
+| Etapa 3 | Quando necessário, é aberto um chamado de manutenção. |
+| Etapa 4 | O chamado registra a data, o responsável e a descrição do problema. |
+| Etapa 5 | Problemas mais complexos são encaminhados ao gerente e, quando necessário, ao responsável regional. |
+| Etapa 6 | O chamado é acompanhado até a conclusão. |
+| Informações utilizadas | Funcionário, data de abertura, descrição do problema e status. |
+| Exceções | Problemas complexos podem depender de atendimento especializado. |
+| Resultado | Problema registrado e encaminhado para resolução. |
+| Integração | `FUNCIONARIO` e `CHAMADO_MANUTENCAO`. O escalonamento regional não é registrado separadamente no banco. |
+
+#### PR10 — Controle de estoque
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Funcionários e gerência. |
+| Início | É necessário consultar ou repor materiais utilizados na unidade. |
+| Etapa 1 | A equipe verifica os materiais disponíveis. |
+| Etapa 2 | São consultados o nome, a categoria e a quantidade de cada material. |
+| Etapa 3 | Materiais com estoque reduzido são identificados. |
+| Etapa 4 | A necessidade de reposição é comunicada ao responsável. |
+| Etapa 5 | Após a reposição, a quantidade disponível é atualizada. |
+| Informações utilizadas | Unidade, nome do material, categoria e quantidade em estoque. |
+| Exceções | Falta de materiais e divergências de quantidade podem dificultar o controle. A retirada individual de itens ainda não é registrada neste modelo. |
+| Resultado | Estoque atualizado e necessidade de reposição identificada. |
+| Integração | `UNIDADE` e `ESTOQUE_MATERIAL`. |
+
+### 3.3 Relação entre os processos
+
+| Processos relacionados | Relação |
+|---|---|
+| PR01 e PR02 | O aluno precisa estar cadastrado para ser vinculado a uma matrícula. |
+| PR02 e PR03 | A matrícula está associada ao plano contratado e aos pagamentos. |
+| PR03 e PR04 | A situação financeira pode influenciar a liberação de acesso. |
+| PR04 e PR05 | O cancelamento altera a situação da matrícula utilizada na verificação de acesso. |
+| PR06 e PR07 | Os treinos e as aulas coletivas fazem parte dos serviços oferecidos aos alunos. |
+| PR08 e PR09 | Ocorrências entre turnos podem envolver problemas de manutenção. |
+| PR08 e PR10 | A comunicação entre turnos pode incluir avisos sobre falta de materiais. |
+
+Os processos apresentados representam as principais atividades da Academia Gaviões relacionadas ao banco de dados desenvolvido. Algumas operações dependem do sistema Evo, do SAC ou de controles externos, conforme as limitações descritas nas demais seções do projeto.
 ## 4. Requisitos funcionais (RF)
 
 RF01 a RF10 são os da E1 v1.1 (códigos mantidos). RF11 é novo. A coluna **No banco** diz com franqueza o quanto cada requisito está implementado.
