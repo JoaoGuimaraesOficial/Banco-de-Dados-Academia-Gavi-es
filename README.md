@@ -432,7 +432,7 @@ RN01 a RN12 são as da E1 v1.1 (códigos mantidos, como pede o enunciado). RN13 
 - DER conceitual revisado: [`Arq-DER/modelo-conceitual.png`](Arq-DER/modelo-conceitual.png) (brModelo)
 - Modelo lógico: [`Arq-DER/modelo-logico.png`](Arq-DER/modelo-logico.png)
 
-![DER conceitual](Arq-DER/modelo-conceitual.png)
+![DER conceitual](Arq-DER/modelo-conceitual-imagem.png)
 
 ### 7.1 Apontamentos da correção e respostas
 
