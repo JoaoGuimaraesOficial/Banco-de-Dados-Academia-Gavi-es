@@ -157,8 +157,6 @@ O texto completo está em [`levantamento/levantamento.md`](levantamento/levantam
 
 ### 2.2 Observação presencial (separada do que foi dito)
 
-> Escrevam apenas o que **viram acontecer**. Se diferir do relato, registrem a diferença. As fotos mostram a catraca e o balcão da recepção; isso ajuda a descrever.
-
 | O que o grupo viu | Diferença em relação ao relato |
 |---|---|
 | ⚠️ PREENCHER (ex.: como a recepção libera alguém na catraca) | ⚠️ PREENCHER |
