@@ -159,9 +159,9 @@ O texto completo está em [`levantamento/levantamento.md`](levantamento/levantam
 
 | O que o grupo viu | Diferença em relação ao relato |
 |---|---|
-| **Recepção e catraca:** a fotografia da área interna registra a catraca próxima à área de musculação. A visita também foi documentada na recepção da academia. | O reconhecimento facial, a consulta da situação do aluno e a liberação manual em caso de falha foram explicados na entrevista. Não há confirmação de que o grupo tenha acompanhado esses procedimentos funcionando. |
-| **Comunicação entre turnos:** a entrevista ocorreu no balcão da recepção, conforme o registro fotográfico. | Os entrevistados relataram dificuldades na transmissão de informações entre os quatro turnos. Não foi documentada a observação direta da troca de turnos ou do local utilizado para registrar recados. |
-| **Estoque de materiais:** as fotografias disponíveis registram a fachada, a recepção e parte da área interna da academia. | A reposição dos materiais de limpeza e a falta de controle na retirada de garrafinhas promocionais foram relatadas na entrevista. O local de armazenamento dos materiais não foi identificado nos registros da visita. |
+| ⚠️ PREENCHER (ex.: como a recepção libera alguém na catraca) | ⚠️ PREENCHER |
+| ⚠️ PREENCHER (ex.: onde são anotados os recados entre turnos) | ⚠️ PREENCHER |
+| ⚠️ PREENCHER (ex.: onde ficam os materiais de limpeza) | ⚠️ PREENCHER |
 
 ---
 
@@ -375,7 +375,7 @@ RF01 a RF10 são os da E1 v1.1 (códigos mantidos). RF11 é novo. A coluna **No 
 | RF02 | Cadastro de planos, vínculo com alunos e registro de pagamento, cancelamento e condições contratuais. | **Parcial.** `PLANO`, `MATRICULA` e `PAGAMENTO`; cancelamento só por status e `DT_FIM`; sem fidelidade nem multa. |
 | RF03 | Liberar ou bloquear a catraca conforme a situação da matrícula e financeira. | **Parcial.** Situação em `MATRICULA.TP_STATUS` e `ALUNO.IN_ATIVO`; o log de acessos fica no Evo. |
 | RF04 | Professores criam, editam e consultam fichas de treino, considerando limitações dos alunos. | **Atendido.** `TREINO` e `ITEM_TREINO`. |
-| RF05 | Check-in em aulas coletivas, respeitando o limite de vagas. | **Atendido.** `CHECKIN_AULA`; excesso detectado pela A01. |
+| RF05 | Check-in em aulas coletivas, respeitando o limite de vagas. | **Parcialmente atendido.** `CHECKIN_AULA`; excesso detectado pela A01. |
 | RF06 | Registrar avisos e pendências dos turnos, mantendo-as disponíveis até serem resolvidas. | **Atendido.** `OCORRENCIA_TURNO` e G05. |
 | RF07 | Registro e acompanhamento de problemas e solicitações de manutenção. | **Parcial.** `CHAMADO_MANUTENCAO` e G08; sem equipamento nem escalonamento. |
 | RF08 | Acompanhar materiais internos e itens promocionais, incluindo retiradas por funcionários. | **Parcial.** `ESTOQUE_MATERIAL` (quantidade atual); sem registro de retiradas. |
@@ -718,7 +718,7 @@ O grupo registra aqui o que o modelo atual **não** cobre, para evitar que o pro
 | **Prompts (E2)** | (1) Envio do enunciado da Entrega 2 (PDF) e do link do repositório, com o pedido: "analise o github e veja como está". (2) Envio da lista de 18 itens que o README deve conter, com o pedido de montá-lo. (3) Envio do script SQL, do dicionário de dados, dos diagramas conceitual e lógico, do roteiro e da transcrição da entrevista e das fotos da visita, com o pedido: "confira esse README". (4) Fornecimento dos usuários do GitHub dos integrantes. |
 | **Fontes verificadas** | As consultas novas foram executadas em SQLite (adaptado) e retornaram o esperado: G05 duas pendências (tarde e noite), G06 uma cobrança após cancelamento, G07 dois itens de estoque baixo, G08 dois chamados em aberto, A05 vazia e A06 um aluno. **Não foram executadas em MySQL 8**: o grupo deve rodar o script inteiro no MySQL. |
 | **O que foi rejeitado ou corrigido** | Numa primeira versão do README, a IA propôs um modelo de 21 tabelas (com acessos, cancelamento, personal externo, movimentação de estoque e outras) que não existia no trabalho do grupo. Ao receber o script, o dicionário e os diagramas reais, o README foi refeito sobre o modelo de 13 tabelas, e o que ficou de fora foi registrado na seção 12. A IA também apontou a possível inversão das cardinalidades do DER e a divergência de tamanho de campos entre o dicionário e o script. |
-| **Reflexão crítica** | |
+| **Reflexão crítica** | A inteligência artificial serviu de auxílio na organização, revisão e criação de trechos da documentação e das consultas SQL. As propostas geradas foram examinadas pelos membros da equipe, que confirmaram sua compatibilidade com a pesquisa efetuada e com o esquema do banco de dados. A IA não substituiu as escolhas de modelagem nem a confirmação dos desfechos. |
 
 ---
 
