@@ -159,9 +159,9 @@ O texto completo está em [`levantamento/levantamento.md`](levantamento/levantam
 
 | O que o grupo viu | Diferença em relação ao relato |
 |---|---|
-| ⚠️ PREENCHER (ex.: como a recepção libera alguém na catraca) | ⚠️ PREENCHER |
-| ⚠️ PREENCHER (ex.: onde são anotados os recados entre turnos) | ⚠️ PREENCHER |
-| ⚠️ PREENCHER (ex.: onde ficam os materiais de limpeza) | ⚠️ PREENCHER |
+| **Recepção e catraca:** a fotografia da área interna registra a catraca próxima à área de musculação. A visita também foi documentada na recepção da academia. | O reconhecimento facial, a consulta da situação do aluno e a liberação manual em caso de falha foram explicados na entrevista. Não há confirmação de que o grupo tenha acompanhado esses procedimentos funcionando. |
+| **Comunicação entre turnos:** a entrevista ocorreu no balcão da recepção, conforme o registro fotográfico. | Os entrevistados relataram dificuldades na transmissão de informações entre os quatro turnos. Não foi documentada a observação direta da troca de turnos ou do local utilizado para registrar recados. |
+| **Estoque de materiais:** as fotografias disponíveis registram a fachada, a recepção e parte da área interna da academia. | A reposição dos materiais de limpeza e a falta de controle na retirada de garrafinhas promocionais foram relatadas na entrevista. O local de armazenamento dos materiais não foi identificado nos registros da visita. |
 
 ---
 
