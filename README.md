@@ -72,29 +72,30 @@ Todos os problemas são resolvidos pelo modelo (a cobertura de P3 e P4 é parcia
 
 ### 1.4 Escopo e justificativa da escolha
 
-**Escopo:** o banco cobre os dados da unidade em seis áreas.
+**Escopo:** o banco cobre os dados e processos da unidade em seis áreas.
 
 | Área | Tabelas |
 |---|---|
-| Alunos e contratos | `ALUNO`, `PLANO`, `MATRICULA`, `PAGAMENTO` |
+| Alunos, contratos e financeiro | `ALUNO`, `PLANO`, `MATRICULA`, `PAGAMENTO`, `NOTA_FISCAL` |
 | Treinos | `TREINO`, `ITEM_TREINO` |
 | Aulas coletivas | `AULA_COLETIVA`, `CHECKIN_AULA`, `UNIDADE` |
 | Equipe | `FUNCIONARIO` |
 | Comunicação | `OCORRENCIA_TURNO` |
 | Operação | `CHAMADO_MANUTENCAO`, `ESTOQUE_MATERIAL` |
 
-**Justificativa da escolha:** a academia reúne processos reais e variados (cadastro com biometria facial, planos recorrentes e avulsos, pagamentos, prescrição de treinos, aulas com limite de vagas e níveis diferentes de acesso aos dados). Isso dá a complexidade que a disciplina exige.
+**Justificativa da escolha:** a academia reúne processos reais e variados, como cadastro de alunos com biometria facial, planos recorrentes e avulsos, pagamentos, controle de notas fiscais, prescrição de treinos, aulas com limite de vagas e diferentes níveis de acesso aos dados. Essa variedade proporciona a complexidade necessária para atender aos objetivos da disciplina.
 
 **Processos típicos que ficaram de fora e o motivo:**
 
 | Item | Motivo |
 |---|---|
-| Venda de bebidas e energéticos (geladeira com totem) | Operação terceirizada pela empresa **Gela Fit**; os dados não ficam na academia. |
-| Avaliação física e medidas corporais | O entrevistado disse que não há medição de rotina nem registro formal de evolução corporal. |
-| Cobrança com número completo de cartão | Fica restrita ao financeiro/central; a recepção e os professores só veem os 4 últimos dígitos. |
-| Registro de cada passagem na catraca | Fica no sistema Evo; este banco não guarda log de acessos (ver [limitações](#12-limitações-conhecidas)). |
-| Personal trainers externos e taxa mensal | Existem na academia, mas **não estão modeladas** nesta versão (ver [limitações](#12-limitações-conhecidas)). |
-| Emissão de nota fiscal, trancamento de plano, aula experimental, convênios (Wellhub, TotalPass) e reajuste de mensalidade | A E1 os lista como regras prováveis "a definir". Não foram confirmados na entrevista (a transcrição não os cita), então ficam **fora** do modelo até a academia confirmar. |
+| Venda de bebidas e energéticos (geladeira com totem) | Operação terceirizada pela empresa **Gela Fit**; os dados não ficam sob responsabilidade da academia. |
+| Avaliação física e medidas corporais | O entrevistado informou que não há medição de rotina nem registro formal de evolução corporal. |
+| Cobrança com número completo de cartão | Fica restrita ao financeiro/central; a recepção e os professores visualizam somente os quatro últimos dígitos. |
+| Registro de cada passagem na catraca | Fica no sistema Evo; este banco não armazena o histórico de acessos (ver [limitações](#12-limitações-conhecidas)). |
+| Personal trainers externos e taxa mensal | Existem na academia, mas **não estão modelados** nesta versão (ver [limitações](#12-limitações-conhecidas)). |
+| Trancamento de plano, aula experimental, convênios (Wellhub e TotalPass) e reajuste de mensalidade | A E1 os lista como regras prováveis "a definir". Não foram confirmados na entrevista; por isso, permanecem fora do modelo até que a academia confirme esses processos. |
+| Emissão fiscal oficial de notas fiscais | O banco possui a tabela `NOTA_FISCAL` para controle acadêmico interno de informações relacionadas às notas, vinculadas aos pagamentos. Entretanto, não realiza emissão fiscal oficial nem possui integração com a SEFAZ ou outros sistemas fiscais. |
 
 ### 1.5 Evidências da existência da organização
 
@@ -167,7 +168,7 @@ O texto completo está em [`levantamento/levantamento.md`](levantamento/levantam
 
 ## 3. Processos de negócio
 
-Os processos de negócio foram identificados a partir da entrevista realizada na Academia Gaviões e das informações levantadas sobre o funcionamento da unidade. Foram organizados dez processos principais, envolvendo cadastro, matrícula, pagamento, acesso, cancelamento, treinos, aulas coletivas, comunicação entre turnos, manutenção e estoque.
+Os processos de negócio foram identificados a partir da entrevista realizada na Academia Gaviões e das informações levantadas sobre o funcionamento da unidade. Foram organizados onze processos principais, envolvendo cadastro, matrícula, pagamento, emissão e controle de notas fiscais, acesso, cancelamento, treinos, aulas coletivas, comunicação entre turnos, manutenção e estoque.
 
 Os campos citados correspondem às informações do [dicionário de dados](dicionario_dados.html) e do [script SQL](docs/academia_gavioes.sql). Algumas atividades são realizadas no sistema Evo ou por setores externos e não estão totalmente representadas no banco desenvolvido.
 
@@ -185,6 +186,7 @@ Os campos citados correspondem às informações do [dicionário de dados](dicio
 | PR08 | **Comunicação entre turnos** | Os funcionários registram avisos e ocorrências para acompanhamento pelos turnos seguintes. |
 | PR09 | **Manutenção** | Problemas nos equipamentos ou instalações são registrados e encaminhados aos responsáveis. |
 | PR10 | **Controle de estoque** | A equipe acompanha a quantidade de materiais disponíveis e identifica a necessidade de reposição. |
+| PR11 | **Emissão e controle de notas fiscais** | As informações das notas fiscais são registradas e vinculadas aos pagamentos para controle interno. |
 
 ### 3.2 Detalhamento dos processos
 
@@ -352,6 +354,22 @@ Os campos citados correspondem às informações do [dicionário de dados](dicio
 | Resultado | Estoque atualizado e necessidade de reposição identificada. |
 | Integração | `UNIDADE` e `ESTOQUE_MATERIAL`. |
 
+#### PR11 — Emissão e controle de notas fiscais
+
+| Campo | Descrição |
+|---|---|
+| Responsáveis | Setor financeiro e sistema de controle. |
+| Início | Existe um pagamento relacionado a um serviço prestado pela academia. |
+| Etapa 1 | O pagamento é identificado no sistema. |
+| Etapa 2 | As informações da nota fiscal relacionada ao pagamento são registradas. |
+| Etapa 3 | São armazenados o número da nota, o código de verificação, a data de emissão, o valor e a descrição do serviço. |
+| Etapa 4 | A nota recebe uma situação de controle, como emitida, cancelada ou pendente. |
+| Etapa 5 | Quando disponível, o arquivo PDF da nota pode ser associado ao registro. |
+| Informações utilizadas | Pagamento, número da nota, código de verificação, data de emissão, valor, descrição do serviço, status e arquivo PDF. |
+| Exceções | Um pagamento pode não possuir nota fiscal vinculada. O registro acadêmico não realiza emissão fiscal oficial nem validação junto à SEFAZ. |
+| Resultado | Informações da nota fiscal registradas e vinculadas ao pagamento correspondente. |
+| Integração | `PAGAMENTO` e `NOTA_FISCAL`. Cada nota fiscal pertence a um pagamento, e um pagamento pode possuir no máximo uma nota fiscal vinculada. |
+
 ### 3.3 Relação entre os processos
 
 | Processos relacionados | Relação |
@@ -359,12 +377,14 @@ Os campos citados correspondem às informações do [dicionário de dados](dicio
 | PR01 e PR02 | O aluno precisa estar cadastrado para ser vinculado a uma matrícula. |
 | PR02 e PR03 | A matrícula está associada ao plano contratado e aos pagamentos. |
 | PR03 e PR04 | A situação financeira pode influenciar a liberação de acesso. |
+| PR03 e PR11 | As informações da nota fiscal são vinculadas ao pagamento correspondente. |
 | PR04 e PR05 | O cancelamento altera a situação da matrícula utilizada na verificação de acesso. |
 | PR06 e PR07 | Os treinos e as aulas coletivas fazem parte dos serviços oferecidos aos alunos. |
 | PR08 e PR09 | Ocorrências entre turnos podem envolver problemas de manutenção. |
 | PR08 e PR10 | A comunicação entre turnos pode incluir avisos sobre falta de materiais. |
 
 Os processos apresentados representam as principais atividades da Academia Gaviões relacionadas ao banco de dados desenvolvido. Algumas operações dependem do sistema Evo, do SAC ou de controles externos, conforme as limitações descritas nas demais seções do projeto.
+
 ## 4. Requisitos funcionais (RF)
 
 RF01 a RF10 são os da E1 v1.1 (códigos mantidos). RF11 é novo. A coluna **No banco** diz com franqueza o quanto cada requisito está implementado.
@@ -446,8 +466,9 @@ RN01 a RN12 são as da E1 v1.1 (códigos mantidos, como pede o enunciado). RN13 
 | Aulas sem local | Entidade `UNIDADE`, ligada à aula e ao estoque | A rede tem várias unidades e o estoque é por unidade. |
 | Aula sem unidade, `ID_INSTRUTOR` como FK | Relacionamentos `MINISTRA` e `OCORRE_EM` | Instrutor e local passam a ser relacionamentos. |
 | Mais de um papel de funcionário como texto livre | `TP_PAPEL` com domínio fixo | Evita valores inconsistentes. |
+| Controle de notas fiscais não representado no modelo | Inclusão da entidade `NOTA_FISCAL`, relacionada a `PAGAMENTO` | Permite registrar internamente os dados das notas fiscais e associá-las aos respectivos pagamentos, sem representar uma integração fiscal oficial. |
 
-### 7.2 Entidades do DER revisado (13)
+### 7.2 Entidades do DER revisado (14)
 
 | Entidade | Identificador | Principais atributos |
 |---|---|---|
@@ -455,6 +476,7 @@ RN01 a RN12 são as da E1 v1.1 (códigos mantidos, como pede o enunciado). RN13 
 | PLANO | `ID_PLANO` | nome, recorrência, mensalidade, ativo |
 | MATRICULA (associativa) | `ID_MATRICULA` | início, fim, status, 4 dígitos do cartão |
 | PAGAMENTO | `ID_PAGAMENTO` | data, valor, forma, status |
+| NOTA_FISCAL | `ID_NOTA_FISCAL` | pagamento, número, série, código de verificação, emissão, valor, serviço, status, PDF |
 | FUNCIONARIO | `ID_FUNCIONARIO` | nome, CPF, papel, ativo |
 | TREINO | `ID_TREINO` | criação, validade, observação médica |
 | ITEM_TREINO | `ID_ITEM_TREINO` | exercício, séries, repetições, carga |
@@ -471,6 +493,7 @@ RN01 a RN12 são as da E1 v1.1 (códigos mantidos, como pede o enunciado). RN13 
 |---|---|
 | MATRICULA (associativa) | ALUNO — PLANO |
 | GERA | MATRICULA — PAGAMENTO |
+| VINCULA | PAGAMENTO — NOTA_FISCAL |
 | RECEBE | ALUNO — TREINO |
 | ELABORA | FUNCIONARIO — TREINO |
 | COMPÕE | TREINO — ITEM_TREINO |
@@ -480,6 +503,14 @@ RN01 a RN12 são as da E1 v1.1 (códigos mantidos, como pede o enunciado). RN13 
 | POSSUI | UNIDADE — ESTOQUE_MATERIAL |
 | REGISTRA | FUNCIONARIO — OCORRENCIA_TURNO |
 | ABRE | FUNCIONARIO — CHAMADO_MANUTENCAO |
+
+### 7.4 Cardinalidade do relacionamento de nota fiscal
+
+| Relacionamento | Cardinalidade | Regra |
+|---|---|---|
+| PAGAMENTO — NOTA_FISCAL | (1,1) — (0,1) | Um pagamento pode não possuir nota fiscal ou possuir uma única nota; cada nota fiscal deve estar vinculada a exatamente um pagamento. |
+
+A cardinalidade é implementada no SQL por meio de `ID_PAGAMENTO NOT NULL`, `FOREIGN KEY` e `UNIQUE`, garantindo que uma nota não fique sem pagamento associado e que um pagamento não possua mais de uma nota fiscal.
 
 ---
 
@@ -493,7 +524,7 @@ RN01 a RN12 são as da E1 v1.1 (códigos mantidos, como pede o enunciado). RN13 
 
 | Elemento conceitual | Resultado no lógico | Onde |
 |---|---|---|
-| Entidade | Tabela; identificador vira PK | as 13 tabelas |
+| Entidade | Tabela; identificador vira PK | as 14 tabelas |
 | Atributo simples | Coluna com tipo | todas |
 | Relacionamento 1:N | FK na tabela do lado N, `NOT NULL` quando a participação mínima é 1 | `PAGAMENTO.ID_MATRICULA`, `TREINO.ID_ALUNO`, `TREINO.ID_PROFESSOR`, `AULA_COLETIVA.ID_UNIDADE`, `ESTOQUE_MATERIAL.ID_UNIDADE` etc. |
 | Entidade associativa | Tabela própria com as duas FKs e os atributos do relacionamento | `MATRICULA` (ALUNO–PLANO) e `CHECKIN_AULA` (ALUNO–AULA) |
@@ -512,6 +543,7 @@ FUNCIONARIO(ID_FUNCIONARIO PK, NM_FUNCIONARIO, ID_CPF UQ, TP_PAPEL, IN_ATIVO)
 UNIDADE(ID_UNIDADE PK, NM_UNIDADE, DS_ENDERECO)
 MATRICULA(ID_MATRICULA PK, ID_ALUNO FK, ID_PLANO FK, DT_INICIO, DT_FIM, TP_STATUS, CD_ULTIMOS_DIGITOS_CARTAO)
 PAGAMENTO(ID_PAGAMENTO PK, ID_MATRICULA FK, DT_PAGAMENTO, VL_PAGAMENTO, TP_FORMA_PAGAMENTO, TP_STATUS)
+NOTA_FISCAL(ID_NOTA_FISCAL PK, ID_PAGAMENTO FK UQ, NR_NOTA_FISCAL UQ, NR_SERIE, CD_VERIFICACAO, DT_EMISSAO, VL_SERVICO, DS_SERVICO, TP_STATUS, DS_ARQUIVO_PDF)
 TREINO(ID_TREINO PK, ID_ALUNO FK, ID_PROFESSOR FK→FUNCIONARIO, DT_CRIACAO, DT_VALIDADE, DS_OBSERVACAO_MEDICA)
 ITEM_TREINO(ID_ITEM_TREINO PK, ID_TREINO FK, NM_EXERCICIO, QT_SERIES, QT_REPETICOES, DS_CARGA)
 AULA_COLETIVA(ID_AULA PK, ID_INSTRUTOR FK→FUNCIONARIO, ID_UNIDADE FK, NM_MODALIDADE, DT_HORARIO, QT_LIMITE_VAGAS)
@@ -556,7 +588,7 @@ As tabelas usam PK simples (`ID_*`), e `CHECKIN_AULA` tem PK substituta com `UNI
 
 ### 9.4 Resultado e pontos de atenção
 
-As 13 tabelas atendem à 3FN. Dois pontos que o grupo aceitou conscientemente:
+As 14 tabelas atendem à 3FN. Dois pontos que o grupo aceitou conscientemente:
 
 - `MATRICULA.TP_STATUS` pode ser derivado dos pagamentos. Foi mantido para a catraca decidir rápido (RNF02) e porque o problema P2 nasce justamente desse status ficar desatualizado. As consultas A05, G06 e A06 conferem a consistência.
 - `MATRICULA.CD_ULTIMOS_DIGITOS_CARTAO` guarda o cartão cadastrado no plano recorrente. Se o cartão mudar, o campo é atualizado; o histórico de cartões não é mantido.
@@ -581,6 +613,7 @@ As 13 tabelas atendem à 3FN. Dois pontos que o grupo aceitou conscientemente:
 | `CHECKIN_AULA.ID_AULA`, `ID_ALUNO` | Associativa. |
 | `OCORRENCIA_TURNO.ID_FUNCIONARIO_AUTOR`, `CHAMADO_MANUTENCAO.ID_FUNCIONARIO_ABERTURA` | Rastreia quem registrou. |
 | `ESTOQUE_MATERIAL.ID_UNIDADE` | Estoque é por unidade. |
+| `NOTA_FISCAL.ID_PAGAMENTO` | Vincula cada nota fiscal a um pagamento e impede que um pagamento possua mais de uma nota. |
 
 Nenhuma FK define `ON DELETE`, então vale o padrão do MySQL (`RESTRICT`): histórico de pagamentos, treinos e ocorrências não pode ser apagado por engano. Aluno e funcionário saem do uso por `IN_ATIVO = 0`, não por exclusão.
 
@@ -663,6 +696,7 @@ Nenhuma FK define `ON DELETE`, então vale o padrão do MySQL (`RESTRICT`): hist
 | Chamado com status inválido | `CHAMADO_MANUTENCAO` | A03 |
 | Pagamento anterior ao início da matrícula | `PAGAMENTO`, `MATRICULA`, `ALUNO` | A04 |
 | RN02 — aluno ativo sem matrícula vigente | `ALUNO`, `MATRICULA` | A06 |
+| PR11 — controle de notas fiscais | `PAGAMENTO`, `NOTA_FISCAL` | Registro vinculado ao pagamento |
 
 Todos os problemas têm ao menos uma consulta, em [`docs/academia_gavioes.sql`](docs/academia_gavioes.sql). Cada uma tem cabeçalho no formato:
 
@@ -717,7 +751,7 @@ O grupo registra aqui o que o modelo atual **não** cobre, para evitar que o pro
 | **Motivação (E2)** | Organizar a documentação conforme o roteiro da Entrega 2 e cobrir os problemas P1 a P3 com consultas. |
 | **Prompts (E2)** | (1) Envio do enunciado da Entrega 2 (PDF) e do link do repositório, com o pedido: "analise o github e veja como está". (2) Envio da lista de 18 itens que o README deve conter, com o pedido de montá-lo. (3) Envio do script SQL, do dicionário de dados, dos diagramas conceitual e lógico, do roteiro e da transcrição da entrevista e das fotos da visita, com o pedido: "confira esse README". (4) Fornecimento dos usuários do GitHub dos integrantes. |
 | **Fontes verificadas** | As consultas novas foram executadas em SQLite (adaptado) e retornaram o esperado: G05 duas pendências (tarde e noite), G06 uma cobrança após cancelamento, G07 dois itens de estoque baixo, G08 dois chamados em aberto, A05 vazia e A06 um aluno. **Não foram executadas em MySQL 8**: o grupo deve rodar o script inteiro no MySQL. |
-| **O que foi rejeitado ou corrigido** | Numa primeira versão do README, a IA propôs um modelo de 21 tabelas (com acessos, cancelamento, personal externo, movimentação de estoque e outras) que não existia no trabalho do grupo. Ao receber o script, o dicionário e os diagramas reais, o README foi refeito sobre o modelo de 13 tabelas, e o que ficou de fora foi registrado na seção 12. A IA também apontou a possível inversão das cardinalidades do DER e a divergência de tamanho de campos entre o dicionário e o script. |
+| **O que foi rejeitado ou corrigido** | Numa primeira versão do README, a IA propôs um modelo de 21 tabelas (com acessos, cancelamento, personal externo, movimentação de estoque e outras) que não existia no trabalho do grupo. Ao receber o script, o dicionário e os diagramas reais, o README foi refeito sobre o modelo de 14 tabelas, e o que ficou de fora foi registrado na seção 12. A IA também apontou a possível inversão das cardinalidades do DER e a divergência de tamanho de campos entre o dicionário e o script. |
 | **Reflexão crítica** | A inteligência artificial serviu de auxílio na organização, revisão e criação de trechos da documentação e das consultas SQL. As propostas geradas foram examinadas pelos membros da equipe, que confirmaram sua compatibilidade com a pesquisa efetuada e com o esquema do banco de dados. A IA não substituiu as escolhas de modelagem nem a confirmação dos desfechos. |
 
 ---
