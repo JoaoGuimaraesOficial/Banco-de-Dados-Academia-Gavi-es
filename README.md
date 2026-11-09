@@ -11,7 +11,7 @@
 | Gabriel Viana de Lima | 48368881 | [gabrielvianadelima1-crypto](https://github.com/gabrielvianadelima1-crypto) |
 | João Victor Guimarães Moura | 48298549 | [JoaoGuimaraesOficial](https://github.com/JoaoGuimaraesOficial) |
 
-**Software dos diagramas:** o DER conceitual está na notação do brModelo e o modelo lógico enviado é MySQL Workbench.
+**Ferramentas utilizadas:** **brModelo**, para a elaboração do DER conceitual, e **MySQL Workbench**, para a elaboração do modelo lógico e de seu respectivo diagrama.
 
 ## Sumário
 
