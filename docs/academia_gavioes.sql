@@ -1,20 +1,12 @@
 -- PROJETO: ACADEMIA GAVIÕES
 -- BANCO DE DADOS: academia_gavioes
 -- SGBD: MySQL 8.0.46
-
 -- Comando apaga o banco existente e todos os seus dados, apenas pra ajudar a testar o script.
--- DROP DATABASE IF EXISTS academia_gavioes;
-
+DROP DATABASE IF EXISTS academia_gavioes;
 -- 1. CRIAÇÃO DO BANCO DE DADOS
-
-CREATE DATABASE IF NOT EXISTS academia_gavioes
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_0900_ai_ci;
-
+CREATE DATABASE IF NOT EXISTS academia_gavioes CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE academia_gavioes;
-
 -- 2. CRIAÇÃO DAS TABELAS PRINCIPAIS
-
 -- Tabela de alunos
 CREATE TABLE IF NOT EXISTS ALUNO (
     ID_ALUNO INT AUTO_INCREMENT PRIMARY KEY,
@@ -25,31 +17,22 @@ CREATE TABLE IF NOT EXISTS ALUNO (
     DS_FOTO_PERFIL VARCHAR(255),
     DS_BIOMETRIA_FACIAL TEXT,
     IN_ATIVO TINYINT(1) NOT NULL DEFAULT 1,
-
     INDEX IDX_ALUNO_NM_ALUNO (NM_ALUNO),
-
-    CONSTRAINT CHK_ALUNO_ATIVO
-        CHECK (IN_ATIVO IN (0, 1))
-) ENGINE=InnoDB;
-
+    CONSTRAINT CHK_ALUNO_ATIVO CHECK (IN_ATIVO IN (0, 1))
+) ENGINE = InnoDB;
 -- Tabela de planos
 CREATE TABLE IF NOT EXISTS PLANO (
     ID_PLANO INT AUTO_INCREMENT PRIMARY KEY,
     NM_PLANO VARCHAR(60) NOT NULL,
     TP_RECORRENCIA VARCHAR(20) NOT NULL,
-    VL_MENSALIDADE DECIMAL(10,2) NOT NULL,
+    VL_MENSALIDADE DECIMAL(10, 2) NOT NULL,
     IN_ATIVO TINYINT(1) NOT NULL DEFAULT 1,
-
-    CONSTRAINT CHK_PLANO_VALOR
-        CHECK (VL_MENSALIDADE > 0),
-
-    CONSTRAINT CHK_PLANO_RECORRENCIA
-        CHECK (TP_RECORRENCIA IN ('recorrente', 'não recorrente')),
-
-    CONSTRAINT CHK_PLANO_ATIVO
-        CHECK (IN_ATIVO IN (0, 1))
-) ENGINE=InnoDB;
-
+    CONSTRAINT CHK_PLANO_VALOR CHECK (VL_MENSALIDADE > 0),
+    CONSTRAINT CHK_PLANO_RECORRENCIA CHECK (
+        TP_RECORRENCIA IN ('recorrente', 'não recorrente')
+    ),
+    CONSTRAINT CHK_PLANO_ATIVO CHECK (IN_ATIVO IN (0, 1))
+) ENGINE = InnoDB;
 -- Tabela de funcionários
 CREATE TABLE IF NOT EXISTS FUNCIONARIO (
     ID_FUNCIONARIO INT AUTO_INCREMENT PRIMARY KEY,
@@ -57,23 +40,18 @@ CREATE TABLE IF NOT EXISTS FUNCIONARIO (
     ID_CPF VARCHAR(11) NOT NULL UNIQUE,
     TP_PAPEL VARCHAR(20) NOT NULL,
     IN_ATIVO TINYINT(1) NOT NULL DEFAULT 1,
-
-    CONSTRAINT CHK_FUNCIONARIO_PAPEL
-        CHECK (TP_PAPEL IN ('recepção', 'professor', 'gerente', 'financeiro')),
-
-    CONSTRAINT CHK_FUNCIONARIO_ATIVO
-        CHECK (IN_ATIVO IN (0, 1))
-) ENGINE=InnoDB;
-
+    CONSTRAINT CHK_FUNCIONARIO_PAPEL CHECK (
+        TP_PAPEL IN ('recepção', 'professor', 'gerente', 'financeiro')
+    ),
+    CONSTRAINT CHK_FUNCIONARIO_ATIVO CHECK (IN_ATIVO IN (0, 1))
+) ENGINE = InnoDB;
 -- Tabela de unidades
 CREATE TABLE IF NOT EXISTS UNIDADE (
     ID_UNIDADE INT AUTO_INCREMENT PRIMARY KEY,
     NM_UNIDADE VARCHAR(100) NOT NULL,
     DS_ENDERECO VARCHAR(255) NOT NULL
-) ENGINE=InnoDB;
-
+) ENGINE = InnoDB;
 -- 3. TABELAS DE MATRÍCULA E TREINO
-
 -- Tabela de matrículas
 CREATE TABLE IF NOT EXISTS MATRICULA (
     ID_MATRICULA INT AUTO_INCREMENT PRIMARY KEY,
@@ -83,22 +61,16 @@ CREATE TABLE IF NOT EXISTS MATRICULA (
     DT_FIM DATE,
     TP_STATUS VARCHAR(20) NOT NULL,
     CD_ULTIMOS_DIGITOS_CARTAO VARCHAR(4),
-
-    CONSTRAINT FK_MATRICULA_ALUNO
-        FOREIGN KEY (ID_ALUNO)
-        REFERENCES ALUNO(ID_ALUNO),
-
-    CONSTRAINT FK_MATRICULA_PLANO
-        FOREIGN KEY (ID_PLANO)
-        REFERENCES PLANO(ID_PLANO),
-
-    CONSTRAINT CHK_MATRICULA_STATUS
-        CHECK (TP_STATUS IN ('pago', 'pendente', 'inadimplente', 'cancelado')),
-
-    CONSTRAINT CHK_MATRICULA_DATAS
-        CHECK (DT_FIM IS NULL OR DT_FIM >= DT_INICIO)
-) ENGINE=InnoDB;
-
+    CONSTRAINT FK_MATRICULA_ALUNO FOREIGN KEY (ID_ALUNO) REFERENCES ALUNO(ID_ALUNO),
+    CONSTRAINT FK_MATRICULA_PLANO FOREIGN KEY (ID_PLANO) REFERENCES PLANO(ID_PLANO),
+    CONSTRAINT CHK_MATRICULA_STATUS CHECK (
+        TP_STATUS IN ('pago', 'pendente', 'inadimplente', 'cancelado')
+    ),
+    CONSTRAINT CHK_MATRICULA_DATAS CHECK (
+        DT_FIM IS NULL
+        OR DT_FIM >= DT_INICIO
+    )
+) ENGINE = InnoDB;
 -- Tabela de treinos
 CREATE TABLE IF NOT EXISTS TREINO (
     ID_TREINO INT AUTO_INCREMENT PRIMARY KEY,
@@ -107,49 +79,52 @@ CREATE TABLE IF NOT EXISTS TREINO (
     DT_CRIACAO DATE NOT NULL,
     DT_VALIDADE DATE NOT NULL,
     DS_OBSERVACAO_MEDICA TEXT,
-
-    CONSTRAINT FK_TREINO_ALUNO
-        FOREIGN KEY (ID_ALUNO)
-        REFERENCES ALUNO(ID_ALUNO),
-
-    CONSTRAINT FK_TREINO_PROFESSOR
-        FOREIGN KEY (ID_PROFESSOR)
-        REFERENCES FUNCIONARIO(ID_FUNCIONARIO),
-
-    CONSTRAINT CHK_TREINO_DATAS
-        CHECK (DT_VALIDADE >= DT_CRIACAO)
-) ENGINE=InnoDB;
-
--- 4. TABELAS DE PAGAMENTO, ITEM_TREINO E AULA_COLETIVA
-
+    CONSTRAINT FK_TREINO_ALUNO FOREIGN KEY (ID_ALUNO) REFERENCES ALUNO(ID_ALUNO),
+    CONSTRAINT FK_TREINO_PROFESSOR FOREIGN KEY (ID_PROFESSOR) REFERENCES FUNCIONARIO(ID_FUNCIONARIO),
+    CONSTRAINT CHK_TREINO_DATAS CHECK (DT_VALIDADE >= DT_CRIACAO)
+) ENGINE = InnoDB;
+-- 4. TABELAS DE PAGAMENTO, NOTA_FISCAL, ITEM_TREINO E AULA_COLETIVA
 -- Tabela de pagamentos
 CREATE TABLE IF NOT EXISTS PAGAMENTO (
     ID_PAGAMENTO INT AUTO_INCREMENT PRIMARY KEY,
     ID_MATRICULA INT NOT NULL,
     DT_PAGAMENTO DATE NOT NULL,
-    VL_PAGAMENTO DECIMAL(10,2) NOT NULL,
+    VL_PAGAMENTO DECIMAL(10, 2) NOT NULL,
     TP_FORMA_PAGAMENTO VARCHAR(30) NOT NULL,
     TP_STATUS VARCHAR(30) NOT NULL,
-
-    CONSTRAINT FK_PAGAMENTO_MATRICULA
-        FOREIGN KEY (ID_MATRICULA)
-        REFERENCES MATRICULA(ID_MATRICULA),
-
-    CONSTRAINT CHK_PAGAMENTO_VALOR
-        CHECK (VL_PAGAMENTO > 0),
-
-    CONSTRAINT CHK_PAGAMENTO_FORMA
-        CHECK (TP_FORMA_PAGAMENTO IN (
+    CONSTRAINT FK_PAGAMENTO_MATRICULA FOREIGN KEY (ID_MATRICULA) REFERENCES MATRICULA(ID_MATRICULA),
+    CONSTRAINT CHK_PAGAMENTO_VALOR CHECK (VL_PAGAMENTO > 0),
+    CONSTRAINT CHK_PAGAMENTO_FORMA CHECK (
+        TP_FORMA_PAGAMENTO IN (
             'PIX',
             'dinheiro',
             'cartão de crédito',
             'cartão de débito'
-        )),
-
-    CONSTRAINT CHK_PAGAMENTO_STATUS
-        CHECK (TP_STATUS IN ('pago', 'pendente'))
-) ENGINE=InnoDB;
-
+        )
+    ),
+    CONSTRAINT CHK_PAGAMENTO_STATUS CHECK (TP_STATUS IN ('pago', 'pendente'))
+) ENGINE = InnoDB;
+-- Tabela de notas fiscais
+-- Registra notas fiscais fictícias vinculadas aos pagamentos realizados.
+-- Esta estrutura representa o controle acadêmico, não a emissão fiscal oficial.
+CREATE TABLE IF NOT EXISTS NOTA_FISCAL (
+    ID_NOTA_FISCAL INT AUTO_INCREMENT PRIMARY KEY,
+    ID_PAGAMENTO INT NOT NULL,
+    NR_NOTA_FISCAL VARCHAR(30) NOT NULL UNIQUE,
+    NR_SERIE VARCHAR(10),
+    CD_VERIFICACAO VARCHAR(60),
+    DT_EMISSAO DATETIME NOT NULL,
+    VL_SERVICO DECIMAL(10, 2) NOT NULL,
+    DS_SERVICO VARCHAR(255) NOT NULL,
+    TP_STATUS VARCHAR(20) NOT NULL DEFAULT 'pendente',
+    DS_ARQUIVO_PDF VARCHAR(255),
+    CONSTRAINT FK_NOTA_FISCAL_PAGAMENTO FOREIGN KEY (ID_PAGAMENTO) REFERENCES PAGAMENTO(ID_PAGAMENTO),
+    CONSTRAINT UK_NOTA_FISCAL_PAGAMENTO UNIQUE (ID_PAGAMENTO),
+    CONSTRAINT CHK_NOTA_FISCAL_VALOR CHECK (VL_SERVICO > 0),
+    CONSTRAINT CHK_NOTA_FISCAL_STATUS CHECK (
+        TP_STATUS IN ('emitida', 'cancelada', 'pendente')
+    )
+) ENGINE = InnoDB;
 -- Tabela de itens do treino
 CREATE TABLE IF NOT EXISTS ITEM_TREINO (
     ID_ITEM_TREINO INT AUTO_INCREMENT PRIMARY KEY,
@@ -158,18 +133,10 @@ CREATE TABLE IF NOT EXISTS ITEM_TREINO (
     QT_SERIES INT NOT NULL,
     QT_REPETICOES INT NOT NULL,
     DS_CARGA VARCHAR(30),
-
-    CONSTRAINT FK_ITEM_TREINO_TREINO
-        FOREIGN KEY (ID_TREINO)
-        REFERENCES TREINO(ID_TREINO),
-
-    CONSTRAINT CHK_ITEM_TREINO_SERIES
-        CHECK (QT_SERIES > 0),
-
-    CONSTRAINT CHK_ITEM_TREINO_REPETICOES
-        CHECK (QT_REPETICOES > 0)
-) ENGINE=InnoDB;
-
+    CONSTRAINT FK_ITEM_TREINO_TREINO FOREIGN KEY (ID_TREINO) REFERENCES TREINO(ID_TREINO),
+    CONSTRAINT CHK_ITEM_TREINO_SERIES CHECK (QT_SERIES > 0),
+    CONSTRAINT CHK_ITEM_TREINO_REPETICOES CHECK (QT_REPETICOES > 0)
+) ENGINE = InnoDB;
 -- Tabela de aulas coletivas
 CREATE TABLE IF NOT EXISTS AULA_COLETIVA (
     ID_AULA INT AUTO_INCREMENT PRIMARY KEY,
@@ -178,40 +145,21 @@ CREATE TABLE IF NOT EXISTS AULA_COLETIVA (
     NM_MODALIDADE VARCHAR(60) NOT NULL,
     DT_HORARIO DATETIME NOT NULL,
     QT_LIMITE_VAGAS INT NOT NULL,
-
-    CONSTRAINT FK_AULA_INSTRUTOR
-        FOREIGN KEY (ID_INSTRUTOR)
-        REFERENCES FUNCIONARIO(ID_FUNCIONARIO),
-
-    CONSTRAINT FK_AULA_UNIDADE
-        FOREIGN KEY (ID_UNIDADE)
-        REFERENCES UNIDADE(ID_UNIDADE),
-
-    CONSTRAINT CHK_AULA_VAGAS
-        CHECK (QT_LIMITE_VAGAS > 0)
-) ENGINE=InnoDB;
-
+    CONSTRAINT FK_AULA_INSTRUTOR FOREIGN KEY (ID_INSTRUTOR) REFERENCES FUNCIONARIO(ID_FUNCIONARIO),
+    CONSTRAINT FK_AULA_UNIDADE FOREIGN KEY (ID_UNIDADE) REFERENCES UNIDADE(ID_UNIDADE),
+    CONSTRAINT CHK_AULA_VAGAS CHECK (QT_LIMITE_VAGAS > 0)
+) ENGINE = InnoDB;
 -- 5. TABELAS FINAIS
-
 -- Tabela de check-ins das aulas
 CREATE TABLE IF NOT EXISTS CHECKIN_AULA (
     ID_CHECKIN INT AUTO_INCREMENT PRIMARY KEY,
     ID_AULA INT NOT NULL,
     ID_ALUNO INT NOT NULL,
     DT_REALIZACAO DATETIME NOT NULL,
-
-    CONSTRAINT FK_CHECKIN_AULA
-        FOREIGN KEY (ID_AULA)
-        REFERENCES AULA_COLETIVA(ID_AULA),
-
-    CONSTRAINT FK_CHECKIN_ALUNO
-        FOREIGN KEY (ID_ALUNO)
-        REFERENCES ALUNO(ID_ALUNO),
-
-    CONSTRAINT UK_CHECKIN_AULA_ALUNO
-        UNIQUE (ID_AULA, ID_ALUNO)
-) ENGINE=InnoDB;
-
+    CONSTRAINT FK_CHECKIN_AULA FOREIGN KEY (ID_AULA) REFERENCES AULA_COLETIVA(ID_AULA),
+    CONSTRAINT FK_CHECKIN_ALUNO FOREIGN KEY (ID_ALUNO) REFERENCES ALUNO(ID_ALUNO),
+    CONSTRAINT UK_CHECKIN_AULA_ALUNO UNIQUE (ID_AULA, ID_ALUNO)
+) ENGINE = InnoDB;
 -- Tabela de ocorrências de turno
 CREATE TABLE IF NOT EXISTS OCORRENCIA_TURNO (
     ID_OCORRENCIA INT AUTO_INCREMENT PRIMARY KEY,
@@ -220,18 +168,12 @@ CREATE TABLE IF NOT EXISTS OCORRENCIA_TURNO (
     TP_TURNO VARCHAR(20) NOT NULL,
     DS_MENSAGEM TEXT NOT NULL,
     IN_RESOLVIDO TINYINT(1) NOT NULL DEFAULT 0,
-
-    CONSTRAINT FK_OCORRENCIA_FUNCIONARIO
-        FOREIGN KEY (ID_FUNCIONARIO_AUTOR)
-        REFERENCES FUNCIONARIO(ID_FUNCIONARIO),
-
-    CONSTRAINT CHK_OCORRENCIA_TURNO
-        CHECK (TP_TURNO IN ('madrugada', 'manhã', 'tarde', 'noite')),
-
-    CONSTRAINT CHK_OCORRENCIA_RESOLVIDO
-        CHECK (IN_RESOLVIDO IN (0, 1))
-) ENGINE=InnoDB;
-
+    CONSTRAINT FK_OCORRENCIA_FUNCIONARIO FOREIGN KEY (ID_FUNCIONARIO_AUTOR) REFERENCES FUNCIONARIO(ID_FUNCIONARIO),
+    CONSTRAINT CHK_OCORRENCIA_TURNO CHECK (
+        TP_TURNO IN ('madrugada', 'manhã', 'tarde', 'noite')
+    ),
+    CONSTRAINT CHK_OCORRENCIA_RESOLVIDO CHECK (IN_RESOLVIDO IN (0, 1))
+) ENGINE = InnoDB;
 -- Tabela de chamados de manutenção
 CREATE TABLE IF NOT EXISTS CHAMADO_MANUTENCAO (
     ID_CHAMADO INT AUTO_INCREMENT PRIMARY KEY,
@@ -239,15 +181,11 @@ CREATE TABLE IF NOT EXISTS CHAMADO_MANUTENCAO (
     DT_ABERTURA DATETIME NOT NULL,
     DS_PROBLEMA TEXT NOT NULL,
     TP_STATUS VARCHAR(20) NOT NULL,
-
-    CONSTRAINT FK_CHAMADO_FUNCIONARIO
-        FOREIGN KEY (ID_FUNCIONARIO_ABERTURA)
-        REFERENCES FUNCIONARIO(ID_FUNCIONARIO),
-
-    CONSTRAINT CHK_CHAMADO_STATUS
-        CHECK (TP_STATUS IN ('aberto', 'em andamento', 'concluído'))
-) ENGINE=InnoDB;
-
+    CONSTRAINT FK_CHAMADO_FUNCIONARIO FOREIGN KEY (ID_FUNCIONARIO_ABERTURA) REFERENCES FUNCIONARIO(ID_FUNCIONARIO),
+    CONSTRAINT CHK_CHAMADO_STATUS CHECK (
+        TP_STATUS IN ('aberto', 'em andamento', 'concluído')
+    )
+) ENGINE = InnoDB;
 -- Tabela de estoque de materiais
 CREATE TABLE IF NOT EXISTS ESTOQUE_MATERIAL (
     ID_MATERIAL INT AUTO_INCREMENT PRIMARY KEY,
@@ -255,343 +193,633 @@ CREATE TABLE IF NOT EXISTS ESTOQUE_MATERIAL (
     NM_MATERIAL VARCHAR(100) NOT NULL,
     TP_MATERIAL VARCHAR(50) NOT NULL,
     QT_ESTOQUE INT NOT NULL,
-
-    CONSTRAINT FK_ESTOQUE_UNIDADE
-        FOREIGN KEY (ID_UNIDADE)
-        REFERENCES UNIDADE(ID_UNIDADE),
-
-    CONSTRAINT CHK_ESTOQUE_QUANTIDADE
-        CHECK (QT_ESTOQUE >= 0)
-) ENGINE=InnoDB;
-
+    CONSTRAINT FK_ESTOQUE_UNIDADE FOREIGN KEY (ID_UNIDADE) REFERENCES UNIDADE(ID_UNIDADE),
+    CONSTRAINT CHK_ESTOQUE_QUANTIDADE CHECK (QT_ESTOQUE >= 0)
+) ENGINE = InnoDB;
 -- 6. INSERÇÃO DE DADOS FICTÍCIOS
-
 -- Alunos
-INSERT INTO ALUNO
-(NM_ALUNO, ID_CPF, NM_EMAIL, DT_NASCIMENTO, DS_FOTO_PERFIL, DS_BIOMETRIA_FACIAL)
-VALUES
-('Carlos Mendes', '11111111111', 'carlos.teste@email.com', '1998-05-12', NULL, NULL),
-('Mariana Oliveira', '22222222222', 'mariana.teste@email.com', '2001-09-23', NULL, NULL),
-('Pedro Santos', '33333333333', 'pedro.teste@email.com', '1995-02-17', NULL, NULL),
-('Ana Costa', '44444444444', 'ana.teste@email.com', '2003-11-08', NULL, NULL);
-
+INSERT INTO ALUNO (
+        NM_ALUNO,
+        ID_CPF,
+        NM_EMAIL,
+        DT_NASCIMENTO,
+        DS_FOTO_PERFIL,
+        DS_BIOMETRIA_FACIAL
+    )
+VALUES (
+        'Carlos Mendes',
+        '11111111111',
+        'carlos.teste@email.com',
+        '1998-05-12',
+        NULL,
+        NULL
+    ),
+    (
+        'Mariana Oliveira',
+        '22222222222',
+        'mariana.teste@email.com',
+        '2001-09-23',
+        NULL,
+        NULL
+    ),
+    (
+        'Pedro Santos',
+        '33333333333',
+        'pedro.teste@email.com',
+        '1995-02-17',
+        NULL,
+        NULL
+    ),
+    (
+        'Ana Costa',
+        '44444444444',
+        'ana.teste@email.com',
+        '2003-11-08',
+        NULL,
+        NULL
+    );
 -- Planos
-INSERT INTO PLANO
-(NM_PLANO, TP_RECORRENCIA, VL_MENSALIDADE)
-VALUES
-('Plano Mensal', 'recorrente', 119.90),
-('Plano Trimestral', 'recorrente', 299.90),
-('Plano Avulso', 'não recorrente', 35.00);
-
+INSERT INTO PLANO (NM_PLANO, TP_RECORRENCIA, VL_MENSALIDADE)
+VALUES ('Plano Mensal', 'recorrente', 119.90),
+    ('Plano Trimestral', 'recorrente', 299.90),
+    ('Plano Avulso', 'não recorrente', 35.00);
 -- Funcionários
-INSERT INTO FUNCIONARIO
-(NM_FUNCIONARIO, ID_CPF, TP_PAPEL)
-VALUES
-('Roberto Almeida', '55555555555', 'gerente'),
-('Fernanda Lima', '66666666666', 'recepção'),
-('Marcos Ribeiro', '77777777777', 'professor'),
-('Juliana Ferreira', '88888888888', 'financeiro');
-
+INSERT INTO FUNCIONARIO (NM_FUNCIONARIO, ID_CPF, TP_PAPEL)
+VALUES ('Roberto Almeida', '55555555555', 'gerente'),
+    ('Fernanda Lima', '66666666666', 'recepção'),
+    ('Marcos Ribeiro', '77777777777', 'professor'),
+    ('Juliana Ferreira', '88888888888', 'financeiro');
 -- Unidades
-INSERT INTO UNIDADE
-(NM_UNIDADE, DS_ENDERECO)
-VALUES
-('Academia Gaviões - Tatuapé', 'Av. Celso Garcia, 5492 - Tatuapé'),
-('Academia Gaviões - Unidade Centro', 'Endereço fictício para teste');
-
+INSERT INTO UNIDADE (NM_UNIDADE, DS_ENDERECO)
+VALUES (
+        'Academia Gaviões - Tatuapé',
+        'Av. Celso Garcia, 5492 - Tatuapé'
+    ),
+    (
+        'Academia Gaviões - Unidade Centro',
+        'Endereço fictício para teste'
+    );
 -- Matrículas
-INSERT INTO MATRICULA
-(ID_ALUNO, ID_PLANO, DT_INICIO, DT_FIM, TP_STATUS, CD_ULTIMOS_DIGITOS_CARTAO)
-VALUES
-(
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '11111111111'),
-    (SELECT ID_PLANO FROM PLANO WHERE NM_PLANO = 'Plano Mensal'),
-    '2026-10-01', NULL, 'pago', '1234'
-),
-(
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '22222222222'),
-    (SELECT ID_PLANO FROM PLANO WHERE NM_PLANO = 'Plano Trimestral'),
-    '2026-09-01', NULL, 'pago', '5678'
-),
-(
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '33333333333'),
-    (SELECT ID_PLANO FROM PLANO WHERE NM_PLANO = 'Plano Mensal'),
-    '2026-10-15', NULL, 'inadimplente', NULL
-),
-(
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '44444444444'),
-    (SELECT ID_PLANO FROM PLANO WHERE NM_PLANO = 'Plano Avulso'),
-    '2026-11-01', NULL, 'pendente', NULL
-);
-
+INSERT INTO MATRICULA (
+        ID_ALUNO,
+        ID_PLANO,
+        DT_INICIO,
+        DT_FIM,
+        TP_STATUS,
+        CD_ULTIMOS_DIGITOS_CARTAO
+    )
+VALUES (
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '11111111111'
+        ),
+        (
+            SELECT ID_PLANO
+            FROM PLANO
+            WHERE NM_PLANO = 'Plano Mensal'
+        ),
+        '2026-10-01',
+        NULL,
+        'pago',
+        '1234'
+    ),
+    (
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '22222222222'
+        ),
+        (
+            SELECT ID_PLANO
+            FROM PLANO
+            WHERE NM_PLANO = 'Plano Trimestral'
+        ),
+        '2026-09-01',
+        NULL,
+        'pago',
+        '5678'
+    ),
+    (
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '33333333333'
+        ),
+        (
+            SELECT ID_PLANO
+            FROM PLANO
+            WHERE NM_PLANO = 'Plano Mensal'
+        ),
+        '2026-10-15',
+        NULL,
+        'inadimplente',
+        NULL
+    ),
+    (
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '44444444444'
+        ),
+        (
+            SELECT ID_PLANO
+            FROM PLANO
+            WHERE NM_PLANO = 'Plano Avulso'
+        ),
+        '2026-11-01',
+        NULL,
+        'pendente',
+        NULL
+    );
 -- Treinos
-INSERT INTO TREINO
-(ID_ALUNO, ID_PROFESSOR, DT_CRIACAO, DT_VALIDADE, DS_OBSERVACAO_MEDICA)
-VALUES
-(
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '11111111111'),
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE ID_CPF = '77777777777'),
-    '2026-10-01', '2026-12-31', NULL
-),
-(
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '22222222222'),
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE ID_CPF = '77777777777'),
-    '2026-10-05', '2026-12-31',
-    'Exemplo fictício: evitar exercícios de alto impacto'
-),
-(
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '33333333333'),
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE ID_CPF = '77777777777'),
-    '2026-10-15', '2026-12-31', NULL
-);
-
+INSERT INTO TREINO (
+        ID_ALUNO,
+        ID_PROFESSOR,
+        DT_CRIACAO,
+        DT_VALIDADE,
+        DS_OBSERVACAO_MEDICA
+    )
+VALUES (
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '11111111111'
+        ),
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '77777777777'
+        ),
+        '2026-10-01',
+        '2026-12-31',
+        NULL
+    ),
+    (
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '22222222222'
+        ),
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '77777777777'
+        ),
+        '2026-10-05',
+        '2026-12-31',
+        'Exemplo fictício: evitar exercícios de alto impacto'
+    ),
+    (
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '33333333333'
+        ),
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '77777777777'
+        ),
+        '2026-10-15',
+        '2026-12-31',
+        NULL
+    );
 -- Pagamentos
-INSERT INTO PAGAMENTO
-(ID_MATRICULA, DT_PAGAMENTO, VL_PAGAMENTO, TP_FORMA_PAGAMENTO, TP_STATUS)
-VALUES
-(
-    (SELECT M.ID_MATRICULA
-     FROM MATRICULA M
-     JOIN ALUNO A ON A.ID_ALUNO = M.ID_ALUNO
-     WHERE A.ID_CPF = '11111111111'),
-    '2026-10-01', 119.90, 'PIX', 'pago'
-),
-(
-    (SELECT M.ID_MATRICULA
-     FROM MATRICULA M
-     JOIN ALUNO A ON A.ID_ALUNO = M.ID_ALUNO
-     WHERE A.ID_CPF = '22222222222'),
-    '2026-09-01', 299.90, 'cartão de crédito', 'pago'
-),
-(
-    (SELECT M.ID_MATRICULA
-     FROM MATRICULA M
-     JOIN ALUNO A ON A.ID_ALUNO = M.ID_ALUNO
-     WHERE A.ID_CPF = '33333333333'),
-    '2026-10-15', 119.90, 'dinheiro', 'pendente'
-),
-(
-    (SELECT M.ID_MATRICULA
-     FROM MATRICULA M
-     JOIN ALUNO A ON A.ID_ALUNO = M.ID_ALUNO
-     WHERE A.ID_CPF = '44444444444'),
-    '2026-11-01', 35.00, 'PIX', 'pendente'
-);
-
+INSERT INTO PAGAMENTO (
+        ID_MATRICULA,
+        DT_PAGAMENTO,
+        VL_PAGAMENTO,
+        TP_FORMA_PAGAMENTO,
+        TP_STATUS
+    )
+VALUES (
+        (
+            SELECT M.ID_MATRICULA
+            FROM MATRICULA M
+                JOIN ALUNO A ON A.ID_ALUNO = M.ID_ALUNO
+            WHERE A.ID_CPF = '11111111111'
+        ),
+        '2026-10-01',
+        119.90,
+        'PIX',
+        'pago'
+    ),
+    (
+        (
+            SELECT M.ID_MATRICULA
+            FROM MATRICULA M
+                JOIN ALUNO A ON A.ID_ALUNO = M.ID_ALUNO
+            WHERE A.ID_CPF = '22222222222'
+        ),
+        '2026-09-01',
+        299.90,
+        'cartão de crédito',
+        'pago'
+    ),
+    (
+        (
+            SELECT M.ID_MATRICULA
+            FROM MATRICULA M
+                JOIN ALUNO A ON A.ID_ALUNO = M.ID_ALUNO
+            WHERE A.ID_CPF = '33333333333'
+        ),
+        '2026-10-15',
+        119.90,
+        'dinheiro',
+        'pendente'
+    ),
+    (
+        (
+            SELECT M.ID_MATRICULA
+            FROM MATRICULA M
+                JOIN ALUNO A ON A.ID_ALUNO = M.ID_ALUNO
+            WHERE A.ID_CPF = '44444444444'
+        ),
+        '2026-11-01',
+        35.00,
+        'PIX',
+        'pendente'
+    );
+-- Notas fiscais fictícias para os pagamentos confirmados.
+-- São registros de demonstração acadêmica, sem validade fiscal.
+INSERT INTO NOTA_FISCAL (
+        ID_PAGAMENTO,
+        NR_NOTA_FISCAL,
+        NR_SERIE,
+        CD_VERIFICACAO,
+        DT_EMISSAO,
+        VL_SERVICO,
+        DS_SERVICO,
+        TP_STATUS,
+        DS_ARQUIVO_PDF
+    )
+SELECT PG.ID_PAGAMENTO,
+    CONCAT('TESTE-', LPAD(PG.ID_PAGAMENTO, 6, '0')),
+    'A',
+    CONCAT('VERIF-TESTE-', LPAD(PG.ID_PAGAMENTO, 8, '0')),
+    TIMESTAMP(PG.DT_PAGAMENTO, '10:00:00'),
+    PG.VL_PAGAMENTO,
+    CONCAT('Serviço de academia - ', P.NM_PLANO),
+    'emitida',
+    NULL
+FROM PAGAMENTO PG
+    INNER JOIN MATRICULA M ON PG.ID_MATRICULA = M.ID_MATRICULA
+    INNER JOIN PLANO P ON M.ID_PLANO = P.ID_PLANO
+WHERE PG.TP_STATUS = 'pago'
+    AND NOT EXISTS (
+        SELECT 1
+        FROM NOTA_FISCAL NF
+        WHERE NF.ID_PAGAMENTO = PG.ID_PAGAMENTO
+    );
 -- Itens dos treinos
-INSERT INTO ITEM_TREINO
-(ID_TREINO, NM_EXERCICIO, QT_SERIES, QT_REPETICOES, DS_CARGA)
-VALUES
-(
-    (SELECT T.ID_TREINO FROM TREINO T
-     JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
-     WHERE A.ID_CPF = '11111111111'),
-    'Supino reto', 3, 12, '20 kg'
-),
-(
-    (SELECT T.ID_TREINO FROM TREINO T
-     JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
-     WHERE A.ID_CPF = '11111111111'),
-    'Agachamento livre', 3, 10, '30 kg'
-),
-(
-    (SELECT T.ID_TREINO FROM TREINO T
-     JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
-     WHERE A.ID_CPF = '11111111111'),
-    'Esteira', 1, 20, '20 minutos'
-),
-(
-    (SELECT T.ID_TREINO FROM TREINO T
-     JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
-     WHERE A.ID_CPF = '22222222222'),
-    'Leg press', 3, 12, '40 kg'
-),
-(
-    (SELECT T.ID_TREINO FROM TREINO T
-     JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
-     WHERE A.ID_CPF = '22222222222'),
-    'Puxada frontal', 3, 12, '25 kg'
-),
-(
-    (SELECT T.ID_TREINO FROM TREINO T
-     JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
-     WHERE A.ID_CPF = '22222222222'),
-    'Bicicleta ergométrica', 1, 15, '15 minutos'
-),
-(
-    (SELECT T.ID_TREINO FROM TREINO T
-     JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
-     WHERE A.ID_CPF = '33333333333'),
-    'Rosca direta', 3, 10, '10 kg'
-),
-(
-    (SELECT T.ID_TREINO FROM TREINO T
-     JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
-     WHERE A.ID_CPF = '33333333333'),
-    'Desenvolvimento com halteres', 3, 12, '8 kg'
-);
-
+INSERT INTO ITEM_TREINO (
+        ID_TREINO,
+        NM_EXERCICIO,
+        QT_SERIES,
+        QT_REPETICOES,
+        DS_CARGA
+    )
+VALUES (
+        (
+            SELECT T.ID_TREINO
+            FROM TREINO T
+                JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
+            WHERE A.ID_CPF = '11111111111'
+        ),
+        'Supino reto',
+        3,
+        12,
+        '20 kg'
+    ),
+    (
+        (
+            SELECT T.ID_TREINO
+            FROM TREINO T
+                JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
+            WHERE A.ID_CPF = '11111111111'
+        ),
+        'Agachamento livre',
+        3,
+        10,
+        '30 kg'
+    ),
+    (
+        (
+            SELECT T.ID_TREINO
+            FROM TREINO T
+                JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
+            WHERE A.ID_CPF = '11111111111'
+        ),
+        'Esteira',
+        1,
+        20,
+        '20 minutos'
+    ),
+    (
+        (
+            SELECT T.ID_TREINO
+            FROM TREINO T
+                JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
+            WHERE A.ID_CPF = '22222222222'
+        ),
+        'Leg press',
+        3,
+        12,
+        '40 kg'
+    ),
+    (
+        (
+            SELECT T.ID_TREINO
+            FROM TREINO T
+                JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
+            WHERE A.ID_CPF = '22222222222'
+        ),
+        'Puxada frontal',
+        3,
+        12,
+        '25 kg'
+    ),
+    (
+        (
+            SELECT T.ID_TREINO
+            FROM TREINO T
+                JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
+            WHERE A.ID_CPF = '22222222222'
+        ),
+        'Bicicleta ergométrica',
+        1,
+        15,
+        '15 minutos'
+    ),
+    (
+        (
+            SELECT T.ID_TREINO
+            FROM TREINO T
+                JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
+            WHERE A.ID_CPF = '33333333333'
+        ),
+        'Rosca direta',
+        3,
+        10,
+        '10 kg'
+    ),
+    (
+        (
+            SELECT T.ID_TREINO
+            FROM TREINO T
+                JOIN ALUNO A ON A.ID_ALUNO = T.ID_ALUNO
+            WHERE A.ID_CPF = '33333333333'
+        ),
+        'Desenvolvimento com halteres',
+        3,
+        12,
+        '8 kg'
+    );
 -- Aulas coletivas
-INSERT INTO AULA_COLETIVA
-(ID_INSTRUTOR, ID_UNIDADE, NM_MODALIDADE, DT_HORARIO, QT_LIMITE_VAGAS)
-VALUES
-(
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO
-     WHERE ID_CPF = '77777777777'),
-    (SELECT ID_UNIDADE FROM UNIDADE
-     WHERE NM_UNIDADE = 'Academia Gaviões - Tatuapé'),
-    'Spinning', '2026-11-05 08:00:00', 19
-),
-(
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO
-     WHERE ID_CPF = '77777777777'),
-    (SELECT ID_UNIDADE FROM UNIDADE
-     WHERE NM_UNIDADE = 'Academia Gaviões - Tatuapé'),
-    'Boxe', '2026-11-05 18:00:00', 15
-),
-(
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO
-     WHERE ID_CPF = '77777777777'),
-    (SELECT ID_UNIDADE FROM UNIDADE
-     WHERE NM_UNIDADE = 'Academia Gaviões - Unidade Centro'),
-    'Muay Thai', '2026-11-06 19:00:00', 20
-);
-
+INSERT INTO AULA_COLETIVA (
+        ID_INSTRUTOR,
+        ID_UNIDADE,
+        NM_MODALIDADE,
+        DT_HORARIO,
+        QT_LIMITE_VAGAS
+    )
+VALUES (
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '77777777777'
+        ),
+        (
+            SELECT ID_UNIDADE
+            FROM UNIDADE
+            WHERE NM_UNIDADE = 'Academia Gaviões - Tatuapé'
+        ),
+        'Spinning',
+        '2026-11-05 08:00:00',
+        19
+    ),
+    (
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '77777777777'
+        ),
+        (
+            SELECT ID_UNIDADE
+            FROM UNIDADE
+            WHERE NM_UNIDADE = 'Academia Gaviões - Tatuapé'
+        ),
+        'Boxe',
+        '2026-11-05 18:00:00',
+        15
+    ),
+    (
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '77777777777'
+        ),
+        (
+            SELECT ID_UNIDADE
+            FROM UNIDADE
+            WHERE NM_UNIDADE = 'Academia Gaviões - Unidade Centro'
+        ),
+        'Muay Thai',
+        '2026-11-06 19:00:00',
+        20
+    );
 -- Check-ins das aulas
-INSERT INTO CHECKIN_AULA
-(ID_AULA, ID_ALUNO, DT_REALIZACAO)
-VALUES
-(
-    (SELECT ID_AULA FROM AULA_COLETIVA
-     WHERE NM_MODALIDADE = 'Spinning'
-     AND DT_HORARIO = '2026-11-05 08:00:00'),
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '11111111111'),
-    '2026-11-05 07:55:00'
-),
-(
-    (SELECT ID_AULA FROM AULA_COLETIVA
-     WHERE NM_MODALIDADE = 'Spinning'
-     AND DT_HORARIO = '2026-11-05 08:00:00'),
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '22222222222'),
-    '2026-11-05 07:57:00'
-),
-(
-    (SELECT ID_AULA FROM AULA_COLETIVA
-     WHERE NM_MODALIDADE = 'Boxe'
-     AND DT_HORARIO = '2026-11-05 18:00:00'),
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '33333333333'),
-    '2026-11-05 17:55:00'
-),
-(
-    (SELECT ID_AULA FROM AULA_COLETIVA
-     WHERE NM_MODALIDADE = 'Muay Thai'
-     AND DT_HORARIO = '2026-11-06 19:00:00'),
-    (SELECT ID_ALUNO FROM ALUNO WHERE ID_CPF = '44444444444'),
-    '2026-11-06 18:55:00'
-);
-
+INSERT INTO CHECKIN_AULA (ID_AULA, ID_ALUNO, DT_REALIZACAO)
+VALUES (
+        (
+            SELECT ID_AULA
+            FROM AULA_COLETIVA
+            WHERE NM_MODALIDADE = 'Spinning'
+                AND DT_HORARIO = '2026-11-05 08:00:00'
+        ),
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '11111111111'
+        ),
+        '2026-11-05 07:55:00'
+    ),
+    (
+        (
+            SELECT ID_AULA
+            FROM AULA_COLETIVA
+            WHERE NM_MODALIDADE = 'Spinning'
+                AND DT_HORARIO = '2026-11-05 08:00:00'
+        ),
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '22222222222'
+        ),
+        '2026-11-05 07:57:00'
+    ),
+    (
+        (
+            SELECT ID_AULA
+            FROM AULA_COLETIVA
+            WHERE NM_MODALIDADE = 'Boxe'
+                AND DT_HORARIO = '2026-11-05 18:00:00'
+        ),
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '33333333333'
+        ),
+        '2026-11-05 17:55:00'
+    ),
+    (
+        (
+            SELECT ID_AULA
+            FROM AULA_COLETIVA
+            WHERE NM_MODALIDADE = 'Muay Thai'
+                AND DT_HORARIO = '2026-11-06 19:00:00'
+        ),
+        (
+            SELECT ID_ALUNO
+            FROM ALUNO
+            WHERE ID_CPF = '44444444444'
+        ),
+        '2026-11-06 18:55:00'
+    );
 -- Ocorrências de turno
-INSERT INTO OCORRENCIA_TURNO
-(ID_FUNCIONARIO_AUTOR, DT_REGISTRO, TP_TURNO, DS_MENSAGEM, IN_RESOLVIDO)
-VALUES
-(
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO
-     WHERE ID_CPF = '66666666666'),
-    '2026-11-05 08:30:00',
-    'manhã',
-    'Foi identificada uma divergência no cadastro de um aluno durante a conferência da recepção.',
-    1
-),
-(
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO
-     WHERE ID_CPF = '55555555555'),
-    '2026-11-05 15:20:00',
-    'tarde',
-    'Foi solicitada a reposição de materiais de limpeza da unidade.',
-    0
-),
-(
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO
-     WHERE ID_CPF = '66666666666'),
-    '2026-11-06 21:10:00',
-    'noite',
-    'A catraca apresentou dificuldade para reconhecer a biometria facial de alguns alunos.',
-    0
-);
-
+INSERT INTO OCORRENCIA_TURNO (
+        ID_FUNCIONARIO_AUTOR,
+        DT_REGISTRO,
+        TP_TURNO,
+        DS_MENSAGEM,
+        IN_RESOLVIDO
+    )
+VALUES (
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '66666666666'
+        ),
+        '2026-11-05 08:30:00',
+        'manhã',
+        'Foi identificada uma divergência no cadastro de um aluno durante a conferência da recepção.',
+        1
+    ),
+    (
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '55555555555'
+        ),
+        '2026-11-05 15:20:00',
+        'tarde',
+        'Foi solicitada a reposição de materiais de limpeza da unidade.',
+        0
+    ),
+    (
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '66666666666'
+        ),
+        '2026-11-06 21:10:00',
+        'noite',
+        'A catraca apresentou dificuldade para reconhecer a biometria facial de alguns alunos.',
+        0
+    );
 -- Chamados de manutenção
-INSERT INTO CHAMADO_MANUTENCAO
-(ID_FUNCIONARIO_ABERTURA, DT_ABERTURA, DS_PROBLEMA, TP_STATUS)
-VALUES
-(
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO
-     WHERE ID_CPF = '55555555555'),
-    '2026-11-05 10:00:00',
-    'Esteira da área de musculação apresentando ruído durante o funcionamento.',
-    'aberto'
-),
-(
-    (SELECT ID_FUNCIONARIO FROM FUNCIONARIO
-     WHERE ID_CPF = '55555555555'),
-    '2026-11-06 14:30:00',
-    'Equipamento de ar-condicionado da sala de aulas coletivas precisa de manutenção.',
-    'em andamento'
-);
-
+INSERT INTO CHAMADO_MANUTENCAO (
+        ID_FUNCIONARIO_ABERTURA,
+        DT_ABERTURA,
+        DS_PROBLEMA,
+        TP_STATUS
+    )
+VALUES (
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '55555555555'
+        ),
+        '2026-11-05 10:00:00',
+        'Esteira da área de musculação apresentando ruído durante o funcionamento.',
+        'aberto'
+    ),
+    (
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '55555555555'
+        ),
+        '2026-11-06 14:30:00',
+        'Equipamento de ar-condicionado da sala de aulas coletivas precisa de manutenção.',
+        'em andamento'
+    );
 -- Estoque de materiais
-INSERT INTO ESTOQUE_MATERIAL
-(ID_UNIDADE, NM_MATERIAL, TP_MATERIAL, QT_ESTOQUE)
-VALUES
-(
-    (SELECT ID_UNIDADE FROM UNIDADE
-     WHERE NM_UNIDADE = 'Academia Gaviões - Tatuapé'),
-    'Papel toalha', 'limpeza', 50
-),
-(
-    (SELECT ID_UNIDADE FROM UNIDADE
-     WHERE NM_UNIDADE = 'Academia Gaviões - Tatuapé'),
-    'Álcool 70%', 'limpeza', 30
-),
-(
-    (SELECT ID_UNIDADE FROM UNIDADE
-     WHERE NM_UNIDADE = 'Academia Gaviões - Unidade Centro'),
-    'Detergente', 'limpeza', 20
-),
-(
-    (SELECT ID_UNIDADE FROM UNIDADE
-     WHERE NM_UNIDADE = 'Academia Gaviões - Unidade Centro'),
-    'Papel higiênico', 'higiene', 80
-);
-
+INSERT INTO ESTOQUE_MATERIAL (ID_UNIDADE, NM_MATERIAL, TP_MATERIAL, QT_ESTOQUE)
+VALUES (
+        (
+            SELECT ID_UNIDADE
+            FROM UNIDADE
+            WHERE NM_UNIDADE = 'Academia Gaviões - Tatuapé'
+        ),
+        'Papel toalha',
+        'limpeza',
+        50
+    ),
+    (
+        (
+            SELECT ID_UNIDADE
+            FROM UNIDADE
+            WHERE NM_UNIDADE = 'Academia Gaviões - Tatuapé'
+        ),
+        'Álcool 70%',
+        'limpeza',
+        30
+    ),
+    (
+        (
+            SELECT ID_UNIDADE
+            FROM UNIDADE
+            WHERE NM_UNIDADE = 'Academia Gaviões - Unidade Centro'
+        ),
+        'Detergente',
+        'limpeza',
+        20
+    ),
+    (
+        (
+            SELECT ID_UNIDADE
+            FROM UNIDADE
+            WHERE NM_UNIDADE = 'Academia Gaviões - Unidade Centro'
+        ),
+        'Papel higiênico',
+        'higiene',
+        80
+    );
 -- 7. CONSULTAS DE VERIFICAÇÃO COM SELECT E JOIN
-
 -- 7.1 - Alunos, matrículas e respectivos planos
-SELECT
-    A.NM_ALUNO AS ALUNO,
+SELECT A.NM_ALUNO AS ALUNO,
     P.NM_PLANO AS PLANO,
     P.VL_MENSALIDADE AS VALOR,
     M.DT_INICIO AS DATA_INICIO,
     M.TP_STATUS AS STATUS_MATRICULA
 FROM ALUNO A
-INNER JOIN MATRICULA M ON A.ID_ALUNO = M.ID_ALUNO
-INNER JOIN PLANO P ON M.ID_PLANO = P.ID_PLANO
+    INNER JOIN MATRICULA M ON A.ID_ALUNO = M.ID_ALUNO
+    INNER JOIN PLANO P ON M.ID_PLANO = P.ID_PLANO
 ORDER BY A.NM_ALUNO;
-
 -- 7.2 - Pagamentos e alunos responsáveis
-SELECT
-    A.NM_ALUNO AS ALUNO,
+SELECT A.NM_ALUNO AS ALUNO,
     PG.DT_PAGAMENTO AS DATA_PAGAMENTO,
     PG.VL_PAGAMENTO AS VALOR,
     PG.TP_FORMA_PAGAMENTO AS FORMA_PAGAMENTO,
     PG.TP_STATUS AS STATUS_PAGAMENTO
 FROM PAGAMENTO PG
-INNER JOIN MATRICULA M ON PG.ID_MATRICULA = M.ID_MATRICULA
-INNER JOIN ALUNO A ON M.ID_ALUNO = A.ID_ALUNO
+    INNER JOIN MATRICULA M ON PG.ID_MATRICULA = M.ID_MATRICULA
+    INNER JOIN ALUNO A ON M.ID_ALUNO = A.ID_ALUNO
 ORDER BY PG.DT_PAGAMENTO;
-
 -- 7.3 - Treinos, alunos, professores e exercícios
-SELECT
-    A.NM_ALUNO AS ALUNO,
+SELECT A.NM_ALUNO AS ALUNO,
     F.NM_FUNCIONARIO AS PROFESSOR,
     T.DT_CRIACAO AS DATA_CRIACAO,
     T.DT_VALIDADE AS DATA_VALIDADE,
@@ -600,247 +828,207 @@ SELECT
     IT.QT_REPETICOES AS REPETICOES,
     IT.DS_CARGA AS CARGA
 FROM TREINO T
-INNER JOIN ALUNO A ON T.ID_ALUNO = A.ID_ALUNO
-INNER JOIN FUNCIONARIO F ON T.ID_PROFESSOR = F.ID_FUNCIONARIO
-INNER JOIN ITEM_TREINO IT ON T.ID_TREINO = IT.ID_TREINO
-ORDER BY A.NM_ALUNO, IT.NM_EXERCICIO;
-
+    INNER JOIN ALUNO A ON T.ID_ALUNO = A.ID_ALUNO
+    INNER JOIN FUNCIONARIO F ON T.ID_PROFESSOR = F.ID_FUNCIONARIO
+    INNER JOIN ITEM_TREINO IT ON T.ID_TREINO = IT.ID_TREINO
+ORDER BY A.NM_ALUNO,
+    IT.NM_EXERCICIO;
 -- 7.4 - Aulas coletivas, instrutores e unidades
-SELECT
-    AC.NM_MODALIDADE AS MODALIDADE,
+SELECT AC.NM_MODALIDADE AS MODALIDADE,
     F.NM_FUNCIONARIO AS INSTRUTOR,
     U.NM_UNIDADE AS UNIDADE,
     AC.DT_HORARIO AS DATA_HORARIO,
     AC.QT_LIMITE_VAGAS AS LIMITE_VAGAS
 FROM AULA_COLETIVA AC
-INNER JOIN FUNCIONARIO F ON AC.ID_INSTRUTOR = F.ID_FUNCIONARIO
-INNER JOIN UNIDADE U ON AC.ID_UNIDADE = U.ID_UNIDADE
+    INNER JOIN FUNCIONARIO F ON AC.ID_INSTRUTOR = F.ID_FUNCIONARIO
+    INNER JOIN UNIDADE U ON AC.ID_UNIDADE = U.ID_UNIDADE
 ORDER BY AC.DT_HORARIO;
-
 -- 7.5 - Check-ins dos alunos nas aulas coletivas
-SELECT
-    A.NM_ALUNO AS ALUNO,
+SELECT A.NM_ALUNO AS ALUNO,
     AC.NM_MODALIDADE AS MODALIDADE,
     AC.DT_HORARIO AS HORARIO_AULA,
     CA.DT_REALIZACAO AS DATA_CHECKIN
 FROM CHECKIN_AULA CA
-INNER JOIN ALUNO A ON CA.ID_ALUNO = A.ID_ALUNO
-INNER JOIN AULA_COLETIVA AC ON CA.ID_AULA = AC.ID_AULA
-ORDER BY AC.DT_HORARIO, A.NM_ALUNO;
-
+    INNER JOIN ALUNO A ON CA.ID_ALUNO = A.ID_ALUNO
+    INNER JOIN AULA_COLETIVA AC ON CA.ID_AULA = AC.ID_AULA
+ORDER BY AC.DT_HORARIO,
+    A.NM_ALUNO;
 -- 7.6 - Ocorrências registradas pelos funcionários
-SELECT
-    F.NM_FUNCIONARIO AS RESPONSAVEL,
+SELECT F.NM_FUNCIONARIO AS RESPONSAVEL,
     F.TP_PAPEL AS CARGO,
     OT.DT_REGISTRO AS DATA_REGISTRO,
     OT.TP_TURNO AS TURNO,
     OT.DS_MENSAGEM AS OCORRENCIA,
     OT.IN_RESOLVIDO AS RESOLVIDO
 FROM OCORRENCIA_TURNO OT
-INNER JOIN FUNCIONARIO F
-    ON OT.ID_FUNCIONARIO_AUTOR = F.ID_FUNCIONARIO
+    INNER JOIN FUNCIONARIO F ON OT.ID_FUNCIONARIO_AUTOR = F.ID_FUNCIONARIO
 ORDER BY OT.DT_REGISTRO;
-
 -- 7.7 - Chamados de manutenção e responsáveis
-SELECT
-    CM.ID_CHAMADO AS CODIGO_CHAMADO,
+SELECT CM.ID_CHAMADO AS CODIGO_CHAMADO,
     F.NM_FUNCIONARIO AS RESPONSAVEL,
     CM.DT_ABERTURA AS DATA_ABERTURA,
     CM.DS_PROBLEMA AS PROBLEMA,
     CM.TP_STATUS AS STATUS_CHAMADO
 FROM CHAMADO_MANUTENCAO CM
-INNER JOIN FUNCIONARIO F
-    ON CM.ID_FUNCIONARIO_ABERTURA = F.ID_FUNCIONARIO
+    INNER JOIN FUNCIONARIO F ON CM.ID_FUNCIONARIO_ABERTURA = F.ID_FUNCIONARIO
 ORDER BY CM.DT_ABERTURA;
-
 -- 7.8 - Materiais disponíveis em cada unidade
-SELECT
-    U.NM_UNIDADE AS UNIDADE,
+SELECT U.NM_UNIDADE AS UNIDADE,
     EM.NM_MATERIAL AS MATERIAL,
     EM.TP_MATERIAL AS CATEGORIA,
     EM.QT_ESTOQUE AS QUANTIDADE
 FROM ESTOQUE_MATERIAL EM
-INNER JOIN UNIDADE U ON EM.ID_UNIDADE = U.ID_UNIDADE
-ORDER BY U.NM_UNIDADE, EM.NM_MATERIAL;
-
+    INNER JOIN UNIDADE U ON EM.ID_UNIDADE = U.ID_UNIDADE
+ORDER BY U.NM_UNIDADE,
+    EM.NM_MATERIAL;
+-- 7.9 - Notas fiscais, pagamentos e respectivos alunos
+SELECT NF.NR_NOTA_FISCAL AS NUMERO_NOTA,
+    NF.NR_SERIE AS SERIE,
+    A.NM_ALUNO AS ALUNO,
+    P.NM_PLANO AS PLANO,
+    PG.DT_PAGAMENTO AS DATA_PAGAMENTO,
+    NF.DT_EMISSAO AS DATA_EMISSAO,
+    NF.VL_SERVICO AS VALOR_SERVICO,
+    NF.DS_SERVICO AS DESCRICAO,
+    NF.TP_STATUS AS STATUS_NOTA
+FROM NOTA_FISCAL NF
+    INNER JOIN PAGAMENTO PG ON NF.ID_PAGAMENTO = PG.ID_PAGAMENTO
+    INNER JOIN MATRICULA M ON PG.ID_MATRICULA = M.ID_MATRICULA
+    INNER JOIN ALUNO A ON M.ID_ALUNO = A.ID_ALUNO
+    INNER JOIN PLANO P ON M.ID_PLANO = P.ID_PLANO
+ORDER BY NF.DT_EMISSAO;
 -- 8. ATUALIZAÇÃO E EXCLUSÃO DE REGISTROS
-
 -- 8.1 - Atualizar a quantidade de papel toalha no estoque.
 -- A busca do ID permite utilizar a chave primária no UPDATE.
-
-SELECT EM.ID_MATERIAL
-INTO @ID_MATERIAL_TESTE
+SELECT EM.ID_MATERIAL INTO @ID_MATERIAL_TESTE
 FROM ESTOQUE_MATERIAL EM
-INNER JOIN UNIDADE U ON EM.ID_UNIDADE = U.ID_UNIDADE
+    INNER JOIN UNIDADE U ON EM.ID_UNIDADE = U.ID_UNIDADE
 WHERE EM.NM_MATERIAL = 'Papel toalha'
-AND U.NM_UNIDADE = 'Academia Gaviões - Tatuapé';
-
+    AND U.NM_UNIDADE = 'Academia Gaviões - Tatuapé';
 UPDATE ESTOQUE_MATERIAL
 SET QT_ESTOQUE = 45
 WHERE ID_MATERIAL = @ID_MATERIAL_TESTE;
-
 -- 8.2 - Atualizar o status de um chamado de manutenção.
 -- O ID_CHAMADO é a chave primária da tabela.
-
 UPDATE CHAMADO_MANUTENCAO
 SET TP_STATUS = 'em andamento'
 WHERE ID_CHAMADO = 1
-AND TP_STATUS = 'aberto';
-
+    AND TP_STATUS = 'aberto';
 -- 8.3 - Conferir as alterações realizadas.
-
-SELECT
-    NM_MATERIAL AS MATERIAL,
+SELECT NM_MATERIAL AS MATERIAL,
     QT_ESTOQUE AS QUANTIDADE_ATUAL
 FROM ESTOQUE_MATERIAL
 WHERE ID_MATERIAL = @ID_MATERIAL_TESTE;
-
-SELECT
-    ID_CHAMADO AS CODIGO_CHAMADO,
+SELECT ID_CHAMADO AS CODIGO_CHAMADO,
     DS_PROBLEMA AS PROBLEMA,
     TP_STATUS AS STATUS
 FROM CHAMADO_MANUTENCAO
 WHERE ID_CHAMADO = 1;
-
 -- 8.4 - Inserir um registro temporário para demonstrar o DELETE.
-
-INSERT INTO CHAMADO_MANUTENCAO
-(ID_FUNCIONARIO_ABERTURA, DT_ABERTURA, DS_PROBLEMA, TP_STATUS)
-VALUES
-(
-    (SELECT ID_FUNCIONARIO
-     FROM FUNCIONARIO
-     WHERE ID_CPF = '55555555555'),
-    '2026-11-07 10:00:00',
-    'REGISTRO TEMPORARIO PARA TESTE DE EXCLUSAO',
-    'aberto'
-);
-
+INSERT INTO CHAMADO_MANUTENCAO (
+        ID_FUNCIONARIO_ABERTURA,
+        DT_ABERTURA,
+        DS_PROBLEMA,
+        TP_STATUS
+    )
+VALUES (
+        (
+            SELECT ID_FUNCIONARIO
+            FROM FUNCIONARIO
+            WHERE ID_CPF = '55555555555'
+        ),
+        '2026-11-07 10:00:00',
+        'REGISTRO TEMPORARIO PARA TESTE DE EXCLUSAO',
+        'aberto'
+    );
 -- Guarda o ID gerado para excluir exatamente o registro inserido.
 SET @ID_CHAMADO_TESTE = LAST_INSERT_ID();
-
 -- 8.5 - Excluir o registro temporário usando a chave primária.
-
 DELETE FROM CHAMADO_MANUTENCAO
 WHERE ID_CHAMADO = @ID_CHAMADO_TESTE;
-
 -- 8.6 - Verificar se o registro temporário foi excluído.
 -- O resultado esperado é zero registros.
-
 SELECT *
 FROM CHAMADO_MANUTENCAO
 WHERE ID_CHAMADO = @ID_CHAMADO_TESTE;
-
 -- 9. CONSULTAS GERENCIAIS
-
 -- G01 - Quantas matrículas existem em cada situação?
 -- Atende ao acompanhamento da situação dos alunos.
-
-SELECT
-    TP_STATUS AS STATUS_MATRICULA,
+SELECT TP_STATUS AS STATUS_MATRICULA,
     COUNT(*) AS TOTAL_MATRICULAS
 FROM MATRICULA
 GROUP BY TP_STATUS
 ORDER BY TOTAL_MATRICULAS DESC;
-
 -- G02 - Quanto foi recebido em pagamentos por mês?
 -- Considera somente pagamentos com status pago.
-
-SELECT
-    DATE_FORMAT(DT_PAGAMENTO, '%Y-%m') AS MES,
+SELECT DATE_FORMAT(DT_PAGAMENTO, '%Y-%m') AS MES,
     SUM(VL_PAGAMENTO) AS TOTAL_PAGAMENTOS,
     COUNT(*) AS QUANTIDADE_PAGAMENTOS
 FROM PAGAMENTO
 WHERE TP_STATUS = 'pago'
 GROUP BY DATE_FORMAT(DT_PAGAMENTO, '%Y-%m')
 ORDER BY MES;
-
 -- G03 - Quantos alunos participaram de cada aula?
 -- Também apresenta a quantidade de vagas disponíveis.
-
-SELECT
-    AC.NM_MODALIDADE AS MODALIDADE,
+SELECT AC.NM_MODALIDADE AS MODALIDADE,
     AC.DT_HORARIO AS DATA_HORARIO,
     AC.QT_LIMITE_VAGAS AS LIMITE_VAGAS,
     COUNT(CA.ID_CHECKIN) AS TOTAL_PARTICIPANTES,
     AC.QT_LIMITE_VAGAS - COUNT(CA.ID_CHECKIN) AS VAGAS_DISPONIVEIS
 FROM AULA_COLETIVA AC
-LEFT JOIN CHECKIN_AULA CA
-    ON AC.ID_AULA = CA.ID_AULA
-GROUP BY
-    AC.ID_AULA,
+    LEFT JOIN CHECKIN_AULA CA ON AC.ID_AULA = CA.ID_AULA
+GROUP BY AC.ID_AULA,
     AC.NM_MODALIDADE,
     AC.DT_HORARIO,
     AC.QT_LIMITE_VAGAS
 ORDER BY AC.DT_HORARIO;
-
 -- G04 - Quantos materiais existem em cada unidade?
 -- Apresenta a quantidade de tipos e o total de itens.
-
-SELECT
-    U.NM_UNIDADE AS UNIDADE,
+SELECT U.NM_UNIDADE AS UNIDADE,
     COUNT(EM.ID_MATERIAL) AS TIPOS_DE_MATERIAIS,
     COALESCE(SUM(EM.QT_ESTOQUE), 0) AS TOTAL_ITENS_ESTOQUE
 FROM UNIDADE U
-LEFT JOIN ESTOQUE_MATERIAL EM
-    ON U.ID_UNIDADE = EM.ID_UNIDADE
-GROUP BY U.ID_UNIDADE, U.NM_UNIDADE
+    LEFT JOIN ESTOQUE_MATERIAL EM ON U.ID_UNIDADE = EM.ID_UNIDADE
+GROUP BY U.ID_UNIDADE,
+    U.NM_UNIDADE
 ORDER BY U.NM_UNIDADE;
-
 -- 10. CONSULTAS DE AUDITORIA
-
 -- A01 - Existem aulas com mais participantes do que vagas?
 -- Verifica o cumprimento do limite de vagas das aulas.
 -- Resultado esperado: nenhum registro.
-
-SELECT
-    AC.ID_AULA,
+SELECT AC.ID_AULA,
     AC.NM_MODALIDADE,
     AC.QT_LIMITE_VAGAS,
     COUNT(CA.ID_CHECKIN) AS TOTAL_PARTICIPANTES
 FROM AULA_COLETIVA AC
-INNER JOIN CHECKIN_AULA CA
-    ON AC.ID_AULA = CA.ID_AULA
-GROUP BY
-    AC.ID_AULA,
+    INNER JOIN CHECKIN_AULA CA ON AC.ID_AULA = CA.ID_AULA
+GROUP BY AC.ID_AULA,
     AC.NM_MODALIDADE,
     AC.QT_LIMITE_VAGAS
 HAVING COUNT(CA.ID_CHECKIN) > AC.QT_LIMITE_VAGAS;
-
 -- A02 - Existem pagamentos com status inválido?
 -- Verifica se os status estão entre os valores permitidos.
 -- Resultado esperado: nenhum registro.
-
-SELECT
-    ID_PAGAMENTO,
+SELECT ID_PAGAMENTO,
     TP_STATUS
 FROM PAGAMENTO
 WHERE TP_STATUS NOT IN ('pago', 'pendente');
-
 -- A03 - Existem chamados com status inválido?
 -- Verifica se os status estão entre os valores permitidos.
 -- Resultado esperado: nenhum registro.
-
-SELECT
-    ID_CHAMADO,
+SELECT ID_CHAMADO,
     TP_STATUS
 FROM CHAMADO_MANUTENCAO
 WHERE TP_STATUS NOT IN ('aberto', 'em andamento', 'concluído');
-
 -- A04 - Existem pagamentos anteriores ao início da matrícula?
 -- Verifica a coerência entre a data do pagamento e a matrícula.
 -- Resultado esperado: nenhum registro, conforme a regra adotada no projeto.
-
-SELECT
-    PG.ID_PAGAMENTO,
+SELECT PG.ID_PAGAMENTO,
     PG.DT_PAGAMENTO,
     M.DT_INICIO,
     A.NM_ALUNO
 FROM PAGAMENTO PG
-INNER JOIN MATRICULA M
-    ON PG.ID_MATRICULA = M.ID_MATRICULA
-INNER JOIN ALUNO A
-    ON M.ID_ALUNO = A.ID_ALUNO
+    INNER JOIN MATRICULA M ON PG.ID_MATRICULA = M.ID_MATRICULA
+    INNER JOIN ALUNO A ON M.ID_ALUNO = A.ID_ALUNO
 WHERE PG.DT_PAGAMENTO < M.DT_INICIO;
-
 -- FIM DO SCRIPT
