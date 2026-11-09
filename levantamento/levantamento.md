@@ -29,7 +29,7 @@ Durante a visita e entrevista com o responsável, foram mapeados os seguintes fl
 Abaixo encontram-se os registos visuais obtidos durante a visita técnica e entrevista na unidade:
 
 * **Entrevista no Ambiente da Academia:**
-  ![Foto da Entrevista no balcão da academia](foto_entrevista.jpg)
+  ![Foto da Entrevista no balcão da academia](foto_entrevista.png)
 
 * **Infraestrutura e Organização da Academia:**
   ![Frente da academia](foto_academia_1.png)
