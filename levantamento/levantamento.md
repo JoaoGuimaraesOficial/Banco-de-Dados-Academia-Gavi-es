@@ -4,7 +4,7 @@
 * **Nome da Organização:** Academia Gaviões
 * **Endereço Completo:** Av. Celso Garcia, 5494 - Tatuapé, São Paulo - SP, 03064-000
 * **Localização / Google Maps:** https://maps.app.goo.gl/436pmzrUuJrhkAcJ6
-* **Responsável pelo Estabelecimento:** Eduardo Curzio
+* **Responsável pelo Estabelecimento:** Eduardo Curzio e Letícia, recepcionistas.
 * **Telefone de Contato:** (11) 94074-7584
 * **Data da Entrevista:** 21/09/2026
 
