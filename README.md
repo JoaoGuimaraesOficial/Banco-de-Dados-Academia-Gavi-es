@@ -760,16 +760,25 @@ O grupo registra aqui o que o modelo atual **não** cobre, para evitar que o pro
 
 ```
 /
-├── README.md                       ← este relatório
-├── dicionario_dados.html           ← dicionário de dados (HTML único)
+├── README.md                              ← relatório principal
+├── dicionario_dados.html                  ← dicionário de dados
 ├── Arq-DER/
-│   ├── modelo-conceitual.png       ← DER conceitual (brModelo)
-│   └── modelo-logico.png           ← modelo lógico
-├── Arq-visita-comprovante/         ← fotos JPG da visita
+│   ├── modelo-conceitual-imagem.png       ← DER conceitual (brModelo)
+│   └── modelo-logico.png                  ← modelo lógico
+├── Arq-visita-comprovante/
+│   ├── c27ab983-a431-41c5-ac05-9aa6a47b8f58.jpg
+│   ├── cb2a05a4-3dc3-4b1a-a368-4929b041b9d9.jpg
+│   ├── comprovante-entrevista-responsavel.jpeg
+│   ├── d027150e-6f19-4159-a3fc-ffbaba051499.jpg
+│   ├── roteiro_entrevista_academia_gavioes.pdf
+│   └── transcricao-completa.pdf
 ├── levantamento/
-│   └── levantamento.md             ← texto organizado do levantamento
+│   ├── foto_academia_1.png
+│   ├── foto_academia_2.png
+│   ├── foto_entrevista.png
+│   └── levantamento.md                    ← levantamento organizado
 └── docs/
-    └── academia_gavioes.sql        ← CREATE, constraints, INSERT, JOIN, UPDATE/DELETE, consultas G e A
+    └── academia_gavioes.sql                ← script SQL completo
 ```
 
 **Executar (MySQL 8):**
