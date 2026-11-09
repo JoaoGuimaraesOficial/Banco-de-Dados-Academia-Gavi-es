@@ -135,7 +135,7 @@ O texto completo está em [`levantamento/levantamento.md`](levantamento/levantam
 | Participantes do grupo | Todos Participaram |
 | Data e horário | 05/11/2026 |
 | Local | Recepção da Academia Gaviões, Av. Celso Garcia, 5492 (no ambiente da organização) |
-| Foto | [`02-entrevista-recepcao.jpg`](Arq-visita-comprovante/02-entrevista-recepcao.jpg) |
+| Foto | [`02-entrevista-recepcao.jpg`](Arq-visita-comprovante/comprovante-entrevista-responsavel.jpeg) |
 | Roteiro usado | 9 blocos (visão geral, cadastros, planos e pagamentos, frequência e treinos, aulas, estoque e equipamentos, sistema e acessos, problemas, observação) |
 
 **O que foi dito**
@@ -736,7 +736,7 @@ O grupo registra aqui o que o modelo atual **não** cobre, para evitar que o pro
 | `PLANO` não tem fidelidade, multa nem acesso a outras unidades | RN08, RN09 e RF10 não são atendidos | Acrescentar `IN_ACESSO_OUTRAS_UNIDADES`, `QT_MESES_FIDELIDADE` e `VL_MULTA` ao plano. |
 | Não há registro de auditoria de quem consultou ou alterou dados sensíveis (seção 6.3 da E1) | Não se sabe quem acessou biometria ou saúde | Criar tabela de log de operações. |
 | Anexo de documento de saúde em PDF não está modelado | RN06 só tem o texto da observação | Criar `DOCUMENTO_SAUDE`. |
-| Cardinalidades do DER (seção 7.3) | Possível inversão de lado | Revisar o diagrama. |
+| Cardinalidades do DER | Foram revisadas na seção 7.4 para o relacionamento PAGAMENTO — NOTA_FISCAL. | Conferir se todas as demais cardinalidades do diagrama correspondem às regras de negócio. |
 
 ---
 
@@ -767,7 +767,7 @@ O grupo registra aqui o que o modelo atual **não** cobre, para evitar que o pro
 │   └── modelo-logico.png           ← modelo lógico
 ├── Arq-visita-comprovante/         ← fotos JPG da visita
 ├── levantamento/
-│   └── levantamento.md             ← texto organizado do levantamento (a criar)
+│   └── levantamento.md             ← texto organizado do levantamento
 └── docs/
     └── academia_gavioes.sql        ← CREATE, constraints, INSERT, JOIN, UPDATE/DELETE, consultas G e A
 ```
