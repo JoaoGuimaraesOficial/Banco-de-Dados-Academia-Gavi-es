@@ -104,12 +104,12 @@ Todos os problemas são resolvidos pelo modelo (a cobertura de P3 e P4 é parcia
 
 | Arquivo | O que mostra |
 |---|---|
-| [`01-fachada-grupo.jpg`](Arq-visita-comprovante/01-fachada-grupo.jpg) | Integrantes do grupo na fachada da Academia Gaviões 24 horas. |
-| [`02-entrevista-recepcao.jpg`](Arq-visita-comprovante/02-entrevista-recepcao.jpg) | Entrevista com a recepção, no balcão da academia. |
-| [`03-interior-academia.jpg`](Arq-visita-comprovante/03-interior-academia.jpg) | Área de musculação, com a catraca à direita da imagem. |
+| [`01-fachada-grupo.jpg`](Arq-visita-comprovante/d027150e-6f19-4159-a3fc-ffbaba051499.jpg) | Integrantes do grupo na fachada da Academia Gaviões 24 horas. |
+| [`02-entrevista-recepcao.jpg`](Arq-visita-comprovante/comprovante-entrevista-responsavel.jpeg) | Entrevista com a recepção, no balcão da academia. |
+| [`03-interior-academia.jpg`](Arq-visita-comprovante/c27ab983-a431-41c5-ac05-9aa6a47b8f58.jpg) | Área de musculação, com a catraca à direita da imagem. |
 
 
-![Fachada](Arq-visita-comprovante/01-fachada-grupo.jpg)
+![Fachada](Arq-visita-comprovante/cb2a05a4-3dc3-4b1a-a368-4929b041b9d9.jpg)
 
 ### 1.6 Responsável entrevistado e vínculo
 
