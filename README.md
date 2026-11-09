@@ -7,7 +7,6 @@
 **Integrantes do grupo:**
 
 - Edilson Angel Arismendi Huanca — RGM 49423452
-- Igor Alves — RGM 48123528
 - Gabriel Alves Rodrigues — RGM 47818191
 - Gabriel Viana de Lima — RGM 48368881
 - João Victor Guimarães Moura — RGM 48298549
@@ -17,6 +16,14 @@
 **Disciplina:** Banco de Dados
 **Versão da documentação:** 1.1
 **Última atualização:** 02/11/2026
+
+## 📋 Histórico de Revisões e Correções (Entrega 1)
+
+Com base nos feedbacks e correções da Entrega 1, foram efetuados os seguintes ajustes estruturais no projeto:
+1. **Remoção de Chaves Estrangeiras do DER Conceitual:** Os atributos de chaves estrangeiras foram retirados do diagrama conceptual gráfico, passando a ser representados exclusivamente pelos relacionamentos (losangos) e respetivas cardinalidades.
+2. **Normalização (Resolução I05):** Separação limpa entre `TREINO` e `ITEM_TREINO` para isolar os atributos específicos de exercícios.
+3. **Alinhamento do Dicionário e Entidades:** Atualização do escopo para contemplar as 12 entidades oficiais do sistema.
+4. **Ferramenta Utilizada:** O Diagrama Entidade-Relacionamento (DER) foi modelado utilizando a ferramenta **[Draw.io / Lucidchart]**.
 
 ---
 
@@ -185,27 +192,24 @@ As regras de negócio precisam aparecer nos requisitos funcionais, senão o sist
 
 ### 5.1 Entidades identificadas
 
-Nesta versão, as oito entidades principais descritas no modelo conceitual são:
+### 5.1 Entidades identificadas
+
+O modelo conceitual do sistema é composto pelas 12 entidades oficiais que estruturam a operação da academia:
 
 | Entidade | Descrição | Origem |
 |---|---|---|
-| **ALUNO** | Armazena os dados dos alunos cadastrados na academia. | Decisão do grupo (a partir da entrevista) |
-| **PLANO** | Representa os planos oferecidos pela academia. | Decisão do grupo (a partir da entrevista) |
-| **MATRICULA** | Registra o vínculo entre um aluno e um plano. | Decisão do grupo |
-| **FUNCIONARIO** | Armazena os dados dos funcionários e suas funções. | Decisão do grupo (a partir da entrevista) |
-| **TREINO** | Representa as fichas de exercícios elaboradas para os alunos. | Decisão do grupo (a partir da entrevista) |
-| **AULA_COLETIVA** | Armazena as informações das aulas, como modalidade, horário e limite de vagas. | Decisão do grupo (a partir da entrevista) |
-| **CHECKIN_AULA** | Registra a participação ou reserva de um aluno em uma aula coletiva. | Decisão do grupo |
-| **OCORRENCIA_TURNO** | Armazena avisos e pendências registrados pelos funcionários durante os turnos. | Decisão do grupo (resolve problema da entrevista) |
-
-Mas os requisitos também falam de estoque, manutenção, unidades e itens de treino. Essas funcionalidades provavelmente vão exigir entidades próprias, tipo:
-
-- `ITEM_TREINO`;
-- `UNIDADE`;
-- `ESTOQUE_MATERIAL`;
-- `CHAMADO_MANUTENCAO`.
-
-Essas quatro entidades já estão no Dicionário de Dados em HTML. Ou seja: o README está com 8 entidades e o HTML com 12, e isso precisa ser alinhado antes da entrega final.
+| **ALUNO** | Armazena os dados cadastrais, biometria e foto dos alunos. | Decisão do grupo (Entrevista) |
+| **PLANO** | Representa os planos de assinatura e condições comerciais. | Decisão do grupo (Entrevista) |
+| **MATRICULA** | Entidade associativa que registra o vínculo entre aluno e plano. | Decisão do grupo |
+| **FUNCIONARIO** | Armazena os dados da equipe interna e prestadores. | Decisão do grupo (Entrevista) |
+| **UNIDADE** | Representa as filiais físicas da rede de academias. | Decisão do grupo |
+| **TREINO** | Representa as fichas de exercícios elaboradas para os alunos. | Decisão do grupo (Entrevista) |
+| **ITEM_TREINO** | Detalha os exercícios específicos de cada ficha (séries, repetições, carga). | Decisão do grupo (Resolução I05) |
+| **AULA_COLETIVA** | Armazena as sessões de aulas, horários e limites de vagas por modalidade. | Decisão do grupo (Entrevista) |
+| **CHECKIN_AULA** | Registra a participação ou reserva do aluno nas aulas coletivas. | Decisão do grupo |
+| **ESTOQUE_MATERIAL** | Controla o inventário de materiais de limpeza e itens promocionais. | Decisão do grupo (Entrevista) |
+| **CHAMADO_MANUTENCAO** | Registra problemas em equipamentos e o acompanhamento dos reparos. | Decisão do grupo (Entrevista) |
+| **REGISTRO_ACESSO** | Armazena o histórico de entradas e saídas nas catracas (biometria/cartão). | Decisão do grupo (Entrevista) |
 
 ### 5.2 Relacionamentos e cardinalidades
 
