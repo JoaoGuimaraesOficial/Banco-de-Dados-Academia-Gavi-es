@@ -1,397 +1,568 @@
-# Modelo Conceitual (DER)
+# Entrega 2 — Do modelo ao banco: Academia Gaviões
 
-### Sistema de gestão de informações da Academia Gaviões
+**Disciplina:** Modelagem de Banco de Dados · **Professor:** Cid Andrade · **Turma:** 2026-2 · **SGBD:** MySQL 8 (InnoDB, `utf8mb4`)
 
-## Metadados
+## Integrantes
 
-**Integrantes do grupo:**
-
-- Edilson Angel Arismendi Huanca — RGM 49423452
-- Gabriel Alves Rodrigues — RGM 47818191
-- Gabriel Viana de Lima — RGM 48368881
-- João Victor Guimarães Moura — RGM 48298549
-
-**Instituição:** Universidade Cidade de São Paulo (UNICID)
-**Curso:** Ciência da Computação
-**Disciplina:** Banco de Dados
-**Versão da documentação:** 1.1
-**Última atualização:** 02/11/2026
-
-## 📋 Histórico de Revisões e Correções (Entrega 1)
-
-Com base nos feedbacks e correções da Entrega 1, foram efetuados os seguintes ajustes estruturais no projeto:
-1. **Remoção de Chaves Estrangeiras do DER Conceitual:** Os atributos de chaves estrangeiras foram retirados do diagrama conceptual gráfico, passando a ser representados exclusivamente pelos relacionamentos (losangos) e respetivas cardinalidades.
-2. **Normalização (Resolução I05):** Separação limpa entre `TREINO` e `ITEM_TREINO` para isolar os atributos específicos de exercícios.
-3. **Alinhamento do Dicionário e Entidades:** Atualização do escopo para contemplar as 12 entidades oficiais do sistema.
-4. **Ferramenta Utilizada:** O Diagrama Entidade-Relacionamento (DER) foi modelado utilizando a ferramenta **[Draw.io / Lucidchart]**.
-
----
-
-## 1. Apresentação da organização
-
-### 1.1 Caracterização
-
-A organização escolhida foi a Academia Gaviões, do setor de fitness e bem-estar. A unidade que usamos como referência funciona 24 horas por dia e atende alunos em horários bem diferentes, então os funcionários são divididos em quatro turnos: madrugada, manhã, tarde e noite.
-
-A equipe tem recepcionistas, professores, pessoal da limpeza, gerente, funcionários do financeiro e personal trainers externos credenciados.
-
-### 1.2 Problemas identificados
-
-Na conversa com os funcionários, apareceram algumas dificuldades da rotina:
-
-- **Comunicação entre os turnos:** avisos, problemas e pendências nem sempre chegam pra equipe seguinte. Isso gera falha no atendimento e atrasa a resolução de problemas.
-- **Pagamentos e cancelamentos:** teve relato de cancelamento de plano que não foi atualizado direito no sistema, o que acabou bloqueando a catraca de um aluno que não devia ter o acesso bloqueado.
-- **Controle de materiais:** falta um acompanhamento melhor dos materiais de uso interno, itens promocionais e produtos de limpeza, principalmente em relação a quanto foi retirado e consumido.
-- **Manutenção de equipamentos:** os problemas que aparecem durante o funcionamento precisam ser registrados e encaminhados pros responsáveis.
-
-### 1.3 Justificativa da escolha
-
-A academia foi escolhida porque tem várias atividades que dependem de informação organizada e atualizada ao mesmo tempo.
-
-Cadastro de aluno, controle de plano, pagamento, liberação de catraca, elaboração de treino e agendamento de aula são processos que precisam funcionar juntos.
-
-Além disso, os cargos diferentes têm necessidades diferentes de acesso à informação. Isso ajuda a trabalhar conceitos de modelagem, integridade e controle de acesso.
-
-### 1.4 Informações da visita
-
-- **Endereço:** Av. Celso Garcia, 5492 — Tatuapé, São Paulo — SP, 03064-000.
-- **Responsáveis entrevistados:** Eduardo Curzio e Leticia, recepcionistas.
-- **Localização:** [Consultar no Google Maps](https://share.google/RPpl0luAjH1SzWWri).
-
----
-
-## 2. Processos de negócio
-
-A partir da entrevista, a gente identificou os principais processos da rotina da academia.
-
-### 2.1 Cadastro e matrícula
-
-Começa com o cadastro do aluno (dados pessoais, foto e biometria facial). Depois é feito o vínculo com o plano escolhido, que pode ser de cobrança recorrente ou não recorrente.
-
-### 2.2 Controle de acesso
-
-A entrada dos alunos é feita por reconhecimento facial na catraca. O sistema precisa checar a situação da matrícula e a situação financeira antes de liberar o acesso.
-
-Quando dá alguma falha na validação, a recepção pode fazer a liberação manual, seguindo o procedimento da academia.
-
-### 2.3 Prescrição de treinos
-
-Os professores elaboram e atualizam as fichas de treino dos alunos. Os exercícios são organizados de acordo com a necessidade, a experiência e as limitações físicas informadas pelo aluno.
-
-O histórico dos treinos precisa ser preservado mesmo quando o professor responsável sai da academia.
-
-### 2.4 Aulas coletivas
-
-A academia oferece modalidades como spinning, boxe e muay thai.
-
-O spinning tem controle de reserva pelo aplicativo e limite de 19 vagas por horário. As outras modalidades normalmente não exigem reserva antecipada, pelo que foi passado na entrevista.
-
-### 2.5 Comunicação entre turnos
-
-As ocorrências e os recados precisam ficar registrados pra que os funcionários dos próximos turnos consigam consultar as pendências anteriores. A ideia é não depender só de conversa ou aviso verbal.
-
-### 2.6 Estoque e manutenção
-
-Os materiais usados pela academia precisam ter as movimentações acompanhadas, incluindo retiradas e consumo.
-
-Também é necessário registrar problemas em equipamentos e acompanhar os chamados de manutenção até resolver.
-
----
-
-## 3. Requisitos do sistema
-
-### 3.1 Requisitos funcionais
-
-| Código | Requisito | Origem |
+| Nome completo | RGM | Usuário GitHub |
 |---|---|---|
-| **RF01** | Cadastro de alunos com informações pessoais, foto, biometria facial e documentação de saúde necessária à matrícula. | Entrevista (dados pessoais, foto, biometria) + documentação de saúde derivada da RN06/RN07 |
-| **RF02** | Cadastro de planos, vínculo com alunos e registro das informações de pagamento, cancelamento e condições contratuais. | Entrevista (planos, pagamento, cancelamento) + condições contratuais derivadas da RN09 |
-| **RF03** | Liberar ou bloquear a entrada na catraca de acordo com a situação da matrícula e financeira do aluno. | Entrevista |
-| **RF04** | Professores criam, editam e consultam fichas de treino, considerando necessidades e limitações dos alunos. | Entrevista |
-| **RF05** | Registro de check-in em aulas coletivas, respeitando o limite de vagas de cada modalidade. | Entrevista |
-| **RF06** | Funcionários registram avisos e pendências dos turnos, mantendo as ocorrências disponíveis para os turnos seguintes até serem resolvidas. | Entrevista |
-| **RF07** | Registro e acompanhamento de problemas e solicitações de manutenção. | Entrevista |
-| **RF08** | Acompanhamento dos materiais internos e dos itens promocionais, incluindo o registro de retiradas por funcionários. | Entrevista (estoque e promocionais) + retiradas derivadas da RN10 |
-| **RF09** | Cadastro de funcionários e personal trainers externos, registrando informações para verificar situação e habilitação profissional. | Entrevista (personal externo na RN04) |
-| **RF10** | Verificação das permissões de acesso do aluno a outras unidades de acordo com o plano contratado. | Decisão de modelagem do grupo (derivada da RN08) |
+| Edilson Angel Arismendi Huanca | 49423452 | [SlofyDev](https://github.com/SlofyDev) |
+| Gabriel Alves Rodrigues | 47818191 | [gbr-alves](https://github.com/gbr-alves) |
+| Gabriel Viana de Lima | 48368881 | [gabrielvianadelima1-crypto](https://github.com/gabrielvianadelima1-crypto) |
+| João Victor Guimarães Moura | 48298549 | [JoaoGuimaraesOficial](https://github.com/JoaoGuimaraesOficial) |
 
-### 3.2 Requisitos não funcionais
+**Software dos diagramas:** o DER conceitual está na notação do brModelo e o modelo lógico enviado é MySQL Workbench.
 
-| Código | Requisito | Origem |
-|---|---|---|
-| **RNF01** | Acesso às informações controlado por função; professores sem dados financeiros; cartão só com últimos dígitos. | Entrevista (RN05 e relatos de acesso) |
-| **RNF02** | Validação de acesso na catraca disponível 24h, com tempo de resposta inferior a 2 segundos. | Elaboração do grupo (requisito técnico) |
-| **RNF03** | Histórico de treinos disponível mesmo após o desligamento do professor responsável. | Entrevista |
+## Sumário
 
----
-
-## 4. Regras de negócio
-
-As regras de negócio são as condições que o sistema tem que respeitar durante o funcionamento da academia. A gente organizou elas de acordo com a natureza e com o que foi passado na entrevista.
-
-**Legenda de origem:**
-
-- **Entrevista:** informação falada pelos entrevistados.
-- **Decisão do grupo:** possibilidade ou necessidade identificada pelo grupo a partir da entrevista e do conteúdo da disciplina.
-
-### 4.1 Regras operacionais
-
-| Código | Regra | Dados envolvidos | Justificativa | Origem |
-|---|---|---|---|---|
-| **RN01** | O cancelamento de plano só ocorre por solicitação formal via SAC. | MATRICULA (`ID_MATRICULA`, `DT_FIM`, status de cancelamento). | Dá rastreabilidade ao pedido e evita cancelamento indevido ou contestado depois, que pode gerar bloqueio errado na catraca. | Entrevista |
-| **RN02** | A inadimplência prolongada, por volta de 60 dias, pode cancelar o plano automaticamente e bloquear a catraca. | MATRICULA (`status`, `DT_INICIO`, `DT_FIM`), ALUNO (`IN_ATIVO`). | Limita o prejuízo financeiro e mantém a base de alunos ativos coerente com a situação dos pagamentos. | Entrevista |
-| **RN03** | O spinning tem limite fixo de 19 vagas por horário, e o check-in é obrigatório pelo aplicativo. | AULA_COLETIVA (`NM_MODALIDADE`, `DT_HORARIO`, `QT_LIMITE_VAGAS`), CHECKIN_AULA (`ID_AULA`, `ID_ALUNO`, `DT_REALIZACAO`). | Respeita a capacidade da sala e das bicicletas, garantindo segurança e qualidade da aula. | Entrevista |
-| **RN04** | Personal trainer externo só pode atuar com cadastro ativo e pagamento de taxa mensal. | Cadastro de personal externo (nome, CPF, status e taxa mensal — entidade a definir), PAGAMENTO. | Controla quem circula na academia e formaliza a contrapartida pelo uso da estrutura. | Entrevista |
-| **RN07** | A matrícula exige idade mínima e apresentação de atestado médico ou PAR-Q. | ALUNO (`DT_NASCIMENTO`), documento de saúde anexado. | Protege a saúde do aluno e reduz os riscos pra academia. | Decisão do grupo |
-| **RN08** | O acesso a outras unidades depende do plano contratado. | PLANO (possível atributo `IN_ACESSO_OUTRAS_UNIDADES`), ALUNO (`DS_BIOMETRIA_FACIAL`). | Diferencia os planos comercialmente e evita acesso indevido a outras unidades. | Decisão do grupo |
-| **RN09** | Planos com fidelidade têm multa em caso de cancelamento antecipado. | PLANO (possíveis atributos `QT_MESES_FIDELIDADE` e `VL_MULTA`), MATRICULA (`DT_INICIO`, `DT_FIM`). | Protege a receita prevista em contrato. | Decisão do grupo |
-| **RN10** | Toda retirada de material por funcionário deve ser registrada com funcionário responsável, material, quantidade e data. | FUNCIONARIO, ESTOQUE_MATERIAL e entidade de movimentação (quantidade e data). | Resolve o problema de falta de controle dos itens promocionais e de limpeza. | Decisão do grupo |
-| **RN11** | Ocorrências pendentes são transferidas ao turno seguinte até serem resolvidas. | OCORRENCIA_TURNO (`DT_REGISTRO`, turno, `ID_FUNCIONARIO_AUTOR`, `DS_MENSAGEM`, `IN_RESOLVIDO`). | Resolve a falha de comunicação entre turnos e evita que pendências sejam esquecidas. | Decisão do grupo |
-
-A RN01 e a RN02 tratam de situações diferentes. O cancelamento pedido pelo aluno passa pelo SAC, enquanto o cancelamento por inadimplência segue uma regra operacional própria, com cerca de 60 dias como referência de prazo.
-
-### 4.2 Restrições legais e organizacionais
-
-| Código | Regra | Dados envolvidos | Justificativa | Origem |
-|---|---|---|---|---|
-| **RN05** | Recepção e professores só podem visualizar os quatro últimos dígitos do cartão do aluno. | MATRICULA (`CD_ULTIMOS_DIGITOS_CARTAO`). | Reduz o risco de exposição de dados financeiros e limita o acesso às informações do cartão. | Entrevista |
-| **RN06** | Informações de saúde e limitações físicas ficam anexadas ao cadastro em formato digital, como PDF ou imagem. | ALUNO, TREINO (`DS_OBSERVACAO_MEDICA`). | Permite elaborar treinos mais seguros. Como são dados pessoais sensíveis, o acesso deve ser restrito de acordo com a função do usuário. | Entrevista |
-| **RN12** | Todo professor deve possuir registro ativo no CREF. | FUNCIONARIO (tipo de funcionário = professor; possível atributo `CD_CREF`). | Permite verificar a habilitação profissional dos professores. | Decisão do grupo |
-
-### 4.3 Regras prováveis ainda não incluídas
-
-Essas regras aqui são comuns em academia, mas não fazem parte da entrevista. Por isso ficam pendentes de decisão do grupo.
-
-| Regra | Decisão do grupo | Motivo |
-|---|---|---|
-| Emissão de nota fiscal | A definir. | Confirmar se a organização emite nota fiscal e como funciona o processo. |
-| Trancamento ou congelamento de plano | A definir. | Não foi informado se existe essa opção. |
-| Aula experimental ou visitante | A definir. | Não foi informado se a academia permite esse tipo de acesso. |
-| Convênios (Wellhub, TotalPass etc.) | A definir. | Perguntar na entrevista como funciona essa modalidade. |
-| Reajuste de mensalidade | A definir. | Entender melhor como funciona a parte financeira e a atualização dos valores. |
-
-### 4.4 Alinhamento entre regras e requisitos funcionais
-
-As regras de negócio precisam aparecer nos requisitos funcionais, senão o sistema não tem como respeitá-las.
-
-| Regra | RF relacionado | Situação |
-|---|---|---|
-| RN01, RN05 e RN09 | RF02 — Planos e pagamentos | O RF02 contempla planos, pagamentos e cancelamentos. Os campos de fidelidade e multa dependem do que for definido para a RN09. |
-| RN02 | RF03 — Controle de acesso | O RF03 contempla o bloqueio de acesso conforme a situação financeira e da matrícula. |
-| RN03 | RF05 — Agendamento de aulas | O RF05 contempla o limite de vagas e o registro de check-in. |
-| RN06 e RN07 | RF01 — Cadastro de alunos | O RF01 deve contemplar a documentação de saúde e a verificação dos requisitos pra matrícula. |
-| RN10 | RF08 — Controle de estoque | O RF08 contempla o registro das retiradas por funcionários. |
-| RN11 | RF06 — Registro de ocorrências | O RF06 contempla a transferência de pendências entre turnos. |
-| RN04 | RF09 — Cadastro e credenciamento de profissionais | O RF09 contempla o cadastro e o controle de personal trainers externos. |
-| RN08 | RF10 — Acesso entre unidades | O RF10 contempla a verificação das permissões de acesso conforme o plano. |
-| RN12 | RF09 — Cadastro e credenciamento de profissionais | O RF09 deve contemplar o registro do CREF para professores. |
+1. [Caracterização da organização](#1-caracterização-da-organização)
+2. [Relato da entrevista e observações presenciais](#2-relato-da-entrevista-e-observações-presenciais)
+3. [Processos de negócio](#3-processos-de-negócio)
+4. [Requisitos funcionais](#4-requisitos-funcionais-rf)
+5. [Requisitos não funcionais](#5-requisitos-não-funcionais-rnf)
+6. [Regras de negócio](#6-regras-de-negócio-rn)
+7. [Revisão do DER (seção 1.1)](#7-revisão-do-der-seção-11)
+8. [Conversão do conceitual para o lógico (seção 1.2)](#8-conversão-do-conceitual-para-o-lógico-seção-12)
+9. [Normalização (seção 1.4)](#9-normalização-seção-14)
+10. [Justificativas técnicas (seção 1.5)](#10-justificativas-técnicas-seção-15)
+11. [Proposta de BI e IA (seção 1.6)](#11-proposta-de-bi-e-ia-seção-16)
+12. [Limitações conhecidas](#12-limitações-conhecidas)
+13. [Registro do uso de inteligência artificial](#13-registro-do-uso-de-inteligência-artificial)
+14. [Estrutura do repositório e execução](#14-estrutura-do-repositório-e-execução)
 
 ---
 
-## 5. Modelagem conceitual
+## 1. Caracterização da organização
 
-### 5.1 Entidades identificadas
+**Situação em relação à Entrega 1:** *Caso A.* Continuamos com a mesma organização da E1, que é real e comprovada. O DER foi revisado a partir da correção (seção 7).
 
-### 5.1 Entidades identificadas
+### 1.1 Natureza e contexto
 
-O modelo conceitual do sistema é composto pelas 12 entidades oficiais que estruturam a operação da academia:
+A **Academia Gaviões** é uma empresa com fins lucrativos do setor fitness. A unidade analisada funciona **24 horas por dia**, em quatro turnos (madrugada, manhã, tarde e noite). Faz parte de uma rede: o cadastro facial do aluno vale em outras unidades e problemas que a gerência não resolve vão para o responsável regional.
 
-| Entidade | Descrição | Origem |
+A equipe tem recepcionistas, professores, funcionários da limpeza, gerente e pessoal do financeiro, mais personal trainers externos. O sistema de gestão é o **Evo**, com aplicativo para o aluno (treino e check-in) e catraca com reconhecimento facial. Os funcionários da unidade são contratados pela própria unidade.
+
+### 1.2 Porte da organização
+
+> Números, não adjetivos. Preencham com valores confirmados com a academia e registrem a fonte. A E1 dizia apenas "centenas de alunos", o que não basta.
+
+| Indicador | Valor | Fonte / data |
 |---|---|---|
-| **ALUNO** | Armazena os dados cadastrais, biometria e foto dos alunos. | Decisão do grupo (Entrevista) |
-| **PLANO** | Representa os planos de assinatura e condições comerciais. | Decisão do grupo (Entrevista) |
-| **MATRICULA** | Entidade associativa que registra o vínculo entre aluno e plano. | Decisão do grupo |
-| **FUNCIONARIO** | Armazena os dados da equipe interna e prestadores. | Decisão do grupo (Entrevista) |
-| **UNIDADE** | Representa as filiais físicas da rede de academias. | Decisão do grupo |
-| **TREINO** | Representa as fichas de exercícios elaboradas para os alunos. | Decisão do grupo (Entrevista) |
-| **ITEM_TREINO** | Detalha os exercícios específicos de cada ficha (séries, repetições, carga). | Decisão do grupo (Resolução I05) |
-| **AULA_COLETIVA** | Armazena as sessões de aulas, horários e limites de vagas por modalidade. | Decisão do grupo (Entrevista) |
-| **CHECKIN_AULA** | Registra a participação ou reserva do aluno nas aulas coletivas. | Decisão do grupo |
-| **ESTOQUE_MATERIAL** | Controla o inventário de materiais de limpeza e itens promocionais. | Decisão do grupo (Entrevista) |
-| **CHAMADO_MANUTENCAO** | Registra problemas em equipamentos e o acompanhamento dos reparos. | Decisão do grupo (Entrevista) |
-| **REGISTRO_ACESSO** | Armazena o histórico de entradas e saídas nas catracas (biometria/cartão). | Decisão do grupo (Entrevista) |
+| Alunos com matrícula ativa | Não temos esses dados | -- |
+| Acessos pela catraca por dia (média) | 1.200 | Entrevista presencial |
+| Funcionários (total e por cargo) | cerca de 20 (varia por turno e por cargo) | Entrevista presencial |
+| Personal trainers externos credenciados | 2 | Entrevista presencial |
+| Planos comercializados | 2 | Site Oficial |
+| Aulas coletivas por semana | 4 | Entrevista presencial |
+| Bicicletas do spinning (vagas por horário) | 19 | Entrevista presencial |
+| Taxa mensal do personal externo | cerca de R$ 400 (varia por unidade) | Entrevista presencial |
+| Frequência de reposição de materiais de limpeza | mensal ou a cada três semanas | Entrevista presencial |
+| Prazo de inadimplência até o cancelamento automático | cerca de 2 meses (o entrevistado não tinha certeza) | Entrevista presencial |
 
-### 5.2 Relacionamentos e cardinalidades
+### 1.3 Problemas identificados
 
-| Relacionamento | Descrição | Origem |
+Todos os problemas são resolvidos pelo modelo (a cobertura de P3 e P4 é parcial; ver [limitações](#12-limitações-conhecidas)). A rastreabilidade problema → tabelas → consulta está na [seção 11.3](#113-rastreabilidade-problema--tabelas--consulta).
+
+| Código | Problema | Origem | Como o modelo resolve |
+|---|---|---|---|
+| **P1** | **Falta de comunicação entre turnos.** Algo que acontece em um turno nem sempre chega à equipe do turno seguinte. Foi o principal ponto de melhoria citado. | Entrevista, itens 17 e 19 | `OCORRENCIA_TURNO` guarda autor, data, turno, mensagem e se foi resolvida. A consulta G05 lista as pendências por turno. |
+| **P2** | **Saldo devedor incorreto após cancelamento.** O cancelamento é feito pelo SAC. Quando o sistema falha, o aluno cancelado continua com dívida, é barrado na catraca e a recepção precisa acionar o SAC. Fica pior quando a dívida é de outra unidade. | Entrevista, itens 14, 15 e 19 | `MATRICULA` (status e `DT_FIM`) e `PAGAMENTO` (cobranças e status). A consulta G06 acha cobranças pendentes lançadas depois do cancelamento e a A05 acha cancelamentos incompletos. |
+| **P3** | **Falta de controle de materiais.** Houve o caso das garrafinhas promocionais entregues a novos alunos sem controle da quantidade retirada. Os materiais de limpeza são repostos por estimativa. | Entrevista, item 11 | `ESTOQUE_MATERIAL` registra item, categoria (limpeza ou promocional), unidade e quantidade. A consulta G07 lista itens com estoque baixo. |
+| **P4** | **Manutenção de equipamentos sem acompanhamento.** Os problemas que aparecem durante o funcionamento precisam ser registrados e encaminhados aos responsáveis. Reparos simples são feitos na hora; os complexos vão ao gerente, ao responsável regional e a uma equipe especializada. | README da E1 (v1.1, item 1.2) e entrevista, item 13 | `CHAMADO_MANUTENCAO` guarda quem abriu, quando, o problema e o status. A consulta G08 lista os chamados não concluídos e há quantos dias estão abertos. |
+
+### 1.4 Escopo e justificativa da escolha
+
+**Escopo:** o banco cobre os dados da unidade em seis áreas.
+
+| Área | Tabelas |
+|---|---|
+| Alunos e contratos | `ALUNO`, `PLANO`, `MATRICULA`, `PAGAMENTO` |
+| Treinos | `TREINO`, `ITEM_TREINO` |
+| Aulas coletivas | `AULA_COLETIVA`, `CHECKIN_AULA`, `UNIDADE` |
+| Equipe | `FUNCIONARIO` |
+| Comunicação | `OCORRENCIA_TURNO` |
+| Operação | `CHAMADO_MANUTENCAO`, `ESTOQUE_MATERIAL` |
+
+**Justificativa da escolha:** a academia reúne processos reais e variados (cadastro com biometria facial, planos recorrentes e avulsos, pagamentos, prescrição de treinos, aulas com limite de vagas e níveis diferentes de acesso aos dados). Isso dá a complexidade que a disciplina exige.
+
+**Processos típicos que ficaram de fora e o motivo:**
+
+| Item | Motivo |
+|---|---|
+| Venda de bebidas e energéticos (geladeira com totem) | Operação terceirizada pela empresa **Gela Fit**; os dados não ficam na academia. |
+| Avaliação física e medidas corporais | O entrevistado disse que não há medição de rotina nem registro formal de evolução corporal. |
+| Cobrança com número completo de cartão | Fica restrita ao financeiro/central; a recepção e os professores só veem os 4 últimos dígitos. |
+| Registro de cada passagem na catraca | Fica no sistema Evo; este banco não guarda log de acessos (ver [limitações](#12-limitações-conhecidas)). |
+| Personal trainers externos e taxa mensal | Existem na academia, mas **não estão modeladas** nesta versão (ver [limitações](#12-limitações-conhecidas)). |
+| Emissão de nota fiscal, trancamento de plano, aula experimental, convênios (Wellhub, TotalPass) e reajuste de mensalidade | A E1 os lista como regras prováveis "a definir". Não foram confirmados na entrevista (a transcrição não os cita), então ficam **fora** do modelo até a academia confirmar. |
+
+### 1.5 Evidências da existência da organização
+
+- **Endereço:** Av. Celso Garcia, 5492 — Tatuapé, São Paulo/SP, CEP 03064-000.
+- **Google Meu Negócio / Maps:** <https://share.google/RPpl0luAjH1SzWWri>
+- **Fotos da visita (JPG), pasta [`Arq-visita-comprovante`](Arq-visita-comprovante/):**
+
+| Arquivo | O que mostra |
+|---|---|
+| [`01-fachada-grupo.jpg`](Arq-visita-comprovante/01-fachada-grupo.jpg) | Integrantes do grupo na fachada da Academia Gaviões 24 horas. |
+| [`02-entrevista-recepcao.jpg`](Arq-visita-comprovante/02-entrevista-recepcao.jpg) | Entrevista com a recepção, no balcão da academia. |
+| [`03-interior-academia.jpg`](Arq-visita-comprovante/03-interior-academia.jpg) | Área de musculação, com a catraca à direita da imagem. |
+
+
+![Fachada](Arq-visita-comprovante/01-fachada-grupo.jpg)
+
+### 1.6 Responsável entrevistado e vínculo
+
+| Item | Dados |
+|---|---|
+| Entrevistados | Eduardo Curzio e Letícia (recepcionistas), conforme a E1. |
+| Telefone / contato | (11) 94074-7584 |
+| Vínculo do grupo com a organização | Nenhum |
+| Acesso para voltar a campo | sim |
+
+---
+
+## 2. Relato da entrevista e observações presenciais
+
+O texto completo está em [`levantamento/levantamento.md`](levantamento/levantamento.md)
+
+### 2.1 Entrevista
+
+| Item | Dados |
+|---|---|
+| Entrevistados | Recepção da unidade (ver 1.6) |
+| Participantes do grupo | Todos Participaram |
+| Data e horário | 05/11/2026 |
+| Local | Recepção da Academia Gaviões, Av. Celso Garcia, 5492 (no ambiente da organização) |
+| Foto | [`02-entrevista-recepcao.jpg`](Arq-visita-comprovante/02-entrevista-recepcao.jpg) |
+| Roteiro usado | 9 blocos (visão geral, cadastros, planos e pagamentos, frequência e treinos, aulas, estoque e equipamentos, sistema e acessos, problemas, observação) |
+
+**O que foi dito**
+
+- Cadastro no **Evo**, com dados pessoais e foto. O cadastro facial vale para outras unidades. A recepção busca o aluno por nome, CPF ou e-mail e pode corrigir dados, como um telefone.
+- Problemas de saúde podem ser digitalizados e anexados ao sistema (inclusive em PDF). Documentos físicos ficam, ao que parece, na sala do gerente. O entrevistado não soube dizer por quanto tempo são guardados.
+- **Plano recorrente:** cartão de crédito cadastrado e cobrança automática mensal. **Não recorrente:** PIX, dinheiro, crédito ou débito.
+- A recepção vê se o pagamento foi feito, se o cartão foi recusado e se há saldo devedor. Após cerca de dois meses sem pagar, o plano pode ser cancelado pelo sistema.
+- A catraca usa reconhecimento facial. Se falhar, a recepção libera manualmente. Existe também um portão para algumas situações.
+- Os professores montam o treino conforme experiência, tempo de prática e limitações físicas. O treino fica no aplicativo, em categorias (A, B, C, superior, inferior). O aluno também pode montar um treino num totem. O treino tem validade e outro professor pode renová-lo se o autor sair.
+- Aulas coletivas durante a semana e aos sábados. O **spinning** tem 19 bicicletas e exige check-in pelo aplicativo. Boxe, muay thai e outras normalmente não exigem agendamento.
+- **Professores** veem CPF, ID do aluno e dados do treino, sem dados cadastrais completos, medidas, financeiro nem cartão. A **recepção** tem acesso mais amplo. O **gerente** consulta matrículas, acessos e financeiro. O número completo do cartão fica com o financeiro/central; só aparecem os 4 últimos dígitos.
+- **Personal trainers externos** pagam cerca de R$ 400 e levam seus alunos, com regras que variam por unidade.
+- Estoque: materiais de limpeza (papel, álcool, Lysoform etc.) repostos todo mês ou a cada três semanas. As garrafinhas promocionais ficaram sem controle da quantidade retirada. A geladeira de bebidas é da Gela Fit (terceirizada).
+- Manutenção simples é feita por funcionários ou professores. O que é mais complexo vai ao gerente, depois ao responsável regional, e uma equipe especializada pode ser enviada.
+- Cancelamento só pelo SAC (e-mail com CPF). Falhas geram saldo devedor incorreto e bloqueio na catraca.
+- Principal dor: **comunicação entre turnos**. Na madrugada pode haver só um recepcionista e a equipe aumenta no fim da tarde e à noite.
+
+**Onde o entrevistado demonstrou dúvida** (mantido como incerto): tempo de guarda dos documentos, prazo exato de cancelamento por inadimplência e política de exclusão de dados de ex-funcionários.
+
+### 2.2 Observação presencial (separada do que foi dito)
+
+> Escrevam apenas o que **viram acontecer**. Se diferir do relato, registrem a diferença. As fotos mostram a catraca e o balcão da recepção; isso ajuda a descrever.
+
+| O que o grupo viu | Diferença em relação ao relato |
+|---|---|
+| ⚠️ PREENCHER (ex.: como a recepção libera alguém na catraca) | ⚠️ PREENCHER |
+| ⚠️ PREENCHER (ex.: onde são anotados os recados entre turnos) | ⚠️ PREENCHER |
+| ⚠️ PREENCHER (ex.: onde ficam os materiais de limpeza) | ⚠️ PREENCHER |
+
+---
+
+## 3. Processos de negócio
+
+Os campos citados correspondem às colunas do [dicionário de dados](dicionario_dados.html) e do [script SQL](docs/academia_gavioes.sql).
+
+| Código | Processo | Descrição |
 |---|---|---|
-| ALUNO — MATRICULA | Um aluno pode possuir várias matrículas ao longo do tempo. Cada matrícula pertence a um aluno. | Decisão do grupo |
-| PLANO — MATRICULA | Um plano pode estar associado a várias matrículas. Cada matrícula está vinculada a um plano. | Decisão do grupo |
-| ALUNO — TREINO | Um aluno pode possuir vários treinos. Cada treino pertence a um aluno. | Decisão do grupo |
-| FUNCIONARIO — TREINO | Um funcionário que atua como professor pode elaborar vários treinos. Cada treino possui um responsável. | Decisão do grupo |
-| ALUNO — AULA_COLETIVA | Um aluno pode participar de várias aulas, e uma aula pode receber vários alunos. O vínculo é registrado por CHECKIN_AULA. | Decisão do grupo |
-| FUNCIONARIO — OCORRENCIA_TURNO | Um funcionário pode registrar várias ocorrências. Cada ocorrência possui um funcionário responsável pelo registro. | Decisão do grupo |
-
-As cardinalidades exatas precisam ser conferidas no DER final, porque a notação usada no README, no dicionário e nos diagramas tem que representar os mesmos relacionamentos.
-
-### 5.3 Justificativa da modelagem
-
-Separar `ALUNO`, `PLANO` e `MATRICULA` permite manter os dados pessoais separados das informações de contratação. Assim o aluno pode trocar de plano ou fazer novas matrículas sem duplicar o cadastro.
-
-A entidade `TREINO` mantém o registro dos exercícios elaborados pelos professores, o que preserva o histórico mesmo quando o funcionário sai da academia.
-
-A entidade `OCORRENCIA_TURNO` foi pensada pra resolver um dos problemas vistos na entrevista: a perda de informação na troca de turno. Com esse registro, os funcionários consultam avisos e acompanham pendências anteriores.
-
-Já `CHECKIN_AULA` funciona como entidade associativa entre alunos e aulas coletivas. Ela permite registrar as participações e aplicar as regras de limite de vagas.
-
-As entidades de estoque, manutenção, unidades e itens de treino devem complementar essa estrutura caso sejam confirmadas no modelo final.
+| PR01 | **Cadastro do aluno** | A recepção registra no Evo nome completo, CPF, e-mail, data de nascimento, foto de perfil (opcional) e cadastro facial (opcional), e marca o aluno como ativo. |
+| PR02 | **Matrícula** | O aluno escolhe um plano (nome, tipo de recorrência e mensalidade). A matrícula guarda aluno, plano, data de início, data de fim (só no cancelamento), status (pago, pendente, inadimplente ou cancelado) e, no plano recorrente, os 4 últimos dígitos do cartão. |
+| PR03 | **Pagamento** | Cada pagamento registra matrícula, data, valor, forma (PIX, dinheiro, crédito ou débito) e status (pago ou pendente). Cobrança recusada ou não paga deixa a matrícula pendente ou inadimplente. |
+| PR04 | **Controle de acesso** | A catraca lê o rosto e consulta a situação financeira. Se a matrícula está inadimplente, bloqueia; se a facial falha, a recepção libera à mão. Esse log fica no Evo (fora do banco). |
+| PR05 | **Cancelamento** | O aluno pede ao SAC por e-mail, com CPF. O SAC cancela, e a matrícula recebe data de fim e status `cancelado`. Após cerca de dois meses de inadimplência o sistema cancela sozinho. |
+| PR06 | **Prescrição de treinos** | O professor cria a ficha de um aluno com datas de criação e validade e observação médica opcional. Cada ficha tem exercícios com nome, séries, repetições e carga (opcional). |
+| PR07 | **Aulas e check-in** | A aula tem instrutor, unidade, modalidade, data e hora e limite de vagas. O check-in do aluno registra aula, aluno e data e hora, e vale uma vez por aluno e aula. |
+| PR08 | **Comunicação entre turnos** | O funcionário registra a ocorrência com data e hora, turno, mensagem e se foi resolvida. |
+| PR09 | **Manutenção** | O funcionário abre um chamado com data e hora, descrição do problema e status (aberto, em andamento ou concluído). O que é complexo sobe ao gerente e ao regional. |
+| PR10 | **Controle de estoque** | Cada material tem unidade, nome, categoria e quantidade em estoque. |
 
 ---
 
-## 6. Fluxo de dados e controle de acesso
+## 4. Requisitos funcionais (RF)
 
-### 6.1 Fluxo de cadastro até a catraca
+RF01 a RF10 são os da E1 v1.1 (códigos mantidos). RF11 é novo. A coluna **No banco** diz com franqueza o quanto cada requisito está implementado.
 
-| Etapa | Descrição | Origem |
+| Código | Requisito | No banco |
 |---|---|---|
-| 1. Cadastro | O aluno informa seus dados pessoais e faz o cadastro na academia. | Entrevista |
-| 2. Identificação | São registradas as informações necessárias pra identificação, incluindo foto e biometria facial. | Entrevista |
-| 3. Documentação | São anexados os documentos necessários pra matrícula, conforme as regras da academia. | Decisão do grupo (derivada da RN06/RN07) |
-| 4. Matrícula | O aluno escolhe um plano e o cadastro é vinculado à matrícula correspondente. | Entrevista |
-| 5. Reconhecimento facial | Ao chegar na academia, o aluno faz a identificação na catraca. | Entrevista |
-| 6. Validação | O sistema consulta a matrícula e verifica a situação financeira do aluno. | Entrevista |
-| 7. Decisão | Se as condições estiverem regulares, a catraca libera o acesso. Caso tenha alguma pendência, o acesso é bloqueado. | Entrevista |
-| 8. Atendimento pela recepção | Se der falha na identificação ou na validação, a recepção verifica a situação e faz o procedimento manual previsto pela academia. | Entrevista |
+| RF01 | Cadastro de alunos com dados pessoais (nome completo, CPF, e-mail, nascimento), foto, biometria facial e documentação de saúde. | **Parcial.** `ALUNO` completo; a saúde está só em `TREINO.DS_OBSERVACAO_MEDICA`. |
+| RF02 | Cadastro de planos, vínculo com alunos e registro de pagamento, cancelamento e condições contratuais. | **Parcial.** `PLANO`, `MATRICULA` e `PAGAMENTO`; cancelamento só por status e `DT_FIM`; sem fidelidade nem multa. |
+| RF03 | Liberar ou bloquear a catraca conforme a situação da matrícula e financeira. | **Parcial.** Situação em `MATRICULA.TP_STATUS` e `ALUNO.IN_ATIVO`; o log de acessos fica no Evo. |
+| RF04 | Professores criam, editam e consultam fichas de treino, considerando limitações dos alunos. | **Atendido.** `TREINO` e `ITEM_TREINO`. |
+| RF05 | Check-in em aulas coletivas, respeitando o limite de vagas. | **Atendido.** `CHECKIN_AULA`; excesso detectado pela A01. |
+| RF06 | Registrar avisos e pendências dos turnos, mantendo-as disponíveis até serem resolvidas. | **Atendido.** `OCORRENCIA_TURNO` e G05. |
+| RF07 | Registro e acompanhamento de problemas e solicitações de manutenção. | **Parcial.** `CHAMADO_MANUTENCAO` e G08; sem equipamento nem escalonamento. |
+| RF08 | Acompanhar materiais internos e itens promocionais, incluindo retiradas por funcionários. | **Parcial.** `ESTOQUE_MATERIAL` (quantidade atual); sem registro de retiradas. |
+| RF09 | Cadastro de funcionários e personal trainers externos, com situação e habilitação (CREF). | **Parcial.** `FUNCIONARIO`; personal externo e CREF não modelados. |
+| RF10 | Verificar permissões de acesso a outras unidades conforme o plano. | **Não atendido.** `PLANO` não tem o atributo. |
+| RF11 | Gerar consultas gerenciais e de auditoria *(novo)*. | **Atendido.** G01 a G08 e A01 a A06 ([seção 11](#11-proposta-de-bi-e-ia-seção-16)). |
 
-Os detalhes técnicos da integração com o reconhecimento facial ainda dependem da implementação.
+---
 
-### 6.2 Níveis de acesso
+## 5. Requisitos não funcionais (RNF)
 
-| Perfil | Acesso previsto | Origem |
+RNF01 a RNF03 são os da E1. RNF04 e RNF05 são novos.
+
+| Código | Categoria | Requisito |
 |---|---|---|
-| **Recepção** | Consultar e atualizar informações cadastrais, verificar matrículas e ajudar na resolução de problemas de acesso. Deve visualizar apenas os quatro últimos dígitos do cartão. | Entrevista (cargos e RN05) |
-| **Professor** | Consultar as informações necessárias pra acompanhar os alunos e elaborar treinos, sem acesso aos dados financeiros completos. Deve visualizar apenas os quatro últimos dígitos do cartão. | Entrevista (cargos e RN05) |
-| **Gerente** | Acompanhar informações operacionais, matrículas, ocorrências e dados necessários à administração da unidade. | Decisão do grupo (a partir dos cargos) |
-| **Financeiro** | Consultar informações relacionadas a pagamentos, planos e situações financeiras. | Decisão do grupo (a partir dos cargos) |
-
-As permissões detalhadas de cadastro, alteração, exclusão e consulta devem ser definidas na etapa de implementação do controle de acesso.
-
-### 6.3 Proteção e registro de informações sensíveis
-
-Informações como biometria facial e dados de saúde exigem cuidado especial por serem dados pessoais sensíveis segundo a LGPD. As informações financeiras também precisam de proteção, embora não sejam automaticamente classificadas como sensíveis pela lei.
-
-O sistema deve restringir o acesso de acordo com a função de cada funcionário. Também é importante manter registro das operações feitas sobre essas informações, permitindo identificar:
-
-- Quem acessou ou alterou os dados;
-- Qual informação foi consultada ou modificada;
-- Qual operação foi realizada;
-- Em qual data e horário ocorreu a operação.
-
-A estrutura específica pra armazenar esses registros ainda precisa ser definida no modelo.
+| RNF01 | Segurança e privacidade | Acesso por papéis: professores não veem dados financeiros nem o número completo do cartão. |
+| RNF02 | Disponibilidade | A validação na catraca funciona 24 horas, com resposta em menos de 2 segundos. |
+| RNF03 | Integridade | O histórico de treinos é preservado mesmo após o desligamento do professor. |
+| RNF04 | LGPD *(novo)* | Biometria e informação de saúde são dados sensíveis. O cartão é guardado só pelos 4 últimos dígitos. |
+| RNF05 | Plataforma *(novo)* | MySQL 8, InnoDB (chaves estrangeiras) e `utf8mb4`. |
 
 ---
 
-## 7. Dicionário de dados e convenções
+## 6. Regras de negócio (RN)
 
-O Dicionário de Dados complementa o DER, apresentando os atributos das entidades, seus tipos, suas chaves e as regras relacionadas a cada informação.
+RN01 a RN12 são as da E1 v1.1 (códigos mantidos, como pede o enunciado). RN13 a RN19 são novas e **estão implementadas no script**. A coluna **No banco** é franca sobre o que ainda não está.
 
-Pra evitar repetição, a documentação detalhada dos atributos fica em um documento separado.
-
-**Dicionário de Dados:** [Inserir aqui o link para o arquivo HTML no GitHub.]
-
-### 7.1 Convenções de nomenclatura
-
-| Prefixo | Significado | Exemplo |
+| Código | Regra | No banco |
 |---|---|---|
-| `ID_` | Identificador | `ID_ALUNO` |
-| `NM_` | Nome | `NM_ALUNO` |
-| `DT_` | Data | `DT_NASCIMENTO` |
-| `CD_` | Código | `CD_ULTIMOS_DIGITOS_CARTAO` |
-| `QT_` | Quantidade | `QT_SERIES` |
-| `TP_` | Tipo ou categoria | `TP_STATUS` |
-| `IN_` | Indicador booleano | `IN_ATIVO` |
-| `DS_` | Descrição ou texto | `DS_MENSAGEM` |
-| `VL_` | Valor monetário | `VL_MENSALIDADE` |
-
-### 7.2 Notação utilizada
-
-- **PK (Primary Key):** chave primária, identifica cada registro de uma tabela.
-- **FK (Foreign Key):** chave estrangeira, relaciona uma tabela a outra.
-- **1:N:** um registro pode estar relacionado a vários registros de outra entidade.
-- **N:N:** vários registros de uma entidade podem se relacionar com vários registros de outra.
-- **UNIQUE:** impede que determinado valor seja repetido em uma coluna ou combinação de colunas.
-- **NOT NULL:** indica que o preenchimento daquele campo é obrigatório.
-
-### 7.3 Banco de dados e collation
-
-A tecnologia definida pro projeto é o MySQL 8, com o mecanismo de armazenamento InnoDB.
-
-O conjunto de caracteres previsto é `utf8mb4`, que permite armazenar caracteres de diferentes idiomas, incluindo acentos e símbolos usados no português.
-
-A collation escolhida é `utf8mb4_0900_ai_ci`. A terminação `ai_ci` indica que as comparações não diferenciam acentos (*accent insensitive*) nem maiúsculas e minúsculas (*case insensitive*). Isso facilita buscas e comparações de nomes e textos.
-
-A configuração definitiva deve ser conferida com o script de criação do banco.
+| RN01 | O cancelamento de plano só ocorre por solicitação formal via SAC. | **Não implementada** (sem tabela de cancelamento). O efeito aparece em `MATRICULA` (`cancelado` e `DT_FIM`), auditado por A05. |
+| RN02 | Inadimplência prolongada (cerca de 60 dias) pode cancelar o plano e bloquear a catraca. | **Parcial.** `TP_STATUS = 'inadimplente'`. O prazo não é automatizado. Auditorias A05 e A06. |
+| RN03 | O spinning tem 19 vagas por horário, com check-in obrigatório pelo aplicativo. | **Parcial.** CHECK `QT_LIMITE_VAGAS > 0` e auditoria A01; o banco não impede o excesso, a A01 o detecta. |
+| RN04 | Personal externo só atua com cadastro ativo e taxa mensal paga. | **Não implementada.** |
+| RN05 | Recepção e professores só veem os 4 últimos dígitos do cartão. | **Atendida.** `CD_ULTIMOS_DIGITOS_CARTAO VARCHAR(4)`; o número completo nunca é guardado. |
+| RN06 | Informações de saúde e limitações ficam anexadas ao cadastro em formato digital. | **Parcial.** Só o texto em `TREINO.DS_OBSERVACAO_MEDICA`; o anexo PDF/imagem não está modelado. |
+| RN07 | A matrícula exige idade mínima e atestado médico ou PAR-Q. | **Parcial.** Existe `ALUNO.DT_NASCIMENTO`; a idade mínima e o atestado não são validados. |
+| RN08 | O acesso a outras unidades depende do plano contratado. | **Não implementada.** |
+| RN09 | Planos com fidelidade têm multa em cancelamento antecipado. | **Não implementada.** |
+| RN10 | Toda retirada de material registra funcionário, material, quantidade e data. | **Não implementada** (sem tabela de movimentação). |
+| RN11 | Ocorrências pendentes passam ao turno seguinte até serem resolvidas. | **Parcial.** `IN_RESOLVIDO` e G05 listam as pendentes; a transferência não é automática. |
+| RN12 | Todo professor deve ter registro ativo no CREF. | **Não implementada** (sem atributo de CREF). |
+| RN13 | `DT_FIM` da matrícula não pode ser anterior a `DT_INICIO`. *(novo)* | CHECK `CHK_MATRICULA_DATAS` |
+| RN14 | O status da matrícula é pago, pendente, inadimplente ou cancelado. *(novo)* | CHECK `CHK_MATRICULA_STATUS` |
+| RN15 | Cada aluno faz no máximo um check-in por aula. *(novo)* | UNIQUE `UK_CHECKIN_AULA_ALUNO` |
+| RN16 | Pagamento tem valor maior que zero, forma e status válidos. *(novo)* | CHECKs `CHK_PAGAMENTO_*` |
+| RN17 | O turno da ocorrência é madrugada, manhã, tarde ou noite. *(novo)* | CHECK `CHK_OCORRENCIA_TURNO` |
+| RN18 | Mensalidade maior que zero e recorrência `recorrente` ou `não recorrente`. *(novo)* | CHECKs `CHK_PLANO_*` |
+| RN19 | Estoque nunca é negativo e a validade do treino não é anterior à criação. *(novo)* | CHECKs `CHK_ESTOQUE_QUANTIDADE` e `CHK_TREINO_DATAS` |
 
 ---
 
-## 8. Diagramas do projeto
+## 7. Revisão do DER (seção 1.1)
 
-- **Modelo conceitual (DER):** [Inserir link para a imagem do DER.]
-- **Modelo lógico:** [Inserir link para a imagem do modelo lógico.]
+- DER conceitual revisado: [`Arq-DER/modelo-conceitual.png`](Arq-DER/modelo-conceitual.png) (brModelo)
+- Modelo lógico: [`Arq-DER/modelo-logico.png`](Arq-DER/modelo-logico.png)
 
-Os diagramas e o Dicionário de Dados precisam ficar coerentes entre si. Toda alteração em entidade, atributo ou relacionamento tem que ser refletida nos documentos correspondentes.
+![DER conceitual](Arq-DER/modelo-conceitual.png)
 
----
+### 7.1 Apontamentos da correção e respostas
 
-## 9. Justificativa técnica
+| Apontamento da E1 | O que mudou | Por quê |
+|---|---|---|
+| Chaves estrangeiras no DER conceitual (`ID_ALUNO`, `ID_PLANO`, `ID_PROFESSOR`…) | Removidas dos atributos; as ligações aparecem só pelos losangos e cardinalidades | FK é decisão do modelo lógico. |
+| I05: normalização, com exercícios misturados na ficha de treino (`1{ITEM_EXERCICIO}100`) | `TREINO` e `ITEM_TREINO` separadas, ligadas em (1,n)–(1,1) | Um treino tem vários exercícios com campos próprios (1FN). |
+| Pagamento só como status e 4 dígitos na matrícula | Entidade `PAGAMENTO` ligada à matrícula | Sem pagamentos não há como investigar o saldo devedor incorreto (P2). |
+| Estoque citado (RF08, P3) sem entidade | Entidade `ESTOQUE_MATERIAL` | Problema declarado precisa aparecer no DER. |
+| Manutenção citada (RF07) sem entidade | Entidade `CHAMADO_MANUTENCAO` | Registrar quem abriu, quando e o status. |
+| Aulas sem local | Entidade `UNIDADE`, ligada à aula e ao estoque | A rede tem várias unidades e o estoque é por unidade. |
+| Aula sem unidade, `ID_INSTRUTOR` como FK | Relacionamentos `MINISTRA` e `OCORRE_EM` | Instrutor e local passam a ser relacionamentos. |
+| Mais de um papel de funcionário como texto livre | `TP_PAPEL` com domínio fixo | Evita valores inconsistentes. |
 
-A estrutura proposta organiza as informações da academia de forma que os processos possam ser feitos sem duplicação desnecessária de dados.
+### 7.2 Entidades do DER revisado (13)
 
-Separar alunos, planos e matrículas permite manter o histórico de vínculos e alterações contratuais. O uso de entidades associativas, como `CHECKIN_AULA`, permite representar situações em que vários alunos participam de várias aulas.
+| Entidade | Identificador | Principais atributos |
+|---|---|---|
+| ALUNO | `ID_ALUNO` | nome, CPF, e-mail, nascimento, foto, biometria, ativo |
+| PLANO | `ID_PLANO` | nome, recorrência, mensalidade, ativo |
+| MATRICULA (associativa) | `ID_MATRICULA` | início, fim, status, 4 dígitos do cartão |
+| PAGAMENTO | `ID_PAGAMENTO` | data, valor, forma, status |
+| FUNCIONARIO | `ID_FUNCIONARIO` | nome, CPF, papel, ativo |
+| TREINO | `ID_TREINO` | criação, validade, observação médica |
+| ITEM_TREINO | `ID_ITEM_TREINO` | exercício, séries, repetições, carga |
+| AULA_COLETIVA | `ID_AULA` | modalidade, horário, limite de vagas |
+| CHECKIN_AULA (associativa) | `ID_CHECKIN` | data e hora do check-in |
+| UNIDADE | `ID_UNIDADE` | nome, endereço |
+| OCORRENCIA_TURNO | `ID_OCORRENCIA` | data e hora, turno, mensagem, resolvido |
+| CHAMADO_MANUTENCAO | `ID_CHAMADO` | abertura, problema, status |
+| ESTOQUE_MATERIAL | `ID_MATERIAL` | nome, categoria, quantidade |
 
-A relação entre treinos e funcionários também é importante pra preservar a autoria das fichas, assim o histórico não depende da permanência do professor na empresa.
+### 7.3 Relacionamentos
 
-Por fim, o registro de ocorrências atende a uma necessidade vista direto na rotina da academia: melhorar a comunicação entre os turnos e evitar que pendências sejam esquecidas.
-
-As funcionalidades de estoque, manutenção e controle de unidades também fazem parte dos requisitos levantados e precisam estar representadas no modelo final.
-
----
-
-## 10. Registro de Uso de Inteligência Artificial
-
-Durante o desenvolvimento do projeto, foram utilizadas ferramentas de inteligência artificial como apoio à organização e documentação das informações.
-
-### 10.1 Ferramentas utilizadas
-
-- ChatGPT
-- Gemini
-
-### 10.2 Objetivo do uso
-
-As ferramentas foram utilizadas para auxiliar na organização das informações da entrevista, estruturação dos requisitos, elaboração das regras de negócio e melhoria da documentação do projeto.
-
-### 10.3 Solicitações realizadas
-
-Foram solicitadas sugestões relacionadas à organização dos requisitos funcionais e não funcionais, identificação de entidades, elaboração das regras de negócio e estruturação do README.
-
-### 10.4 Respostas recebidas
-
-As ferramentas forneceram sugestões de organização, exemplos de documentação e possíveis melhorias para a apresentação do projeto.
-
-### 10.5 Sugestões rejeitadas ou corrigidas
-
-Algumas sugestões foram ajustadas ou descartadas quando não correspondiam às informações obtidas na entrevista ou apresentavam funcionalidades que não haviam sido confirmadas.
-
-### 10.6 Reflexão crítica
-
-O uso das ferramentas facilitou a organização e a documentação do trabalho. Entretanto, as respostas não foram consideradas automaticamente corretas, sendo necessário avaliar sua coerência com as informações disponíveis.
-
-### 10.7 Justificativa da versão final
-
-A versão final foi definida considerando as informações levantadas pelo grupo, o conteúdo estudado na disciplina e as sugestões que se mostraram adequadas ao projeto.
-
-### 10.8 Verificação e limitações
-
-O grupo considerou as ferramentas como apoio complementar, não como substitutas da análise e das decisões dos integrantes. As informações do projeto e as decisões sobre requisitos, regras de negócio e relacionamentos foram avaliadas com base no material disponível. Eventuais utilizações adicionais durante as correções deverão ser registradas nesta seção.
+| Relacionamento | Entidades |
+|---|---|
+| MATRICULA (associativa) | ALUNO — PLANO |
+| GERA | MATRICULA — PAGAMENTO |
+| RECEBE | ALUNO — TREINO |
+| ELABORA | FUNCIONARIO — TREINO |
+| COMPÕE | TREINO — ITEM_TREINO |
+| CHECKIN_AULA (associativa) | ALUNO — AULA_COLETIVA |
+| MINISTRA | FUNCIONARIO — AULA_COLETIVA |
+| OCORRE_EM | AULA_COLETIVA — UNIDADE |
+| POSSUI | UNIDADE — ESTOQUE_MATERIAL |
+| REGISTRA | FUNCIONARIO — OCORRENCIA_TURNO |
+| ABRE | FUNCIONARIO — CHAMADO_MANUTENCAO |
 
 ---
 
-## 11. Considerações finais
+## 8. Conversão do conceitual para o lógico (seção 1.2)
 
-No fim, o projeto serviu pra perceber como os processos da academia dependem de informação organizada e acessível pras pessoas certas.
+![Modelo lógico](Arq-DER/modelo-logico.png)
 
-A entrevista mostrou necessidades ligadas a cadastro, controle financeiro, acesso à unidade, elaboração de treino, aulas coletivas, comunicação entre funcionários e manutenção.
+`NOT NULL`, `UNIQUE`, `CHECK` e `DEFAULT` não aparecem no diagrama. Estão no [dicionário de dados](dicionario_dados.html) e no [script SQL](docs/academia_gavioes.sql).
 
-A modelagem proposta tenta representar essas necessidades por meio de entidades, atributos e relacionamentos. O DER, o modelo lógico e o Dicionário de Dados precisam ser mantidos atualizados em conjunto, senão a documentação não representa o que a academia realmente precisa.
+### 8.1 Regras aplicadas
 
-As regras de negócio também ajudam a entender o funcionamento esperado do sistema, mostrando quais condições devem ser respeitadas em cada processo.
+| Elemento conceitual | Resultado no lógico | Onde |
+|---|---|---|
+| Entidade | Tabela; identificador vira PK | as 13 tabelas |
+| Atributo simples | Coluna com tipo | todas |
+| Relacionamento 1:N | FK na tabela do lado N, `NOT NULL` quando a participação mínima é 1 | `PAGAMENTO.ID_MATRICULA`, `TREINO.ID_ALUNO`, `TREINO.ID_PROFESSOR`, `AULA_COLETIVA.ID_UNIDADE`, `ESTOQUE_MATERIAL.ID_UNIDADE` etc. |
+| Entidade associativa | Tabela própria com as duas FKs e os atributos do relacionamento | `MATRICULA` (ALUNO–PLANO) e `CHECKIN_AULA` (ALUNO–AULA) |
+| Entidade fraca/composta de uma ficha | Tabela com FK para a ficha | `ITEM_TREINO.ID_TREINO` |
+| Auto-referência a `FUNCIONARIO` por papéis diferentes | Várias FKs para a mesma tabela, com nomes que indicam o papel | `ID_PROFESSOR`, `ID_INSTRUTOR`, `ID_FUNCIONARIO_AUTOR`, `ID_FUNCIONARIO_ABERTURA` |
+| Atributo `TP_PAPEL` | Coluna com CHECK de domínio | `FUNCIONARIO` |
+
+Não há generalização no DER atual: o professor é um `FUNCIONARIO` com `TP_PAPEL = 'professor'`.
+
+### 8.2 Tabelas do modelo lógico
+
+```
+ALUNO(ID_ALUNO PK, NM_ALUNO, ID_CPF UQ, NM_EMAIL, DT_NASCIMENTO, DS_FOTO_PERFIL, DS_BIOMETRIA_FACIAL, IN_ATIVO)
+PLANO(ID_PLANO PK, NM_PLANO, TP_RECORRENCIA, VL_MENSALIDADE, IN_ATIVO)
+FUNCIONARIO(ID_FUNCIONARIO PK, NM_FUNCIONARIO, ID_CPF UQ, TP_PAPEL, IN_ATIVO)
+UNIDADE(ID_UNIDADE PK, NM_UNIDADE, DS_ENDERECO)
+MATRICULA(ID_MATRICULA PK, ID_ALUNO FK, ID_PLANO FK, DT_INICIO, DT_FIM, TP_STATUS, CD_ULTIMOS_DIGITOS_CARTAO)
+PAGAMENTO(ID_PAGAMENTO PK, ID_MATRICULA FK, DT_PAGAMENTO, VL_PAGAMENTO, TP_FORMA_PAGAMENTO, TP_STATUS)
+TREINO(ID_TREINO PK, ID_ALUNO FK, ID_PROFESSOR FK→FUNCIONARIO, DT_CRIACAO, DT_VALIDADE, DS_OBSERVACAO_MEDICA)
+ITEM_TREINO(ID_ITEM_TREINO PK, ID_TREINO FK, NM_EXERCICIO, QT_SERIES, QT_REPETICOES, DS_CARGA)
+AULA_COLETIVA(ID_AULA PK, ID_INSTRUTOR FK→FUNCIONARIO, ID_UNIDADE FK, NM_MODALIDADE, DT_HORARIO, QT_LIMITE_VAGAS)
+CHECKIN_AULA(ID_CHECKIN PK, ID_AULA FK, ID_ALUNO FK, DT_REALIZACAO, UQ(ID_AULA, ID_ALUNO))
+OCORRENCIA_TURNO(ID_OCORRENCIA PK, ID_FUNCIONARIO_AUTOR FK, DT_REGISTRO, TP_TURNO, DS_MENSAGEM, IN_RESOLVIDO)
+CHAMADO_MANUTENCAO(ID_CHAMADO PK, ID_FUNCIONARIO_ABERTURA FK, DT_ABERTURA, DS_PROBLEMA, TP_STATUS)
+ESTOQUE_MATERIAL(ID_MATERIAL PK, ID_UNIDADE FK, NM_MATERIAL, TP_MATERIAL, QT_ESTOQUE)
+```
+
+---
+
+## 9. Normalização (seção 1.4)
+
+Partimos de como a academia vê os dados (ficha de treino, cadastro e planilhas) até chegar às tabelas do modelo.
+
+### 9.1 Primeira forma normal (valores atômicos, sem grupos repetidos)
+
+| Situação original | Problema | Solução |
+|---|---|---|
+| Ficha de treino com `exercício1, séries1, repetições1, exercício2…` | Grupo repetido | Tabela `ITEM_TREINO`, uma linha por exercício. |
+| Situação da matrícula escrita livremente | Valores sem padrão | Domínio fixo com CHECK: pago, pendente, inadimplente, cancelado. |
+| Turno escrito livremente ("manhã cedo", "AM") | Valores sem padrão | CHECK: madrugada, manhã, tarde, noite. |
+| Nome completo em um só campo | Pode parecer não atômico | Mantido: a academia sempre busca e exibe o nome completo, e nenhuma consulta usa o sobrenome. Decisão consciente. |
+
+### 9.2 Segunda forma normal (sem dependência parcial da chave)
+
+As tabelas usam PK simples (`ID_*`), e `CHECKIN_AULA` tem PK substituta com `UNIQUE (ID_AULA, ID_ALUNO)`. Mesmo assim verificamos o par natural:
+
+| Tabela intermediária | Dependência parcial | Resultado |
+|---|---|---|
+| `CHECKIN_AULA(ID_AULA, ID_ALUNO, NM_MODALIDADE, DT_HORARIO, NM_ALUNO, DT_REALIZACAO)` | `NM_MODALIDADE` e `DT_HORARIO` dependem só da aula; `NM_ALUNO` só do aluno | Ficam em `AULA_COLETIVA` e `ALUNO`. O check-in guarda só `DT_REALIZACAO`. |
+
+### 9.3 Terceira forma normal (sem dependência transitiva)
+
+| Tabela intermediária | Dependência transitiva | Resultado |
+|---|---|---|
+| `MATRICULA(…, ID_PLANO, NM_PLANO, VL_MENSALIDADE)` | `NM_PLANO` e `VL_MENSALIDADE` dependem de `ID_PLANO` | Ficam em `PLANO`. |
+| `AULA_COLETIVA(…, ID_UNIDADE, NM_UNIDADE, DS_ENDERECO)` | Dados da unidade dependem de `ID_UNIDADE` | Ficam em `UNIDADE`. |
+| `TREINO(…, ID_PROFESSOR, NM_PROFESSOR, ID_CPF)` | Dados do professor dependem de `ID_PROFESSOR` | Ficam em `FUNCIONARIO`. |
+| `PAGAMENTO(…, ID_ALUNO, NM_ALUNO)` | O aluno é conhecido pela matrícula | Só a FK para `MATRICULA`; o aluno vem por JOIN. |
+| `ESTOQUE_MATERIAL(…, NM_UNIDADE)` | Nome da unidade depende de `ID_UNIDADE` | Fica em `UNIDADE`. |
+
+### 9.4 Resultado e pontos de atenção
+
+As 13 tabelas atendem à 3FN. Dois pontos que o grupo aceitou conscientemente:
+
+- `MATRICULA.TP_STATUS` pode ser derivado dos pagamentos. Foi mantido para a catraca decidir rápido (RNF02) e porque o problema P2 nasce justamente desse status ficar desatualizado. As consultas A05, G06 e A06 conferem a consistência.
+- `MATRICULA.CD_ULTIMOS_DIGITOS_CARTAO` guarda o cartão cadastrado no plano recorrente. Se o cartão mudar, o campo é atualizado; o histórico de cartões não é mantido.
+
+---
+
+## 10. Justificativas técnicas (seção 1.5)
+
+### 10.1 Chaves primárias
+
+`INT AUTO_INCREMENT` em todas as tabelas. O CPF **não** é PK: é dado pessoal, pode ser corrigido e se repetiria como FK em várias tabelas. Fica `UNIQUE NOT NULL` em `ALUNO` e `FUNCIONARIO`. `CHECKIN_AULA` usa PK substituta e `UNIQUE (ID_AULA, ID_ALUNO)` para impedir check-in duplicado (RN15).
+
+### 10.2 Chaves estrangeiras
+
+| FK | Motivo |
+|---|---|
+| `MATRICULA.ID_ALUNO`, `ID_PLANO` | Liga aluno e plano; preserva o histórico de renovações. |
+| `PAGAMENTO.ID_MATRICULA` | Pagamento sempre pertence a uma matrícula. |
+| `TREINO.ID_ALUNO`, `ID_PROFESSOR` | Autoria preservada (RNF03). |
+| `ITEM_TREINO.ID_TREINO` | Exercício não existe sem a ficha. |
+| `AULA_COLETIVA.ID_INSTRUTOR`, `ID_UNIDADE` | Quem dá a aula e onde. |
+| `CHECKIN_AULA.ID_AULA`, `ID_ALUNO` | Associativa. |
+| `OCORRENCIA_TURNO.ID_FUNCIONARIO_AUTOR`, `CHAMADO_MANUTENCAO.ID_FUNCIONARIO_ABERTURA` | Rastreia quem registrou. |
+| `ESTOQUE_MATERIAL.ID_UNIDADE` | Estoque é por unidade. |
+
+Nenhuma FK define `ON DELETE`, então vale o padrão do MySQL (`RESTRICT`): histórico de pagamentos, treinos e ocorrências não pode ser apagado por engano. Aluno e funcionário saem do uso por `IN_ATIVO = 0`, não por exclusão.
+
+### 10.3 Restrições por regra de negócio
+
+| Regra | Restrição | Tipo |
+|---|---|---|
+| RN03 | `CHK_AULA_VAGAS` (vagas > 0) + auditoria A01 | CHECK + consulta |
+| RN05 | `CD_ULTIMOS_DIGITOS_CARTAO VARCHAR(4)` | Tipo |
+| RN13 | `CHK_MATRICULA_DATAS` | CHECK |
+| RN14 | `CHK_MATRICULA_STATUS` | CHECK |
+| RN15 | `UK_CHECKIN_AULA_ALUNO` | UNIQUE |
+| RN16 | `CHK_PAGAMENTO_VALOR`, `_FORMA`, `_STATUS` | CHECK |
+| RN17 | `CHK_OCORRENCIA_TURNO` | CHECK |
+| RN18 | `CHK_PLANO_VALOR`, `CHK_PLANO_RECORRENCIA` | CHECK |
+| RN19 | `CHK_ESTOQUE_QUANTIDADE`, `CHK_TREINO_DATAS` | CHECK |
+| Cadastro | `ID_CPF UNIQUE NOT NULL`; índice em `NM_ALUNO` | UNIQUE + índice |
+
+### 10.4 Decisões gerais
+
+| Decisão | Justificativa |
+|---|---|
+| `DECIMAL(10,2)` para dinheiro | Evita erro de arredondamento do `FLOAT`. |
+| `VARCHAR(11)` para CPF e `VARCHAR(4)` para dígitos do cartão | Texto preserva zeros à esquerda. |
+| `TINYINT(1)` com CHECK (0,1) para indicadores | Booleano do MySQL com domínio garantido. |
+| `DATETIME` em check-in, aula, ocorrência e chamado | O horário importa (turnos, vagas). `DATE` onde só o dia importa. |
+| Domínios com CHECK em vez de tabelas auxiliares | Listas pequenas e estáveis. Se crescerem, viram tabelas de domínio. |
+| Biometria em `TEXT` | Guarda o modelo/código do cadastro facial, não a imagem bruta (RNF04). |
+| `UNIDADE` como tabela | A rede tem várias unidades e aula e estoque são por unidade. |
+
+---
+
+## 11. Proposta de BI e IA (seção 1.6)
+
+### 11.1 Informações estratégicas
+
+| Pergunta de decisão | Quem usa |
+|---|---|
+| Os avisos entre turnos estão sendo resolvidos? | Gerente |
+| Quanto há de cobrança indevida em matrículas canceladas? | Financeiro e SAC |
+| Quanto está sendo recebido por mês? | Financeiro |
+| Qual a proporção de matrículas inadimplentes e canceladas? | Gerente |
+| Quais materiais estão acabando? | Gerente |
+| Quais aulas lotam e quais ficam vazias? | Coordenação de professores |
+| Há chamados de manutenção parados? | Gerente e regional |
+
+### 11.2 KPIs
+
+| KPI | Fórmula | Período | Meta (proposta) | Problema | Consulta |
+|---|---|---|---|---|---|
+| Ocorrências pendentes por turno | contagem de `IN_RESOLVIDO = 0` por `TP_TURNO` | Diário | 0 | P1 | G05 |
+| Idade da ocorrência pendente mais antiga | agora − `MIN(DT_REGISTRO)` entre pendentes | Diário | ≤ 24 h | P1 | G05 |
+| Cobranças pendentes após o cancelamento | contagem de pagamentos `pendente` com `DT_PAGAMENTO > DT_FIM` em matrícula `cancelado` | Mensal | 0 | P2 | G06 |
+| Valor cobrado indevidamente | soma de `VL_PAGAMENTO` do KPI anterior | Mensal | R$ 0 | P2 | G06 |
+| Cancelamentos sem data de fim | matrículas com status e `DT_FIM` incoerentes | Semanal | 0 | P2 | A05 |
+| Itens com estoque baixo | itens com `QT_ESTOQUE ≤ 20` | Semanal | 0 | P3 | G07 |
+| Chamados de manutenção em aberto | contagem de chamados com `TP_STATUS <> 'concluído'` | Semanal | 0 há mais de 7 dias | P4 | G08 |
+| Dias em aberto do chamado mais antigo | hoje − `MIN(DT_ABERTURA)` entre não concluídos | Semanal | ≤ 7 dias | P4 | G08 |
+| Receita recebida por mês | soma de `VL_PAGAMENTO` com status `pago`, por mês | Mensal | Crescimento mensal | Gestão | G02 |
+| Distribuição de matrículas por status | contagem por `TP_STATUS` ÷ total | Mensal | Inadimplência em queda | P2 / gestão | G01 |
+| Ocupação das aulas | check-ins ÷ `QT_LIMITE_VAGAS` | Semanal | 70% a 100% | Gestão | G03 |
+
+> As metas são propostas iniciais do grupo e precisam ser validadas com a gerência. O limite de 20 unidades em G07 é um parâmetro adotado pelo grupo. KPI sem consulta no script não é KPI: todos acima têm consulta.
+
+### 11.3 Rastreabilidade: problema → tabelas → consulta
+
+| Problema ou regra | Tabelas | Consulta |
+|---|---|---|
+| P1 — ocorrências pendentes por turno | `OCORRENCIA_TURNO` | G05 |
+| P2 — cobrança após cancelamento | `MATRICULA`, `PAGAMENTO`, `ALUNO` | G06 |
+| P2 — cancelamento incompleto | `MATRICULA` | A05 |
+| P3 — materiais com estoque baixo | `ESTOQUE_MATERIAL`, `UNIDADE` | G07 |
+| P4 — chamados de manutenção em aberto | `CHAMADO_MANUTENCAO`, `FUNCIONARIO` | G08 |
+| Matrículas por status | `MATRICULA` | G01 |
+| Receita por mês | `PAGAMENTO` | G02 |
+| Ocupação das aulas | `AULA_COLETIVA`, `CHECKIN_AULA` | G03 |
+| Materiais por unidade | `UNIDADE`, `ESTOQUE_MATERIAL` | G04 |
+| RN03 — check-ins acima das vagas | `AULA_COLETIVA`, `CHECKIN_AULA` | A01 |
+| RN16 — pagamento com status inválido | `PAGAMENTO` | A02 |
+| Chamado com status inválido | `CHAMADO_MANUTENCAO` | A03 |
+| Pagamento anterior ao início da matrícula | `PAGAMENTO`, `MATRICULA`, `ALUNO` | A04 |
+| RN02 — aluno ativo sem matrícula vigente | `ALUNO`, `MATRICULA` | A06 |
+
+Todos os problemas têm ao menos uma consulta, em [`docs/academia_gavioes.sql`](docs/academia_gavioes.sql). Cada uma tem cabeçalho no formato:
+
+```sql
+-- G07 - Quais materiais estão com estoque baixo (20 unidades ou menos)?
+-- Atende: P3 (falta de controle de itens promocionais e materiais de limpeza)
+```
+
+### 11.4 Potencial de BI
+
+- **Painéis** (Power BI ou Metabase) ligados ao MySQL: operação diária (ocorrências, chamados, estoque), financeiro (receita, inadimplência, cobrança indevida) e aulas (ocupação).
+- **Alertas** para ocorrência pendente há mais de 24 h, cobrança em matrícula cancelada e estoque no limite.
+
+### 11.5 Aplicações de IA
+
+| Aplicação | Dados do banco | Benefício | Limites |
+|---|---|---|---|
+| Previsão de evasão | status da matrícula, atrasos em `PAGAMENTO`, check-ins, treino vencido | Agir antes do cancelamento | Precisa de meses de histórico; dados pessoais sob a LGPD. |
+| Previsão de reposição de materiais | `ESTOQUE_MATERIAL` ao longo do tempo | Compra antecipada | O estoque atual guarda só a quantidade, sem histórico de saídas. Seria preciso registrar movimentações. |
+| Planejamento da grade de aulas | `AULA_COLETIVA` e `CHECKIN_AULA` | Ajustar horários e vagas | Aulas sem check-in obrigatório não geram dado de ocupação. |
+| Classificação das ocorrências de turno | texto de `DS_MENSAGEM` | Priorizar o que é urgente | Texto curto e livre; exige revisão humana. |
+
+---
+
+## 12. Limitações conhecidas
+
+O grupo registra aqui o que o modelo atual **não** cobre, para evitar que o problema declarado não apareça no DER:
+
+| Limitação | Efeito | Possível evolução |
+|---|---|---|
+| Não há tabela de acessos (log da catraca) | O bloqueio indevido da P2 não é medido diretamente; só a cobrança pós-cancelamento (G06) | Criar `ACESSO` (aluno, unidade, data e hora, resultado, motivo, funcionário que liberou). |
+| Não há tabela de cancelamento (origem SAC, protocolo, datas) | RN01 e RN02 só aparecem pelo status e pela data de fim da matrícula | Criar `CANCELAMENTO`. |
+| Personal trainers externos, taxa mensal e CREF do professor não estão modelados | RN04, RN12 e parte do RF09 não são aplicados pelo banco | Criar `PERSONAL_EXTERNO` e `TAXA_PERSONAL`. |
+| `ESTOQUE_MATERIAL` guarda só a quantidade atual | Não responde quem retirou nem quanto foi consumido (P3 fica coberto apenas em parte) | Criar `MOVIMENTACAO_ESTOQUE` (entrada/saída, funcionário, data). |
+| `CHAMADO_MANUTENCAO` não identifica o equipamento nem o escalonamento ao regional | Manutenção sem histórico por equipamento | Criar `EQUIPAMENTO` e o status `escalado`. |
+| `PAGAMENTO.DT_PAGAMENTO` é `NOT NULL` | Cobrança pendente usa a data da cobrança | Separar vencimento e data de pagamento. |
+| `PLANO` não tem fidelidade, multa nem acesso a outras unidades | RN08, RN09 e RF10 não são atendidos | Acrescentar `IN_ACESSO_OUTRAS_UNIDADES`, `QT_MESES_FIDELIDADE` e `VL_MULTA` ao plano. |
+| Não há registro de auditoria de quem consultou ou alterou dados sensíveis (seção 6.3 da E1) | Não se sabe quem acessou biometria ou saúde | Criar tabela de log de operações. |
+| Anexo de documento de saúde em PDF não está modelado | RN06 só tem o texto da observação | Criar `DOCUMENTO_SAUDE`. |
+| Cardinalidades do DER (seção 7.3) | Possível inversão de lado | Revisar o diagrama. |
+
+---
+
+## 13. Registro do uso de inteligência artificial
+
+| Item | Registro |
+|---|---|
+| **Ferramenta e etapa (E1)** | ChatGPT e Gemini: estruturação da entrevista, organização dos requisitos, dicionário de dados e modelo conceitual. |
+| **Motivação (E1)** | Agilizar a transformação das anotações de campo em requisitos e estrutura de dados. |
+| **Prompt (E1)** | Transcrição da entrevista, transformando arquivo de áudio em texto. |
+| **Ferramenta e etapa (E2)** | Claude (Anthropic): redação deste README a partir do enunciado, do script SQL, do dicionário, dos diagramas e da transcrição; mesclagem de dados e consultas extras no script (G05 a G08, A05 e A06 e massa para P2 e P3), e comparação deste README com o texto da E1 v1.1. |
+| **Motivação (E2)** | Organizar a documentação conforme o roteiro da Entrega 2 e cobrir os problemas P1 a P3 com consultas. |
+| **Prompts (E2)** | (1) Envio do enunciado da Entrega 2 (PDF) e do link do repositório, com o pedido: "analise o github e veja como está". (2) Envio da lista de 18 itens que o README deve conter, com o pedido de montá-lo. (3) Envio do script SQL, do dicionário de dados, dos diagramas conceitual e lógico, do roteiro e da transcrição da entrevista e das fotos da visita, com o pedido: "confira esse README". (4) Fornecimento dos usuários do GitHub dos integrantes. |
+| **Fontes verificadas** | As consultas novas foram executadas em SQLite (adaptado) e retornaram o esperado: G05 duas pendências (tarde e noite), G06 uma cobrança após cancelamento, G07 dois itens de estoque baixo, G08 dois chamados em aberto, A05 vazia e A06 um aluno. **Não foram executadas em MySQL 8**: o grupo deve rodar o script inteiro no MySQL. |
+| **O que foi rejeitado ou corrigido** | Numa primeira versão do README, a IA propôs um modelo de 21 tabelas (com acessos, cancelamento, personal externo, movimentação de estoque e outras) que não existia no trabalho do grupo. Ao receber o script, o dicionário e os diagramas reais, o README foi refeito sobre o modelo de 13 tabelas, e o que ficou de fora foi registrado na seção 12. A IA também apontou a possível inversão das cardinalidades do DER e a divergência de tamanho de campos entre o dicionário e o script. |
+| **Reflexão crítica** | |
+
+---
+
+## 14. Estrutura do repositório e execução
+
+```
+/
+├── README.md                       ← este relatório
+├── dicionario_dados.html           ← dicionário de dados (HTML único)
+├── Arq-DER/
+│   ├── modelo-conceitual.png       ← DER conceitual (brModelo)
+│   └── modelo-logico.png           ← modelo lógico
+├── Arq-visita-comprovante/         ← fotos JPG da visita
+├── levantamento/
+│   └── levantamento.md             ← texto organizado do levantamento (a criar)
+└── docs/
+    └── academia_gavioes.sql        ← CREATE, constraints, INSERT, JOIN, UPDATE/DELETE, consultas G e A
+```
+
+**Executar (MySQL 8):**
+
+```bash
+mysql -u root -p < docs/academia_gavioes.sql
+```
+
+**Massa de dados:** Inclui matrícula cancelada com cobrança pendente depois do cancelamento (P2), aluno ativo sem matrícula vigente, materiais com estoque baixo e ocorrências pendentes (P1, P3 e P4). O volume é pequeno e **não** é proporcional ao porte real; para a defesa.
