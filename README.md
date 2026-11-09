@@ -449,7 +449,7 @@ RN01 a RN12 são as da E1 v1.1 (códigos mantidos, como pede o enunciado). RN13 
 
 ## 7. Revisão do DER (seção 1.1)
 
-- DER conceitual revisado: [`Arq-DER/modelo-conceitual.png`](Arq-DER/modelo-conceitual.png) (brModelo)
+- DER conceitual revisado: [`Arq-DER/modelo-conceitual.png`](Arq-DER/modelo-conceitual-imagem.png) (brModelo)
 - Modelo lógico: [`Arq-DER/modelo-logico.png`](Arq-DER/modelo-logico.png)
 
 ![DER conceitual](Arq-DER/modelo-conceitual-imagem.png)
@@ -508,7 +508,7 @@ RN01 a RN12 são as da E1 v1.1 (códigos mantidos, como pede o enunciado). RN13 
 
 | Relacionamento | Cardinalidade | Regra |
 |---|---|---|
-| PAGAMENTO — NOTA_FISCAL | (1,1) — (0,1) | Um pagamento pode não possuir nota fiscal ou possuir uma única nota; cada nota fiscal deve estar vinculada a exatamente um pagamento. |
+| PAGAMENTO — NOTA_FISCAL | (0,1) — (1,1) | Um pagamento pode não possuir nota fiscal ou possuir uma única nota; cada nota fiscal deve estar vinculada a exatamente um pagamento. |
 
 A cardinalidade é implementada no SQL por meio de `ID_PAGAMENTO NOT NULL`, `FOREIGN KEY` e `UNIQUE`, garantindo que uma nota não fique sem pagamento associado e que um pagamento não possua mais de uma nota fiscal.
 
