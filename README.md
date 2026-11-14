@@ -13,6 +13,9 @@
 
 **Ferramentas utilizadas:** **brModelo**, para a elaboração do DER conceitual, e **MySQL Workbench**, para a elaboração do modelo lógico e de seu respectivo diagrama.
 
+#LINK DO VÍDEO NÃO LISTADO DO YOUTUBE PARA A CONCLUSÃO DA ATIVIDADE DE BANCO DE DADOS: 
+https://youtu.be/lEMvkuKBLSM
+
 ## Sumário
 
 1. [Caracterização da organização](#1-caracterização-da-organização)
